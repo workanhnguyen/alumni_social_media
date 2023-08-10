@@ -31,7 +31,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         "com.example.server.repositories",
         "com.example.server.services"
 })
-@PropertySource("classpath:cloudinary.properties")
 public class WebAppContextConfig implements WebMvcConfigurer {
 
     @Autowired
@@ -53,16 +52,5 @@ public class WebAppContextConfig implements WebMvcConfigurer {
                 = new CommonsMultipartResolver();
         resolver.setDefaultEncoding("UTF-8");
         return resolver;
-    }
-
-    @Bean
-    public Cloudinary cloudinary() {
-        Cloudinary cloudinary
-                = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", env.getProperty("cloudinary.cloud_name"),
-                "api_key", env.getProperty("cloudinary.api_key"),
-                "api_secret", env.getProperty("cloudinary.api_secret"),
-                "secure", true));
-        return cloudinary;
     }
 }
