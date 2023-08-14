@@ -11,11 +11,6 @@ import { Link } from "react-router-dom";
 const roles = [
   {
     icon: "https://img.freepik.com/premium-vector/empty-face-icon-avatar-with-red-hair-vector-illustration_601298-13418.jpg?w=2000",
-    name: "Quản trị viên",
-    url: "/login/admin",
-  },
-  {
-    icon: "https://img.freepik.com/premium-vector/empty-face-icon-avatar-with-red-hair-vector-illustration_601298-13418.jpg?w=2000",
     name: "Giảng viên",
     url: "/login/lecturer",
   },
