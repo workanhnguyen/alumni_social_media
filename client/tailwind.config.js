@@ -17,7 +17,8 @@ module.exports = {
         xs: '2px'
       },
       colors: {
-        'half-transparent': 'rgb((0, 0, 0) / 0.5)'
+        'half-transparent': 'rgb((0, 0, 0) / 0.5)',
+        'primary': '#1b73e8'
       }
     },
   },
