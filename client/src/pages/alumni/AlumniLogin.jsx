@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { ROLE_ALUMNI } from '../../constants/Role';
-import { SignIn } from '../../components';
+import { SignInForm } from '../../components';
 
 const AlumniLogin = () => {
   return (
-    <SignIn role={ROLE_ALUMNI} />
+    <SignInForm role={ROLE_ALUMNI} />
   );
 }
 

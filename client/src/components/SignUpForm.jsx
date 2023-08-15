@@ -10,7 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Copyright } from "../components";
+import { Copyright } from ".";
 import {
   FormControl,
   IconButton,
@@ -20,14 +20,14 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -56,7 +56,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Đăng ký
+            Đăng ký thông tin cựu sinh viên
           </Typography>
           <Box
             component="form"
@@ -125,12 +125,37 @@ export default function SignUp() {
                   />
                 </FormControl>
               </Grid>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth required>
+                  <InputLabel htmlFor="confirmPassword">Nhập lại mật khẩu</InputLabel>
+                  <OutlinedInput
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowConfirmPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    label="Nhập lại mật khẩu"
+                    name="confirmPassword"
+                  />
+                </FormControl>
+              </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disableElevation
+              size="large"
             >
               Đăng ký
             </Button>

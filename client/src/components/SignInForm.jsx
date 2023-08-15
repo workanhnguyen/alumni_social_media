@@ -21,7 +21,7 @@ import {
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
-import { Copyright } from '../components';
+import { Copyright } from '.';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -111,6 +111,8 @@ export default function SignIn({ role }) {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disableElevation
+              size="large"
             >
               Đăng nhập
             </Button>

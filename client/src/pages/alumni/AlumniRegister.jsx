@@ -1,9 +1,9 @@
 import React from 'react'
-import { SignUp } from '../../components'
+import { SignUpForm } from '../../components'
 
 const AlumniRegister = () => {
   return (
-    <SignUp />
+    <SignUpForm />
   )
 }
 
