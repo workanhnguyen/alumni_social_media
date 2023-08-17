@@ -149,16 +149,18 @@ export default function SignUp() {
                 </FormControl>
               </Grid>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              disableElevation
-              size="large"
-            >
-              Đăng ký
-            </Button>
+            <Link to='/dashboard'>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                disableElevation
+                size="large"
+              >
+                Đăng ký
+              </Button>
+            </Link>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link

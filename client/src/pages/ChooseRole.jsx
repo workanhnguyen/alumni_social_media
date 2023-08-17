@@ -41,7 +41,7 @@ const ChooseRole = () => {
                     elevation={2}
                     key={index}
                     fullWidth
-                    className="w-full flex items-center px-6 py-2 cursor-pointer text-white bg-primary hover:bg-primaryHover hover:text-white hover:transition ease-linear duration-300"
+                    className="w-full flex items-center px-6 py-2 cursor-pointer text-white hover:bg-primary hover:text-white hover:transition ease-linear duration-300"
                   >
                     <Avatar alt="Remy Sharp" src={role.icon} />
                     <p className="ml-3">{role.name}</p>

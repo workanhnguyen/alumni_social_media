@@ -106,16 +106,18 @@ export default function SignIn({ role }) {
               control={<Checkbox value="remember" color="primary" />}
               label="Lưu đăng nhập"
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              disableElevation
-              size="large"
-            >
-              Đăng nhập
-            </Button>
+            <Link to='/dashboard'>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                disableElevation
+                size="large"
+              >
+                Đăng nhập
+              </Button>
+            </Link>
             <Grid container>
               <Grid item xs className="cursor-pointer">
                 <Link to="/register/alumni" className="underline text-primary text-sm">
