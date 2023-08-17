@@ -18,7 +18,9 @@ module.exports = {
       },
       colors: {
         'half-transparent': 'rgb((0, 0, 0) / 0.5)',
-        'primary': '#1b73e8'
+        'primary': '#1b73e8',
+        'gray': '#EFF2F5',
+        'dark-gray': '#65676b',
       }
     },
   },
