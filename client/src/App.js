@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AlumniLogin, AlumniRegister, ChooseRole, LecturerLogin } from './pages';
+import { AlumniLogin, AlumniRegister, ChooseRole, DashBoard, LecturerLogin } from './pages';
 
 const App = () => {
   return (
@@ -11,6 +11,7 @@ const App = () => {
         <Route path='/login/alumni' element={<AlumniLogin />} />
         <Route path='/login/lecturer' element={<LecturerLogin />} />
         <Route path='/register/alumni' element={<AlumniRegister />} />
+        <Route path='/dashboard' element={<DashBoard />} />
       </Routes>
     </BrowserRouter>
   )
