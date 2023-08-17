@@ -20,7 +20,15 @@ module.exports = {
         'half-transparent': 'rgb((0, 0, 0) / 0.5)',
         'primary': '#1b73e8',
         'gray': '#EFF2F5',
+        'gray-2': '#dee1e3',
+        'gray-3': '#f7f8fa',
         'dark-gray': '#65676b',
+      },
+      width: {
+        '128': '32rem',
+      },
+      height: {
+        '128': '32rem',
       }
     },
   },
