@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,7 +13,6 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { ROLE_ALUMNI } from "../constants/Role";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   FormControl,
@@ -21,9 +21,9 @@ import {
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
-import { Copyright } from '.';
 
-// TODO remove, this demo shouldn't need to reset the theme.
+import { ROLE_ALUMNI } from "../constants/Role";
+import { Copyright } from '../components';
 
 const defaultTheme = createTheme();
 

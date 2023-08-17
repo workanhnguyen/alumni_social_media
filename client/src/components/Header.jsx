@@ -57,7 +57,7 @@ const Header = () => {
 
           <div className="w-fit flex justify-end items-center">
             <Avatar
-              sx={{ width: 60, height: 60 }}
+              sx={{ width: 40, height: 40 }}
               alt="Remy Sharp"
               src={blankAvatar}
             />
