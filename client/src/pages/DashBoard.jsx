@@ -12,7 +12,7 @@ const DashBoard = () => {
     <DefaultLayout>
       <div className="w-full h-fit bg-gray">
         <Container>
-          <PostPanel className="my-6" />
+          <PostPanel className="my-6 mt-20" />
           <div className="w-full flex flex-col items-center">
             {posts.length > 0 &&
               posts.map((post, index) => <Post key={index} data={post} />)}
