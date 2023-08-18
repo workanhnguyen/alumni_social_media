@@ -1,7 +1,8 @@
-export { default as ChooseRole } from './ChooseRole';
-export { default as AlumniLogin } from './alumni/AlumniLogin';
-export { default as AlumniRegister } from './alumni/AlumniRegister';
-export { default as LecturerLogin } from './lecturer/LecturerLogin';
+export { default as ChooseRolePage } from './ChooseRolePage';
+export { default as AlumniLoginPage } from './alumni/AlumniLoginPage';
+export { default as AlumniRegisterPage } from './alumni/AlumniRegisterPage';
+export { default as LecturerLoginPage } from './lecturer/LecturerLoginPage';
 export { default as DashBoard } from './DashBoard';
-export { default as Group } from './Group';
-export { default as Letter } from './Letter';
+export { default as GroupPage } from './GroupPage';
+export { default as LetterPage } from './LetterPage';
+export { default as PersonalPage } from './PersonalPage';
