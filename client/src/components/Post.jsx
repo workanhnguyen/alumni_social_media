@@ -7,6 +7,9 @@ import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 
 import { actionHaha, blankAvatar } from "../assets";
 import { Link } from "react-router-dom";
+import loggedInUser from "../data/user";
+
+const user = loggedInUser;
 
 const Post = ({ data }) => {
   return (
@@ -17,14 +20,16 @@ const Post = ({ data }) => {
         <div className="w-full flex justify-between px-4">
           {/* User info */}
           <div className="w-fit flex items-center">
-            <Avatar
-              src={blankAvatar}
-              alt="avatar"
-              sx={{ width: 40, height: 40 }}
-              className="cursor-pointer"
-            />
+            <Link to={`/${user.username}`}>
+              <Avatar
+                src={blankAvatar}
+                alt="avatar"
+                sx={{ width: 40, height: 40 }}
+                className="cursor-pointer"
+              />
+            </Link>
             <div className="flex-1 flex flex-col justify-center ml-2 gap-y-1">
-              <Link className="font-semibold hover:underline cursor-pointer">{`${data.user.first_name} ${data.user.last_name}`}</Link>
+              <Link to={`/${user.username}`} className="font-semibold hover:underline cursor-pointer">{`${data.user.first_name} ${data.user.last_name}`}</Link>
               <span className="text-xs">{data.timestamp}</span>
             </div>
           </div>

@@ -9,6 +9,9 @@ import EmailIcon from "@mui/icons-material/Email";
 import { blankAvatar, logo1, logo2 } from "../assets";
 import { GROUP, HOME, LETTER } from "../constants/Role";
 import { useStateContext } from "../contexts/ContextProvider";
+import loggedInUser from "../data/user";
+
+const user = loggedInUser;
 
 const Header = () => {
   const { pageContent, setPageContent } = useStateContext();
@@ -57,12 +60,14 @@ const Header = () => {
           </div>
 
           <div className="w-fit flex justify-end items-center">
-            <Avatar
-              sx={{ width: 40, height: 40 }}
-              alt="Remy Sharp"
-              src={blankAvatar}
-              className="cursor-pointer"
-            />
+            <Link to={`/${user.username}`}>
+              <Avatar
+                sx={{ width: 40, height: 40 }}
+                alt="Remy Sharp"
+                src={blankAvatar}
+                className="cursor-pointer"
+              />
+            </Link>
           </div>
         </div>
       </Container>
