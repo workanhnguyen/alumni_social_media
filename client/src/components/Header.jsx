@@ -29,30 +29,31 @@ const Header = () => {
           </div>
 
           <div className="w-fit flex">
-            <div
+            <Link to='/dashboard'
               className={`max-md:px-3 px-8 py-1 max-sm:mx-2 mx-4 rounded-lg cursor-pointer ${
                 pageContent === HOME ? "text-primary" : "text-dark-gray"
               } hover:bg-gray`}
               onClick={() => handleIconClick(HOME)}
             >
               <HomeIcon fontSize="large" />
-            </div>
-            <div
+            </Link>
+            <Link to='/groups'
               className={`max-md:px-3 px-8 py-1 max-sm:mx-2 mx-4 rounded-lg cursor-pointer ${
                 pageContent === GROUP ? "text-primary" : "text-dark-gray"
               } hover:bg-gray`}
               onClick={() => handleIconClick(GROUP)}
             >
               <GroupIcon fontSize="large" />
-            </div>
-            <div
+            </Link>
+            <Link
+            to='/letters'
               className={`max-md:px-3 px-8 py-1 max-sm:mx-2 mx-4 rounded-lg cursor-pointer ${
                 pageContent === LETTER ? "text-primary" : "text-dark-gray"
               } hover:bg-gray`}
               onClick={() => handleIconClick(LETTER)}
             >
               <EmailIcon fontSize="large" />
-            </div>
+            </Link>
           </div>
 
           <div className="w-fit flex justify-end items-center">
