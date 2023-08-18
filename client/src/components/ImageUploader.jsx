@@ -23,7 +23,7 @@ const ImageUploader = () => {
             <label htmlFor="fileInput" className={`relative overflow-auto`}>
               <div className="w-full h-full flex flex-col justify-center items-center bg-gray-3 rounded-md hover:bg-gray-2 cursor-pointer">
                 <AddPhotoAlternateIcon fontSize="large" />
-                <span className="font-semibold">Thêm ảnh</span>
+                <span className="font-semibold">Thêm ảnh/video</span>
                 <span className="text-xs text-dark-gray">hoặc kéo và thả</span>
               </div>
             </label>
@@ -31,7 +31,7 @@ const ImageUploader = () => {
             <div className="relative w-full h-full bg-gray-3 overflow-auto rounded-md">
               <label
                 htmlFor="fileInput"
-                className="absolute z-10 top-2.5 left-3 flex items-center px-2 py-1.5 rounded-md bg-white cursor-pointer hover:bg-gray-2"
+                className="absolute z-10 top-2.5 left-3 flex items-center px-2 py-1.5 drop-shadow-md rounded-md bg-white cursor-pointer hover:bg-gray-2"
               >
                 <AddPhotoAlternateIcon fontSize="small" />
                 <span className="text-sm ml-1">Thêm ảnh</span>
@@ -40,7 +40,7 @@ const ImageUploader = () => {
                 <div key={index} className="relative mb-3">
                   <div
                     onClick={() => handleRemoveImage(index)}
-                    className="absolute top-2.5 right-3 px-1.5 py-1 rounded-full bg-white cursor-pointer hover:bg-gray-2"
+                    className="absolute top-2.5 right-3 px-1.5 py-1 drop-shadow-md rounded-full bg-white cursor-pointer hover:bg-gray-2"
                   >
                     <CloseIcon fontSize="small" />
                   </div>
