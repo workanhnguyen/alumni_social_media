@@ -19,7 +19,7 @@ const PostForm = ({ show, setShow }) => {
       ref={postPanelRef}
       className={`${
         show ? "" : "hidden"
-      } w-full h-screen fixed flex justify-center items-center top-0 left-0 bg-blackOverlay`}
+      } w-full h-screen fixed z-20 flex justify-center items-center top-0 left-0 bg-blackOverlay`}
     >
       <div className="relative max-sm:w-full w-128 p-4 bg-white rounded-md">
         <div
