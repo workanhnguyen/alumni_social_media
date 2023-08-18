@@ -8,7 +8,7 @@ import { GROUP, HOME, LETTER } from "../constants/Role";
 const DashBoard = () => {
     const { pageContent } = useStateContext();
   return (
-    <div className="w-full h-fit bg-gray">
+    <div className="relative w-full h-fit bg-gray">
       <Header />
       <Container>
         {pageContent === HOME && (<PostPanel className='my-6' />)}
