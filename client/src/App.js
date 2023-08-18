@@ -1,19 +1,20 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AlumniLogin, AlumniRegister, ChooseRole, DashBoard, Group, LecturerLogin, Letter } from './pages';
+import { AlumniLoginPage, AlumniRegisterPage, ChooseRolePage, DashBoard, GroupPage, LecturerLoginPage, LetterPage, PersonalPage } from './pages';
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<ChooseRole />} />
+        <Route path='/' element={<ChooseRolePage />} />
 
-        <Route path='/login/alumni' element={<AlumniLogin />} />
-        <Route path='/login/lecturer' element={<LecturerLogin />} />
-        <Route path='/register/alumni' element={<AlumniRegister />} />
+        <Route path='/login/alumni' element={<AlumniLoginPage />} />
+        <Route path='/login/lecturer' element={<LecturerLoginPage />} />
+        <Route path='/register/alumni' element={<AlumniRegisterPage />} />
         <Route path='/dashboard' element={<DashBoard />} />
-        <Route path='/groups' element={<Group />} />
-        <Route path='/letters' element={<Letter />} />
+        <Route path='/groups' element={<GroupPage />} />
+        <Route path='/letters' element={<LetterPage />} />
+        <Route path='/:username' element={<PersonalPage />} />
       </Routes>
     </BrowserRouter>
   )
