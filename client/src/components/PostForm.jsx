@@ -1,35 +1,19 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
 import PublicIcon from "@mui/icons-material/Public";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { Avatar, Button, Divider } from "@mui/material";
 
 import { blankAvatar } from "../assets";
+import ImageUploader from "./ImageUploader";
+import DivTextField from "./DivTextField";
 const PostForm = ({ show, setShow }) => {
   const postPanelRef = useRef();
-
-  const [text, setText] = useState("");
-  const [image, setImage] = useState(blankAvatar);
-
-  const handleTextChange = (e) => {
-    setText(e.target.innerHTML);
-  };
   
-  const handlePaste = (e) => {
-    e.preventDefault();
-
-    const pastedText = e.clipboardData.getData("text/plain"); // Get plain text
-    document.execCommand("insertText", false, pastedText); // Insert plain text
-  };
-
   const handleClosePostPanel = () => {
     setShow(false);
   };
 
-  const handleRemoveImage = () => {
-    setImage(null);
-  };
   return (
     <div
       ref={postPanelRef}
@@ -62,40 +46,8 @@ const PostForm = ({ show, setShow }) => {
             </div>
           </div>
         </div>
-        <div
-          className={`editable-div w-full mt-4 border-none outline-none text-sm ${
-            text ? "filled" : ""
-          }`}
-          data-placeholder="Bạn đang nghĩ gì?"
-          contentEditable
-          onInput={handleTextChange}
-          onPaste={handlePaste}
-        />
-
-        <div className="w-full h-60 border mt-3 p-2 border-gray-2 rounded-md">
-          <div
-            className={`relative w-full h-full flex flex-col justify-center items-center bg-gray-3 rounded-md hover:bg-gray-2 cursor-pointer overflow-auto`}
-          >
-            {image && (
-              <div
-                onClick={handleRemoveImage}
-                className="absolute top-2.5 right-3 px-1.5 py-1 rounded-full bg-white cursor-pointer hover:bg-gray-2"
-              >
-                <CloseIcon fontSize="small" />
-              </div>
-            )}
-
-            {!image ? (
-              <>
-                <AddPhotoAlternateIcon fontSize="large" />
-                <span className="font-semibold">Thêm ảnh</span>
-                <span className="text-xs text-dark-gray">hoặc kéo và thả</span>
-              </>
-            ) : (
-              <img className="w-full bg-contain" src={image} alt="" />
-            )}
-          </div>
-        </div>
+        <DivTextField />
+        <ImageUploader />
         <div className="mt-3">
           <Button fullWidth disableElevation variant="contained">
             Đăng
