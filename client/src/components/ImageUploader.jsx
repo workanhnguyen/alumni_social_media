@@ -18,10 +18,10 @@ const ImageUploader = () => {
         );
       };
   return (
-    <div className="w-full h-60 border mt-3 p-2 border-gray-2 rounded-md">
+    <div className="w-full min-h-fit max-h-80 border mt-3 p-2 border-gray-2 rounded-md overflow-auto">
           {images.length === 0 ? (
             <label htmlFor="fileInput" className={`relative overflow-auto`}>
-              <div className="w-full h-full flex flex-col justify-center items-center bg-gray-3 rounded-md hover:bg-gray-2 cursor-pointer">
+              <div className="w-full h-full flex flex-col justify-center items-center py-20 bg-gray-3 rounded-md hover:bg-gray-2 cursor-pointer">
                 <AddPhotoAlternateIcon fontSize="large" />
                 <span className="font-semibold">Thêm ảnh/video</span>
                 <span className="text-xs text-dark-gray">hoặc kéo và thả</span>

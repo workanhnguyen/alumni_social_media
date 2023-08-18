@@ -12,7 +12,7 @@ const PostPanel = ({ className }) => {
         setShowPostForm(true);
     }
   return (
-    <div className="relative">
+    <>
       <div className="w-full flex justify-center">
         <div
           className={`${className} max-sm:w-full sm:w-128 p-4 bg-white rounded-md drop-shadow-sm shadow-sm`}
@@ -32,7 +32,7 @@ const PostPanel = ({ className }) => {
 
       {/* Post form popup */}
       <PostForm show={showPostForm} setShow={setShowPostForm} />
-    </div>
+    </>
   );
 };
 
