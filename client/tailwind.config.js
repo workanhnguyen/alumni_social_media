@@ -23,9 +23,11 @@ module.exports = {
         'gray-2': '#dee1e3',
         'gray-3': '#f7f8fa',
         'dark-gray': '#65676b',
+        'red': '#d84543'
       },
       width: {
         '128': '32rem',
+        '235': '58.75rem'
       },
       height: {
         '128': '32rem',
