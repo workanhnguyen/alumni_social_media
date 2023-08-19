@@ -1,10 +1,23 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
-import { Avatar, Container } from "@mui/material";
+import {
+  Avatar,
+  Container,
+  Divider,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  MenuList,
+  Paper,
+  Typography,
+} from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
 import EmailIcon from "@mui/icons-material/Email";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import { blankAvatar, logo1, logo2 } from "../assets";
 import { GROUP, HOME, LETTER } from "../constants/Role";
@@ -18,6 +31,15 @@ const Header = () => {
 
   const handleIconClick = (iconName) => {
     setPageContent(iconName);
+  };
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -58,16 +80,46 @@ const Header = () => {
               <EmailIcon fontSize="large" />
             </Link>
           </div>
-
+          {/* Avatar */}
           <div className="w-fit flex justify-end items-center">
-            <Link to={`/${user.username}`}>
-              <Avatar
-                sx={{ width: 40, height: 40 }}
-                alt="Remy Sharp"
-                src={blankAvatar}
-                className="cursor-pointer"
-              />
-            </Link>
+            {/* <Link to={`/${user.username}`}> */}
+            <Avatar
+              aria-controls={open ? "user-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              sx={{ width: 40, height: 40 }}
+              alt="User Avatar"
+              src={blankAvatar}
+              className="cursor-pointer"
+            />
+            <Menu
+              id="user-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <Link to={`/${user.username}`}>
+                <MenuItem>
+                  
+                    <ListItemIcon>
+                      <VisibilityIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Xem trang cá nhân</ListItemText>
+                  
+                </MenuItem>
+                </Link>
+                <div className="my-2"><Divider /></div>
+                <MenuItem>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" className="text-red" />
+                  </ListItemIcon>
+                  <ListItemText className="text-red">Đăng xuất</ListItemText>
+                </MenuItem>
+            </Menu>
           </div>
         </div>
       </Container>
