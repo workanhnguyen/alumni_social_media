@@ -13,9 +13,9 @@ const DashBoard = () => {
       <div className="w-full h-fit flex flex-col bg-gray">
         <Container>
           <PostPanel className="my-6 mt-20" />
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center mb-4">
             {posts.length > 0 &&
-              posts.map((post, index) => <Post key={index} data={post} />)}
+              posts.map((post, index) => <Post key={index} data={post} width='w-150' className='max-sm:w-full sm:w-150' />)}
           </div>
         </Container>
       </div>

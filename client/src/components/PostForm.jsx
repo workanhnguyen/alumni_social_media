@@ -6,7 +6,7 @@ import { Avatar, Button, Divider } from "@mui/material";
 
 import { blankAvatar } from "../assets";
 import ImageUploader from "./ImageUploader";
-import DivTextField from "./DivTextField";
+import { CustomTextField } from "../components";
 const PostForm = ({ show, setShow }) => {
   const postPanelRef = useRef();
   
@@ -46,7 +46,7 @@ const PostForm = ({ show, setShow }) => {
             </div>
           </div>
         </div>
-        <DivTextField />
+        <CustomTextField />
         <ImageUploader />
         <div className="mt-3">
           <Button fullWidth disableElevation variant="contained">

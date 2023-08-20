@@ -15,7 +15,7 @@ const PostPanel = ({ className }) => {
     <>
       <div className="w-full flex justify-center">
         <div
-          className={`${className} max-sm:w-full sm:w-128 p-4 bg-white rounded-md drop-shadow-sm shadow-sm`}
+          className={`${className} max-sm:w-full sm:w-150 p-4 bg-white rounded-md drop-shadow-sm shadow-sm`}
         >
           <div className="w-full flex">
             <Avatar

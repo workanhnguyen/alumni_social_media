@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import {
   Avatar,
@@ -9,15 +9,12 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  MenuList,
-  Paper,
-  Typography,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
 import EmailIcon from "@mui/icons-material/Email";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import LogoutIcon from '@mui/icons-material/Logout';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import { blankAvatar, logo1, logo2 } from "../assets";
 import { GROUP, HOME, LETTER } from "../constants/Role";
@@ -82,17 +79,20 @@ const Header = () => {
           </div>
           {/* Avatar */}
           <div className="w-fit flex justify-end items-center">
-            {/* <Link to={`/${user.username}`}> */}
-            <Avatar
-              aria-controls={open ? "user-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-              sx={{ width: 40, height: 40 }}
-              alt="User Avatar"
-              src={blankAvatar}
-              className="cursor-pointer"
-            />
+            <div className="md:flex md:items-center md:bg-gray md:px-4 md:py-2 md:rounded-md">
+              <p className="mr-2 font-semibold max-md:hidden">Anh Nguyễn</p>
+              <Avatar
+                aria-controls={open ? "user-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                onClick={handleClick}
+                sx={{ width: 35, height: 35 }}
+                alt="User Avatar"
+                src={blankAvatar}
+                className="cursor-pointer"
+              />
+            </div>
+
             <Menu
               id="user-menu"
               anchorEl={anchorEl}
@@ -104,21 +104,21 @@ const Header = () => {
             >
               <Link to={`/${user.username}`}>
                 <MenuItem>
-                  
-                    <ListItemIcon>
-                      <VisibilityIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Xem trang cá nhân</ListItemText>
-                  
-                </MenuItem>
-                </Link>
-                <div className="my-2"><Divider /></div>
-                <MenuItem>
                   <ListItemIcon>
-                    <LogoutIcon fontSize="small" className="text-red" />
+                    <VisibilityIcon fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText className="text-red">Đăng xuất</ListItemText>
+                  <ListItemText>Xem trang cá nhân</ListItemText>
                 </MenuItem>
+              </Link>
+              <div className="my-2">
+                <Divider />
+              </div>
+              <MenuItem>
+                <ListItemIcon>
+                  <LogoutIcon fontSize="small" className="text-red" />
+                </ListItemIcon>
+                <ListItemText className="text-red">Đăng xuất</ListItemText>
+              </MenuItem>
             </Menu>
           </div>
         </div>
