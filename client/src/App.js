@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AlumniLoginPage, AlumniRegisterPage, ChooseRolePage, DashBoard, GroupPage, LecturerLoginPage, LetterPage, PersonalPage } from './pages';
+import PostDetailPage from './pages/PostDetailPage';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path='/groups' element={<GroupPage />} />
         <Route path='/letters' element={<LetterPage />} />
         <Route path='/:username' element={<PersonalPage />} />
+        <Route path='/posts/:id' element={<PostDetailPage />} />
       </Routes>
     </BrowserRouter>
   )
