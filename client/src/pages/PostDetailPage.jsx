@@ -1,12 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import PublicIcon from "@mui/icons-material/Public";
-import { Avatar } from "@mui/material";
+import { Avatar, Divider } from "@mui/material";
+import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 
 import { useStateContext } from "../contexts/ContextProvider";
 import { DefaultLayout } from "../layouts";
-import { blankAvatar } from "../assets";
+import { actionHaha, blankAvatar } from "../assets";
+
+const images = [
+  blankAvatar,
+  blankAvatar,
+  blankAvatar,
+  blankAvatar,
+  blankAvatar,
+];
 
 const PostDetailPage = () => {
   const { postDetail } = useStateContext();
@@ -32,7 +41,63 @@ const PostDetailPage = () => {
           </div>
 
           {/* Post content */}
-          <div className="mt-3 px-4" dangerouslySetInnerHTML={{ __html: postDetail?.content }} />
+          <div
+            className="mt-3 px-4"
+            dangerouslySetInnerHTML={{ __html: postDetail?.content }}
+          />
+
+          {/* Post images */}
+          <div className="mt-3 flex overflow-auto gap-x-1">
+            {}
+            {images.map((image, index) => (
+              <img key={index} src={image} alt="img" />
+            ))}
+          </div>
+          {/* Post reaction quantities */}
+          <div className="w-full flex justify-between px-4 py-3">
+            {/* Like */}
+            <div className="w-fit flex items-center">
+              <Avatar src={actionHaha} sx={{ width: 18, height: 18 }} />
+              <span className="ml-1 text-dark-gray text-sm">
+                Bạn, Văn Mãi và 100 người khác
+              </span>
+            </div>
+            {/* Comment */}
+            <div className="w-fit flex items-center">
+              <ChatBubbleOutlineOutlinedIcon
+                className="text-dark-gray"
+                fontSize="small"
+              />
+              <span className="text-sm text-dark ml-1 -mt-1">79</span>
+            </div>
+          </div>
+          <Divider variant="middle" />
+          {/* Post reacting action */}
+          <div className="w-full flex justify-center items-center gap-x-1 mt-2">
+            <div className="w-fit flex items-center px-10 py-2 hover:bg-gray active:bg-gray-2 rounded-md cursor-pointer">
+              <Avatar src={actionHaha} sx={{ width: 18, height: 18 }} />
+              <span className="text-sm text-dark-gray ml-1 font-semibold">
+                Haha
+              </span>
+            </div>
+            <div
+              className="w-fit flex items-center px-6 py-2 hover:bg-gray active:bg-gray-2 rounded-md cursor-pointer"
+            >
+              <ChatBubbleOutlineOutlinedIcon
+                fontSize="small"
+                className="text-dark-gray -mb-0.5"
+              />
+              <span className="text-sm text-dark-gray ml-1 font-semibold">
+                Bình luận
+              </span>
+            </div>
+            <div className="w-fit flex items-center px-8 py-2 hover:bg-gray active:bg-gray-2 rounded-md cursor-pointer">
+              <ReplyOutlinedIcon fontSize="small" className="text-dark-gray" />
+              <span className="text-sm text-dark-gray ml-1 font-semibold">
+                Chia sẻ
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </DefaultLayout>
