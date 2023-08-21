@@ -17,7 +17,7 @@ const UserImageList = ({ images }) => {
       <Grid container spacing={1}>
         {images.map((image, index) => (
           <Grid key={index} item xs={4}>
-            <img className="w-full" src={image} alt={`image-${index}`} />
+            <img className="w-full" src={image} alt={`img-${index}`} />
           </Grid>
         ))}
       </Grid>

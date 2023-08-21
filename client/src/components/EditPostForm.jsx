@@ -4,11 +4,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import PublicIcon from "@mui/icons-material/Public";
 import { Avatar, Button, Divider } from "@mui/material";
 
-import { CustomTextField, ImageUploader } from "../components";
-import { POST_CREATION } from "../constants/common";
+import { CustomTextField, ImageEditor } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 
-const PostForm = ({ data, show, setShow, type }) => {
+const EditPostForm = ({ data, show, setShow }) => {
   const { loggingUser } = useStateContext();
   const postPanelRef = useRef();
 
@@ -47,7 +46,7 @@ const PostForm = ({ data, show, setShow, type }) => {
           </div>
         </div>
         <CustomTextField content={data?.content} />
-        {type === POST_CREATION && <ImageUploader /> }
+        <ImageEditor imageList={[data?.image]} />
         <div className="mt-3">
           <Button fullWidth disableElevation variant="contained">
             Đăng
@@ -58,4 +57,4 @@ const PostForm = ({ data, show, setShow, type }) => {
   );
 };
 
-export default PostForm;
+export default EditPostForm;

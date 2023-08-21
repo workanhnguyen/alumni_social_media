@@ -5,6 +5,7 @@ export { default as Header } from './Header';
 export { default as PostPanel } from './PostPanel';
 export { default as PostForm } from './PostForm';
 export { default as ImageUploader } from './ImageUploader';
+export { default as ImageEditor } from './ImageEditor';
 export { default as CustomTextField } from './CustomTextField';
 export { default as Post } from './Post';
 export { default as CoverImage } from './CoverImage';

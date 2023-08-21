@@ -4,8 +4,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -22,8 +20,8 @@ import {
   OutlinedInput,
 } from "@mui/material";
 
-import { ROLE_ALUMNI } from "../constants/Role";
-import { Copyright } from '../components';
+import { ROLE_ALUMNI } from "../constants/role";
+import { Copyright } from "../components";
 
 const defaultTheme = createTheme();
 
@@ -102,11 +100,8 @@ export default function SignIn({ role }) {
                 name="password"
               />
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Lưu đăng nhập"
-            />
-            <Link to='/dashboard'>
+
+            <Link to="/dashboard">
               <Button
                 type="submit"
                 fullWidth
@@ -119,14 +114,12 @@ export default function SignIn({ role }) {
               </Button>
             </Link>
             <Grid container>
-              <Grid item xs className="cursor-pointer">
-                <Link to="/register/alumni" className="underline text-primary text-sm">
-                  Quên mật khẩu
-                </Link>
-              </Grid>
               {role === ROLE_ALUMNI ? (
-                <Grid item className="cursor-pointer">
-                  <Link to="/register/alumni" className="underline text-primary text-sm">
+                <Grid fullWidth item className="flex justify-center cursor-pointer">
+                  <Link
+                    to="/register/alumni"
+                    className="underline text-primary text-sm"
+                  >
                     Chưa có tài khoản? Đăng ký
                   </Link>
                 </Grid>

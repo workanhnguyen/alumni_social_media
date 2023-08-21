@@ -4,12 +4,17 @@ import { Avatar } from "@mui/material";
 
 import PostForm from "./PostForm";
 import { blankAvatar } from "../assets";
+import { useStateContext } from "../contexts/ContextProvider";
+import { POST_CREATION } from "../constants/common";
 
 const PostPanel = ({ className }) => {
     const [showPostForm, setShowPostForm] = useState(false);
 
+    const { postType, setPostType } = useStateContext();
+
     const handleShowPostForm = () => {
         setShowPostForm(true);
+        setPostType(POST_CREATION);
     }
   return (
     <>
@@ -31,7 +36,7 @@ const PostPanel = ({ className }) => {
       </div>
 
       {/* Post form popup */}
-      <PostForm show={showPostForm} setShow={setShowPostForm} />
+      <PostForm type={postType} show={showPostForm} setShow={setShowPostForm} />
     </>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ROLE_LECTURER } from '../../constants/Role'
+import { ROLE_LECTURER } from '../../constants/role'
 import { SignInForm } from '../../components'
 
 const LecturerLogin = () => {

@@ -6,6 +6,7 @@ import blankAvatar from "./blank-avatar.jpg";
 import actionHaha from "./action-haha.svg";
 import actionHeart from "./action-heart.svg";
 import actionLike from "./action-like.svg";
+import placeholderImage from "./placeholder-image.jpg";
 
 export {
   logoLong,
@@ -16,4 +17,5 @@ export {
   actionHaha,
   actionHeart,
   actionLike,
+  placeholderImage
 };

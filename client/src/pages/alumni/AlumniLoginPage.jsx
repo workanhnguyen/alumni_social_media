@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ROLE_ALUMNI } from '../../constants/Role';
+import { ROLE_ALUMNI } from '../../constants/role';
 import { SignInForm } from '../../components';
 
 const AlumniLogin = () => {

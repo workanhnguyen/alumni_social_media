@@ -164,7 +164,7 @@ export default function SignUp() {
               </Button>
             </Link>
             <Grid container justifyContent="flex-end">
-              <Grid item>
+              <Grid fullWidth item className="flex justify-center">
                 <Link
                   to="/login/alumni"
                   className="underline text-primary text-sm cursor-pointer"

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 
 import ReactQuill from "react-quill";
 
-const CustomTextField = () => {
-  const [text, setText] = useState("");
+const CustomTextField = ({ content }) => {
+  const [text, setText] = useState(content || '');
   
   return (
     <div className="mt-3">

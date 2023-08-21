@@ -1,0 +1,2 @@
+export const POST_CREATION = 'POST_CREATION';
+export const POST_EDITION = 'POST_EDITION';

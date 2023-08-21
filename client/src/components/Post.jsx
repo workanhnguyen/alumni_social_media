@@ -19,7 +19,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { actionHaha, blankAvatar } from "../assets";
 import { Link } from "react-router-dom";
 import loggedInUser from "../data/user";
-import { PostForm } from ".";
+import { POST_EDITION } from "../constants/common";
+import { useStateContext } from "../contexts/ContextProvider";
+import EditPostForm from "./EditPostForm";
 
 const user = loggedInUser;
 
@@ -27,6 +29,8 @@ const Post = ({ data, className }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [showEditPostForm, setShowEditPostForm] = useState(false);
   const open = Boolean(anchorEl);
+
+  const { postType, setPostType } = useStateContext();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -37,6 +41,7 @@ const Post = ({ data, className }) => {
 
   const handleShowEditPostForm = () => {
     setShowEditPostForm(true);
+    setPostType(POST_EDITION);
     handleClose();
   }
   return (
@@ -167,7 +172,7 @@ const Post = ({ data, className }) => {
         </Menu>
       </div>
       {/* Post form popup */}
-      <PostForm show={showEditPostForm} setShow={setShowEditPostForm} />
+      <EditPostForm type={postType} data={data} show={showEditPostForm} setShow={setShowEditPostForm} />
     </>
   );
 };

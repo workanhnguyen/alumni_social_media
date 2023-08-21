@@ -17,7 +17,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 import { blankAvatar, logo1, logo2 } from "../assets";
-import { GROUP, HOME, LETTER } from "../constants/Role";
+import { GROUP, HOME, LETTER } from "../constants/page";
 import { useStateContext } from "../contexts/ContextProvider";
 import loggedInUser from "../data/user";
 
