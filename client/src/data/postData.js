@@ -1,7 +1,7 @@
 const posts = [
     {
       "id": 1,
-      "content": "Lorem ipsum dolor sit amet.",
+      "content": "<h1>Lorem ipsum dolor sit amet</h1>Something outside",
       "timestamp": "2023-08-06T10:00:00Z",
       "is_lock": false,
       "image": "https://u4d2z7k9.rocketcdn.me/wp-content/uploads/2021/10/rsz_sk_rahaman_hossain_1-min.jpg",
