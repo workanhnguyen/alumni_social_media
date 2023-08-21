@@ -13,9 +13,9 @@ const PostDetailPage = () => {
   return (
     <DefaultLayout>
       <div className="w-full h-full flex justify-center bg-gray">
-        <div className="max-sm:w-full w-150 bg-white my-6 mt-20 px-4 py-3 rounded-md drop-shadow-sm">
+        <div className="max-sm:w-full w-150 bg-white my-6 mt-20 py-3 rounded-md drop-shadow-sm">
           {/* Post creator info */}
-          <div className="w-fit flex items-center">
+          <div className="w-fit flex items-center px-4">
             <Avatar
               src={blankAvatar}
               alt="avatar"
@@ -30,6 +30,9 @@ const PostDetailPage = () => {
               </div>
             </div>
           </div>
+
+          {/* Post content */}
+          <div className="mt-3 px-4" dangerouslySetInnerHTML={{ __html: postDetail?.content }} />
         </div>
       </div>
     </DefaultLayout>
