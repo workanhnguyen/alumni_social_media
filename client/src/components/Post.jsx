@@ -17,9 +17,8 @@ import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { actionHaha, blankAvatar } from "../assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loggedInUser from "../data/user";
-import { POST_EDITION } from "../constants/common";
 import { useStateContext } from "../contexts/ContextProvider";
 import EditPostForm from "./EditPostForm";
 
@@ -30,7 +29,9 @@ const Post = ({ data, className }) => {
   const [showEditPostForm, setShowEditPostForm] = useState(false);
   const open = Boolean(anchorEl);
 
-  const { postType, setPostType } = useStateContext();
+  const { setPostDetail } = useStateContext();
+
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -41,9 +42,14 @@ const Post = ({ data, className }) => {
 
   const handleShowEditPostForm = () => {
     setShowEditPostForm(true);
-    setPostType(POST_EDITION);
     handleClose();
-  }
+  };
+
+  const handleNavigateToPostDetailPage = () => {
+    setPostDetail(data);
+    navigate(`/posts/${data.id}`);
+  };
+
   return (
     <>
       <div
@@ -67,7 +73,7 @@ const Post = ({ data, className }) => {
                 className="font-semibold hover:underline cursor-pointer"
               >{`${data.user.first_name} ${data.user.last_name}`}</Link>
              <div className="flex items-center text-dark-gray">
-                <span className="text-xs">{data.timestamp}</span>
+                <span onClick={handleNavigateToPostDetailPage} className="text-xs hover:underline cursor-pointer">{data.timestamp}</span>
                 <PublicIcon fontSize="inherit" className="ml-1.5 mb-0.5" />
              </div>
             </div>
@@ -123,7 +129,7 @@ const Post = ({ data, className }) => {
               Haha
             </span>
           </div>
-          <div className="w-fit flex items-center px-6 py-2 hover:bg-gray active:bg-gray-2 rounded-md cursor-pointer">
+          <div onClick={handleNavigateToPostDetailPage} className="w-fit flex items-center px-6 py-2 hover:bg-gray active:bg-gray-2 rounded-md cursor-pointer">
             <ChatBubbleOutlineOutlinedIcon
               fontSize="small"
               className="text-dark-gray -mb-0.5"
@@ -172,7 +178,7 @@ const Post = ({ data, className }) => {
         </Menu>
       </div>
       {/* Post form popup */}
-      <EditPostForm type={postType} data={data} show={showEditPostForm} setShow={setShowEditPostForm} />
+      <EditPostForm data={data} show={showEditPostForm} setShow={setShowEditPostForm} />
     </>
   );
 };

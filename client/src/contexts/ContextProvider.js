@@ -15,6 +15,7 @@ export const ContextProvider = ({ children }) => {
   const [pageContent, setPageContent] = useState(HOME);
   const [loggingUser, setLoggingUser] = useState(initUser);
   const [postType, setPostType] = useState(null);
+  const [postDetail, setPostDetail] = useState(null);
 
   return (
     <StateContext.Provider
@@ -25,6 +26,8 @@ export const ContextProvider = ({ children }) => {
         setLoggingUser,
         postType,
         setPostType,
+        postDetail,
+        setPostDetail
       }}
     >
       {children}

@@ -5,7 +5,6 @@ import PublicIcon from "@mui/icons-material/Public";
 import { Avatar, Button, Divider } from "@mui/material";
 
 import { CustomTextField, ImageUploader } from "../components";
-import { POST_CREATION } from "../constants/common";
 import { useStateContext } from "../contexts/ContextProvider";
 
 const PostForm = ({ data, show, setShow, type }) => {
@@ -47,7 +46,7 @@ const PostForm = ({ data, show, setShow, type }) => {
           </div>
         </div>
         <CustomTextField content={data?.content} />
-        {type === POST_CREATION && <ImageUploader /> }
+        <ImageUploader />
         <div className="mt-3">
           <Button fullWidth disableElevation variant="contained">
             Đăng
