@@ -8,6 +8,7 @@ export { default as ImageUploader } from './ImageUploader';
 export { default as ImageEditor } from './ImageEditor';
 export { default as CustomTextField } from './CustomTextField';
 export { default as Post } from './Post';
+export { default as Comment } from './Comment';
 export { default as CoverImage } from './CoverImage';
 export { default as UserAvatar } from './UserAvatar';
 export { default as UserCommonInfo } from './UserCommonInfo';

@@ -4,11 +4,13 @@ import PublicIcon from "@mui/icons-material/Public";
 import { Avatar, Divider } from "@mui/material";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 
 import { useStateContext } from "../contexts/ContextProvider";
 import { DefaultLayout } from "../layouts";
 import { actionHaha, blankAvatar } from "../assets";
+import { commentData } from "../data/commentData";
+import { Comment } from "../components";
 
 const images = [
   blankAvatar,
@@ -18,17 +20,19 @@ const images = [
   blankAvatar,
 ];
 
+const comments = commentData;
+
 const PostDetailPage = () => {
-    const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
   const { postDetail } = useStateContext();
 
   const handleCommentContentChange = (e) => {
     setComment(e.target.value);
   };
 
-    // useEffect(() => {
-        
-    // }, [comment]);
+  // useEffect(() => {
+
+  // }, [comment]);
   return (
     <DefaultLayout>
       <div className="w-full h-full flex justify-center bg-gray">
@@ -112,18 +116,31 @@ const PostDetailPage = () => {
 
           {/* Comment section */}
           <div className="w-full flex flex-col px-4 mt-3">
-            <div className="flex items-center">
+            <div className="flex flex items-center">
               <Avatar
                 src={blankAvatar}
                 alt="avatar"
                 sx={{ width: 32, height: 32 }}
               />
-              <div
-                className="relative flex-1 flex items-center ml-1 rounded-3xl cursor-pointer hover:bg-gray-2 overflow-hidden"
-              >
-                <input onChange={handleCommentContentChange} className="w-full px-3 py-2 border-none outline-none text-dark-gray bg-gray" placeholder="Viết bình luận..." />
-                <span className={`absolute right-3 ${comment === '' ? 'hidden' : 'block' } text-primary`}><SendIcon fontSize="small" /></span>
+              <div className="relative flex-1 flex items-center ml-1 rounded-3xl cursor-pointer hover:bg-gray-2 overflow-hidden">
+                <input
+                  onChange={handleCommentContentChange}
+                  className="w-full px-3 py-2 border-none outline-none text-dark-gray bg-gray"
+                  placeholder="Viết bình luận..."
+                />
+                <span
+                  className={`absolute right-3 ${
+                    comment === "" ? "hidden" : "block"
+                  } text-primary`}
+                >
+                  <SendIcon fontSize="small" />
+                </span>
               </div>
+            </div>
+            <div className="mt-6">
+              {comments.map((comment, index) => (
+                <Comment key={index} data={comment} />
+              ))}
             </div>
           </div>
         </div>
