@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import PublicIcon from "@mui/icons-material/Public";
 import { Avatar, Divider } from "@mui/material";

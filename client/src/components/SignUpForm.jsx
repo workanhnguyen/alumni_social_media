@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import cookie from "react-cookies";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -14,16 +13,13 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
-import InfoIcon from "@mui/icons-material/Info";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { Copyright } from "../components";
-import { ALUMNI, EMAIL_REGEX, LOGIN } from "../constants/common";
+import { ALUMNI, EMAIL_REGEX } from "../constants/common";
 import { ALUMNI_LOGIN } from "../routes";
-import { ROLE_ALUMNI } from "../constants/role";
-import { useStateContext } from "../contexts/ContextProvider";
-import Apis, { authApi, endpoints } from "../configs/Apis";
-import { Alert, CircularProgress } from "@mui/material";
+import Apis, { endpoints } from "../configs/Apis";
+import { CircularProgress } from "@mui/material";
 
 const defaultTheme = createTheme();
 
