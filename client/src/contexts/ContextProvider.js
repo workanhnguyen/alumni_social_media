@@ -1,5 +1,9 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useReducer, useState } from "react";
+
+import cookie from "react-cookies";
+
 import { HOME } from "../constants/page";
+import UserReducer from "../reducers/UserReducer";
 
 const StateContext = createContext();
 
@@ -12,6 +16,8 @@ const initUser = {
 };
 
 export const ContextProvider = ({ children }) => {
+  const [user, dispatch] = useReducer(UserReducer, cookie.load("user") || null);
+
   const [pageContent, setPageContent] = useState(HOME);
   const [loggingUser, setLoggingUser] = useState(initUser);
   const [postType, setPostType] = useState(null);
@@ -27,7 +33,9 @@ export const ContextProvider = ({ children }) => {
         postType,
         setPostType,
         postDetail,
-        setPostDetail
+        setPostDetail,
+        user,
+        dispatch
       }}
     >
       {children}

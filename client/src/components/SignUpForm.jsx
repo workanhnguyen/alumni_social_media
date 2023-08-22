@@ -1,45 +1,148 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import cookie from "react-cookies";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import {
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-} from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import CloseIcon from "@mui/icons-material/Close";
+import InfoIcon from "@mui/icons-material/Info";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { Copyright } from "../components";
+import { ALUMNI, EMAIL_REGEX, LOGIN } from "../constants/common";
+import { ALUMNI_LOGIN } from "../routes";
+import { ROLE_ALUMNI } from "../constants/role";
+import { useStateContext } from "../contexts/ContextProvider";
+import Apis, { authApi, endpoints } from "../configs/Apis";
+import { Alert, CircularProgress } from "@mui/material";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [studentId, setStudentId] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [avatar, setAvatar] = useState(null);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  const [alertMessage, setAlertMessage] = useState("");
+  const [fnAlert, setFnAlert] = useState(false);
+  const [lnAlert, setLnAlert] = useState(false);
+  const [sIdAlert, setSIdAlert] = useState(false);
+  const [eAlert, setEAlert] = useState(false);
+  const [pAlert, setPAlert] = useState(false);
+  const [cpAlert, setCpAlert] = useState(false);
+  const [aAlert, setAAlert] = useState(false);
+
+  const [showProgress, setShowProgress] = useState(false);
+  const [isRegisterSuccessfull, setIsRegisterSuccessfull] = useState(false);
+  const fileInputRef = useRef();
+  const navigate = useNavigate();
+
+  const handleChooseAvatar = (e) => {
+    setAvatar(e.target.files[0]);
   };
+
+  const handleRemoveAvatar = () => {
+    setAvatar(null);
+  };
+
+  const handleResetInputField = () => {
+    setFirstName("");
+    setLastName("");
+    setStudentId("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setAvatar(null);
+    setAlertMessage("");
+  };
+
+  const handleRegister = async (body) => {
+    try {
+      setShowProgress(true);
+
+      let res = await Apis.post(endpoints["register"], body);
+
+      if (res.data === true) {
+        setIsRegisterSuccessfull(true);
+        setTimeout(() => navigate(ALUMNI_LOGIN), 2000);
+      }
+    } catch (err) {
+      console.log(err);
+      setAlertMessage("Đăng ký thất bại, vui lòng thử lại sau!");
+      setShowProgress(false);
+    } finally {
+      handleResetInputField();
+      setShowProgress(false);
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    setAlertMessage("");
+
+    const message = validate();
+
+    if (message === "") {
+      const userForm = new FormData();
+      userForm.append("username", studentId);
+      userForm.append("studentId", studentId);
+      userForm.append("firstName", firstName);
+      userForm.append("lastName", lastName);
+      userForm.append("email", email);
+      userForm.append("role", ALUMNI);
+      userForm.append("password", password);
+      userForm.append("avatar", avatar, avatar.name);
+
+      handleRegister(userForm);
+    } else {
+      setAlertMessage(message);
+    }
+  };
+
+  const validate = () => {
+    let message = "";
+
+    if (
+      firstName === "" ||
+      lastName === "" ||
+      studentId === "" ||
+      email === "" ||
+      password === "" ||
+      confirmPassword === "" ||
+      avatar === null
+    ) {
+      message = "Vui lòng nhập đầy đủ thông tin!";
+    } else if (password !== confirmPassword) {
+      message = "Mật khẩu không trùng khớp!";
+    } else if (!EMAIL_REGEX.test(email)) {
+      message = "Định dạng email không hợp lệ!";
+    }
+
+    setFnAlert(firstName === "");
+    setLnAlert(lastName === "");
+    setSIdAlert(studentId === "");
+    setEAlert(email === "");
+    setEAlert(!EMAIL_REGEX.test(email));
+    setPAlert(password === "" || password !== confirmPassword ? true : false);
+    setCpAlert(
+      confirmPassword === "" || confirmPassword !== password ? true : false
+    );
+    setAAlert(avatar === null);
+
+    return message;
   };
 
   return (
@@ -48,10 +151,11 @@ export default function SignUp() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
             display: "flex",
+            height: "100vh",
             flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
@@ -69,114 +173,179 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  error={lnAlert}
                   name="lastName"
                   required
                   fullWidth
                   id="lastName"
                   label="Họ và tên đệm"
                   autoFocus
+                  size="small"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  error={fnAlert}
                   required
                   fullWidth
                   id="firstName"
                   label="Tên"
                   name="firstName"
+                  size="small"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  value={studentId}
+                  onChange={(e) => setStudentId(e.target.value)}
+                  error={sIdAlert}
                   required
                   fullWidth
                   id="studentId"
                   label="Mã số sinh viên"
                   name="studentId"
+                  size="small"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  error={eAlert}
                   required
                   fullWidth
                   id="email"
                   label="Địa chỉ email"
                   name="email"
+                  size="small"
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormControl variant="outlined" fullWidth required>
-                  <InputLabel htmlFor="password">Mật khẩu</InputLabel>
-                  <OutlinedInput
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Mật khẩu"
-                    name="password"
-                  />
-                </FormControl>
+                <TextField
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  error={pAlert}
+                  id="password"
+                  type="password"
+                  size="small"
+                  required
+                  label="Mật khẩu"
+                  name="password"
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={12}>
-                <FormControl variant="outlined" fullWidth required>
-                  <InputLabel htmlFor="confirmPassword">Nhập lại mật khẩu</InputLabel>
-                  <OutlinedInput
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowConfirmPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Nhập lại mật khẩu"
-                    name="confirmPassword"
-                  />
-                </FormControl>
+                <TextField
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  error={cpAlert}
+                  id="confirm-password"
+                  size="small"
+                  type="password"
+                  required
+                  label="Nhập lại mật khẩu"
+                  name="confirmPassword"
+                  fullWidth
+                />
               </Grid>
-            </Grid>
-            <Link to='/dashboard'>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                disableElevation
-                size="large"
+              <Grid item xs={12}>
+                <div
+                  className={`w-full h-40 border p-2 ${
+                    aAlert ? "border-red" : "border-gray-2"
+                  } rounded-md overflow-auto`}
+                >
+                  {avatar === null ? (
+                    <label
+                      htmlFor="fileInput"
+                      className={`relative overflow-auto`}
+                    >
+                      <div className="w-full h-full flex flex-col justify-center items-center bg-gray-3 rounded-md hover:bg-gray-2 cursor-pointer">
+                        <AddPhotoAlternateIcon fontSize="large" />
+                        <span className="font-semibold">
+                          Thêm ảnh đại diện *
+                        </span>
+                      </div>
+                    </label>
+                  ) : (
+                    <div className="relative w-full h-full bg-gray-3 overflow-auto rounded-md">
+                      <div className="relative mb-3">
+                        <div
+                          onClick={handleRemoveAvatar}
+                          className="absolute top-2.5 right-3 px-1.5 py-1 drop-shadow-md rounded-full bg-white cursor-pointer hover:bg-gray-2"
+                        >
+                          <CloseIcon fontSize="small" />
+                        </div>
+                        <img
+                          className="h-full"
+                          src={URL.createObjectURL(avatar)}
+                          alt="avatar-preview"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Grid>
+              <Grid
+                item
+                className={`${
+                  alertMessage === "" ? "hidden" : "block"
+                } w-full flex justify-center text-red`}
               >
-                Đăng ký
-              </Button>
-            </Link>
-            <Grid container justifyContent="flex-end">
-              <Grid fullWidth item className="flex justify-center">
+                {alertMessage}
+              </Grid>
+              <Grid item xs={12}>
+                {isRegisterSuccessfull ? (
+                  <Button
+                    color="success"
+                    size="large"
+                    variant="outlined"
+                    fullWidth
+                    startIcon={<CheckCircleIcon />}
+                    sx={{ mt: 0, mb: 2 }}
+                  >
+                    Đăng ký thành công
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant={`${showProgress ? "outlined" : "contained"}`}
+                    sx={{ mt: 0, mb: 2 }}
+                    disableElevation
+                    size="large"
+                  >
+                    {showProgress ? <CircularProgress size={28} /> : "Đăng ký"}
+                  </Button>
+                )}
+              </Grid>
+              <Grid item xs={12}>
                 <Link
                   to="/login/alumni"
-                  className="underline text-primary text-sm cursor-pointer"
+                  className="w-full flex justify-center -mt-3 underline text-primary text-sm cursor-pointer"
                 >
                   Đã có tài khoản? Đăng nhập
                 </Link>
               </Grid>
+              <Grid item xs={12}>
+                <Copyright sx={{ mt: 0 }} />
+              </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
+      <input
+        className="hidden"
+        ref={fileInputRef}
+        id="fileInput"
+        type="file"
+        multiple={false}
+        accept=".png, .jpg"
+        onChange={handleChooseAvatar}
+      />
     </ThemeProvider>
   );
 }

@@ -13,7 +13,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="server" options="-endorseddirs E:\LTJava\project_java\server\target/endorsed" />
+      <module name="server" options="-endorseddirs C:\MyData\OldDeviceData\HCMCOpenUniversity\223_HCMCOU\LapTrinhJava\project_java\server\target/endorsed" />
     </option>
   </component>
 </project>
