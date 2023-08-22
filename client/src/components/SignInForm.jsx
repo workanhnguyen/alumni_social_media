@@ -113,12 +113,12 @@ export default function SignIn({ role }) {
                 Đăng nhập
               </Button>
             </Link>
-            <Grid container>
+            <Grid container justifyContent='center'>
               {role === ROLE_ALUMNI ? (
-                <Grid fullWidth item className="flex justify-center cursor-pointer">
+                <Grid item className="flex justify-center cursor-pointer">
                   <Link
                     to="/register/alumni"
-                    className="underline text-primary text-sm"
+                    className="underline mt-3 text-primary text-sm"
                   >
                     Chưa có tài khoản? Đăng ký
                   </Link>
@@ -127,7 +127,7 @@ export default function SignIn({ role }) {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        <Copyright sx={{ mt: 3, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );
