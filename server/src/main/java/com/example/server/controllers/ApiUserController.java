@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.Map;
 
 @RestController
@@ -22,25 +24,24 @@ public class ApiUserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(path = "/sign_up",
+    @PostMapping(path = "/register/",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<?> addUser(@RequestParam Map<String, String> params, @RequestPart MultipartFile avatar) {
         String role = params.get("role");
         if (!isValidUserData(params, avatar, role)) {
-            return new ResponseEntity<>(false, HttpStatus.OK);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        } else {
+            this.userService.addUser(params, avatar);
+            return new ResponseEntity<>(true, HttpStatus.CREATED);
         }
-        
-        Users user = this.userService.addUser(params, avatar);
-        
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
     
-    @PostMapping("/sign_in")
+    @PostMapping("/login/")
     @CrossOrigin
     public ResponseEntity<String> login(@RequestBody Users user) {
-        if (this.userService.authUser(user.getUsername(), user.getPassword()) == true) {
+        if (this.userService.authUser(user.getUsername(), user.getPassword())) {
             String token = this.jwtService.generateTokenLogin(user.getUsername());
             
             return new ResponseEntity<>(token, HttpStatus.OK);
@@ -62,6 +63,13 @@ public class ApiUserController {
 //        }
 //        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 //    }
+
+    @GetMapping(path = "/current-user/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<?> details(Principal user) {
+        Users u = this.userService.getUserByUsername(user.getName());
+        return new ResponseEntity<>(u, HttpStatus.OK);
+    }
     
     
     
