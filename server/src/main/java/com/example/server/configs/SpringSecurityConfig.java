@@ -56,7 +56,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http)
             throws Exception {
 
-        http.formLogin().loginPage("/login")
+        http.formLogin()
                 .usernameParameter("username")
                 .passwordParameter("password");
 

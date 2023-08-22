@@ -15,6 +15,24 @@
     <class>com.example.server.pojos.Lecturer</class>
     <class>com.example.server.pojos.Question</class>
     <class>com.example.server.pojos.Group</class>
+    <class>com.example.server.pojos.Posts</class>
+    <class>com.example.server.pojos.Users</class>
+    <class>com.example.server.pojos.Majors</class>
+    <class>com.example.server.pojos.Surveys</class>
+    <class>com.example.server.pojos.Questions</class>
+    <class>com.example.server.pojos.Letters</class>
+    <class>com.example.server.pojos.Groups</class>
+    <class>com.example.server.pojos.AcademicYears</class>
+    <class>com.example.server.pojos.Reactions</class>
+    <class>com.example.server.pojos.GroupMembers</class>
+    <class>com.example.server.pojos.Shares</class>
+    <class>com.example.server.pojos.Options</class>
+    <class>com.example.server.pojos.SurveyParticipants</class>
+    <class>com.example.server.pojos.Answers</class>
+    <class>com.example.server.pojos.Images</class>
+    <class>com.example.server.pojos.Departments</class>
+    <class>com.example.server.pojos.Comments</class>
+    <class>com.example.server.pojos.SurveyParticipant</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/social_media_db?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
