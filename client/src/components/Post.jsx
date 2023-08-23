@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 
 import {
-  Avatar,
   Divider,
-  ListItemIcon,
-  ListItemText,
   Menu,
   MenuItem,
 } from "@mui/material";
@@ -24,27 +21,15 @@ import {
 import PostImageSlider from "./PostImageSlider";
 import { POST_DETAIL } from "../constants/common";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
-import { actionHaha, actionHeart, actionLike } from "../assets";
-import { Link } from "react-router-dom";
 
 const comments = commentData;
 
 const Post = ({ data, className, type }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
   const [showEditPostForm, setShowEditPostForm] = useState(false);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [showCommentSection, setShowCommentSection] = useState(true);
 
   const handleShowEditPostForm = () => {
     setShowEditPostForm(true);
-    handleClose();
   };
 
   return (
@@ -114,10 +99,16 @@ const Post = ({ data, className, type }) => {
         <Divider variant="middle" />
         {/* Comment section */}
         <div className="mt-3">
-          <CommentSection
+          {data?.isLock ? (
+            <div className="flex justify-center mb-3">
+              <p className="text-dark-gray">Phần bình luận đã bị khóa</p>
+            </div>
+          ) : (
+            <CommentSection
             comments={comments}
             quantity={type === POST_DETAIL ? comments.length : 1}
           />
+          )}
         </div>
       </div>
       {/* Post form popup */}
