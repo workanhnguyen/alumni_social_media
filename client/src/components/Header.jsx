@@ -98,7 +98,7 @@ const Header = () => {
                     </Link>
                   </MenuItem>
                   <MenuItem onClick={popupState.close}>
-                    <div onClick={handleLogout} className="flex items-center text-red">
+                    <div onClick={handleLogout} className="w-full flex items-center text-red">
                       <LogoutOutlinedIcon fontSize="small" />
                       <span className="ml-2">Đăng xuất</span>
                     </div>
