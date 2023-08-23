@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +34,9 @@ public class UserServiceImp implements UserService {
     @Autowired
     private Cloudinary cloudinary;
     
+    LocalDateTime currentTime = LocalDateTime.now();
+    Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
+    
     @Override
     public Users addUser(Map<String, String> params, MultipartFile avatar) {
         Users u = new Users();
@@ -38,10 +44,11 @@ public class UserServiceImp implements UserService {
         u.setFirstName(params.get("firstName"));
         u.setLastName(params.get("lastName"));
         u.setUsername(params.get("username"));
-        
+        u.setIsActive(true);
+        u.setCreatedAt(this.currentDate);
         u.setRole(params.get("role"));
         String role = params.get("role");
-        if ("2".equals(role)) {
+        if ("ALUMNI".equals(role)) {
             u.setStudentId(params.get("studentId")); 
             u.setPassword(this.passwordEncoder.encode(params.get("password")));
         } else {
@@ -68,11 +75,17 @@ public class UserServiceImp implements UserService {
     
     @Override
     public boolean authUser(String username, String password) {
-        return this.userRepo.authUser(username, password);
+        Users u = this.userRepo.getUserByUsername(username);
+        Boolean check = isCreatedAtWithin24Hours(u.getCreatedAt());
+        if (this.userRepo.authUser(username, password))
+            return true;
+        
+        u.setIsActive(false);
+        return false;
     }
 
     @Override
-      public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Users u = this.userRepo.getUserByUsername(username);
         if (u == null) {
             throw new UsernameNotFoundException("Invalid");
@@ -81,5 +94,25 @@ public class UserServiceImp implements UserService {
         authorities.add(new SimpleGrantedAuthority(u.getRole()));
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
+    }
+
+    @Override
+    public boolean changePassword(String password, String newPassword, Users u) {
+        password = this.passwordEncoder.encode(password);
+        if( passwordEncoder.matches(password, u.getPassword()))
+        {
+            u.setPassword(this.passwordEncoder.encode(newPassword));
+            u.setUpdatedAt(this.currentDate);
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean isCreatedAtWithin24Hours(Date createdAt) {
+        Date now = new Date();
+        long timeDifferenceInMillis = now.getTime() - createdAt.getTime();
+        long twentyFourHoursInMillis = 24 * 60 * 60 * 1000; // 24 giờ * 60 phút * 60 giây * 1000 milliseconds
+
+        return timeDifferenceInMillis <= twentyFourHoursInMillis;
     }
 }

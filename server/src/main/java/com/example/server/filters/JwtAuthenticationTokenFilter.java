@@ -28,6 +28,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import com.example.server.pojos.Users;
 import com.example.server.components.JwtService;
 import com.example.server.services.UserService;
+import org.springframework.stereotype.Component;
+
 
 public class JwtAuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter{
      private final static String TOKEN_HEADER = "authorization";

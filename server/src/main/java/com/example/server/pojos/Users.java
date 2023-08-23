@@ -72,6 +72,7 @@ public class Users implements Serializable {
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "password")
+    
     private String password;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
@@ -100,6 +101,7 @@ public class Users implements Serializable {
     private String bgImage;
     @Size(max = 255)
     @Column(name = "password_reset_token")
+    
     private String passwordResetToken;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -119,28 +121,37 @@ public class Users implements Serializable {
         @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "letter_id", referencedColumnName = "id")})
     @ManyToMany
+    @JsonIgnore
     private Set<Letters> lettersSet;
     @JoinTable(name = "survey_participant", joinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "survey_id", referencedColumnName = "id")})
     @ManyToMany
+    @JsonIgnore
     private Set<Surveys> surveysSet;
     @ManyToMany(mappedBy = "usersSet")
+    @JsonIgnore
     private Set<Groups> groupsSet;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     private Set<Comments> commentsSet;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     private Set<Surveys> surveysSet1;
     @OneToMany(mappedBy = "creatorId")
+    @JsonIgnore
     private Set<Groups> groupsSet1;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     private Set<Posts> postsSet;
     @JoinColumn(name = "major_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Majors majorId;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     private Set<Shares> sharesSet;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     private Set<Reactions> reactionsSet;
 
     public Users() {
@@ -173,7 +184,7 @@ public class Users implements Serializable {
         this.username = username;
     }
 
-
+    
     public String getPassword() {
         return password;
     }
