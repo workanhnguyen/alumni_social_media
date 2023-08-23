@@ -1,17 +1,12 @@
 import React from "react";
 
-import { Divider } from "@mui/material";
-
 import { DefaultLayout } from "../layouts";
-import { commentData } from "../data/commentData";
-import { CommentSection, Post } from "../components";
+import { Post } from "../components";
 import { postData } from "../data";
 import { useParams } from "react-router-dom";
 import { POST_DETAIL } from "../constants/common";
 
 const posts = postData;
-
-const comments = commentData;
 
 const PostDetailPage = () => {
   const { postId } = useParams();
