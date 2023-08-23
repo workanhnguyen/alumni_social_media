@@ -26,7 +26,6 @@ const comments = commentData;
 
 const Post = ({ data, className, type }) => {
   const [showEditPostForm, setShowEditPostForm] = useState(false);
-  const [showCommentSection, setShowCommentSection] = useState(true);
 
   const handleShowEditPostForm = () => {
     setShowEditPostForm(true);
