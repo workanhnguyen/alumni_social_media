@@ -1,42 +1,29 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import {
-  Avatar,
-  Container,
-  Divider,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-} from "@mui/material";
+import { Avatar, Container, Menu, MenuItem } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
 import EmailIcon from "@mui/icons-material/Email";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import LogoutIcon from "@mui/icons-material/Logout";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
 import { blankAvatar, logo1, logo2 } from "../assets";
 import { GROUP, HOME, LETTER } from "../constants/page";
 import { useStateContext } from "../contexts/ContextProvider";
-import loggedInUser from "../data/user";
-
-const user = loggedInUser;
+import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 
 const Header = () => {
-  const { pageContent, setPageContent } = useStateContext();
+  const { pageContent, setPageContent, user } = useStateContext();
+
+  const navigate = useNavigate();
 
   const handleIconClick = (iconName) => {
     setPageContent(iconName);
   };
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleLogout = () => {
+    navigate('/', { replace: true })
   };
 
   return (
@@ -78,49 +65,48 @@ const Header = () => {
             </Link>
           </div>
           {/* Avatar */}
-          <div className="w-fit flex justify-end items-center">
-            <div className="md:flex md:items-center md:bg-gray md:px-4 md:py-2 md:rounded-md">
-              <p className="mr-2 font-semibold max-md:hidden">Anh Nguyễn</p>
-              <Avatar
-                aria-controls={open ? "user-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
-                sx={{ width: 35, height: 35 }}
-                alt="User Avatar"
-                src={blankAvatar}
-                className="cursor-pointer"
-              />
-            </div>
 
-            <Menu
-              id="user-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <Link to={`/${user.username}`}>
-                <MenuItem>
-                  <ListItemIcon>
-                    <VisibilityIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>Xem trang cá nhân</ListItemText>
-                </MenuItem>
-              </Link>
-              <div className="my-2">
-                <Divider />
-              </div>
-              <MenuItem>
-                <ListItemIcon>
-                  <LogoutIcon fontSize="small" className="text-red" />
-                </ListItemIcon>
-                <ListItemText className="text-red">Đăng xuất</ListItemText>
-              </MenuItem>
-            </Menu>
-          </div>
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <>
+                <div
+                  {...bindTrigger(popupState)}
+                  className="w-fit flex justify-end items-center"
+                >
+                  <div className="md:flex md:items-center md:bg-gray md:px-4 md:py-2 md:rounded-md">
+                    <p className="mr-2 font-semibold max-md:hidden">
+                      Anh Nguyễn
+                    </p>
+                    <Avatar
+                      sx={{ width: 35, height: 35 }}
+                      alt="User Avatar"
+                      src={blankAvatar}
+                      className="cursor-pointer"
+                    />
+                  </div>
+                </div>
+                <Menu
+                  anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                  transformOrigin={{ vertical: "top", horizontal: "center" }}
+                  elevation={2}
+                  {...bindMenu(popupState)}
+                >
+                  <MenuItem onClick={popupState.close}>
+                    <Link to={`/${user?.username}`} className="flex items-center">
+                      <AccountCircleOutlinedIcon fontSize="small" />
+                      <span className="ml-2">Xem trang cá nhân</span>
+                    </Link>
+                  </MenuItem>
+                  <MenuItem onClick={popupState.close}>
+                    <div onClick={handleLogout} className="flex items-center text-red">
+                      <LogoutOutlinedIcon fontSize="small" />
+                      <span className="ml-2">Đăng xuất</span>
+                    </div>
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
+          </PopupState>
         </div>
       </Container>
     </div>

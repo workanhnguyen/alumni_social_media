@@ -16,10 +16,9 @@ const initUser = {
 };
 
 export const ContextProvider = ({ children }) => {
-  const [user, dispatch] = useReducer(UserReducer, cookie.load("user") || null);
+  const [user, dispatch] = useReducer(UserReducer, cookie.load("user") || initUser);
 
   const [pageContent, setPageContent] = useState(HOME);
-  const [loggingUser, setLoggingUser] = useState(initUser);
   const [postType, setPostType] = useState(null);
   const [postDetail, setPostDetail] = useState(null);
 
@@ -28,8 +27,6 @@ export const ContextProvider = ({ children }) => {
       value={{
         pageContent,
         setPageContent,
-        loggingUser,
-        setLoggingUser,
         postType,
         setPostType,
         postDetail,
