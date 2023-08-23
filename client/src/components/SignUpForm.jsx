@@ -18,8 +18,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Copyright } from "../components";
 import { ALUMNI, EMAIL_REGEX } from "../constants/common";
 import { ALUMNI_LOGIN } from "../routes";
-import Apis, { endpoints } from "../configs/Apis";
 import { CircularProgress } from "@mui/material";
+import { registerUser } from "../apis/UserApi";
 
 const defaultTheme = createTheme();
 
@@ -67,20 +67,23 @@ export default function SignUp() {
 
   const handleRegister = async (body) => {
     try {
+      
       setShowProgress(true);
 
-      let res = await Apis.post(endpoints["register"], body);
+      let { data } = await registerUser(body);
 
-      if (res.data === true) {
+      if (data) {
+        handleResetInputField();
         setIsRegisterSuccessfull(true);
         setTimeout(() => navigate(ALUMNI_LOGIN), 2000);
+      } else {
+        setAlertMessage("Đăng ký thất bại, vui lòng thử lại sau!");
       }
     } catch (err) {
       console.log(err);
       setAlertMessage("Đăng ký thất bại, vui lòng thử lại sau!");
       setShowProgress(false);
     } finally {
-      handleResetInputField();
       setShowProgress(false);
     }
   };
@@ -217,6 +220,7 @@ export default function SignUp() {
                   id="email"
                   label="Địa chỉ email"
                   name="email"
+                  type="email"
                   size="small"
                 />
               </Grid>
@@ -311,7 +315,6 @@ export default function SignUp() {
                     fullWidth
                     variant={`${showProgress ? "outlined" : "contained"}`}
                     sx={{ mt: 0, mb: 2 }}
-                    disableElevation
                     size="large"
                   >
                     {showProgress ? <CircularProgress size={28} /> : "Đăng ký"}
