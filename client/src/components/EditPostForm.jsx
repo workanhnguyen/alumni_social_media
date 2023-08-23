@@ -46,7 +46,7 @@ const EditPostForm = ({ data, show, setShow }) => {
           </div>
         </div>
         <CustomTextField content={data?.content} />
-        <ImageEditor imageList={[data?.image]} />
+        <ImageEditor imageList={data?.images} />
         <div className="mt-3">
           <Button fullWidth disableElevation variant="contained">
             Đăng

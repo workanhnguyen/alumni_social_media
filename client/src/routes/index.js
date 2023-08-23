@@ -4,5 +4,5 @@ export const LECTURER_LOGIN = '/login/lecturer';
 export const DASHBOARD = '/dashboard';
 export const GROUPS = '/groups';
 export const LETTERS = '/letters';
-export const POST_DETAIL = '/posts/:id';
+export const POST_DETAIL = '/posts/:postId';
 export const CURRENT_USER = '/:username';

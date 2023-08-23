@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Avatar } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-const Comment = ({ data }) => {
+const CommentItem = ({ data }) => {
   return (
     <div className="w-fit flex mb-3">
       <Avatar
@@ -32,7 +32,7 @@ const Comment = ({ data }) => {
           </div>
           {data?.comments?.length !== 0 &&
             data?.comments?.map((comment, index) => (
-              <div className="w-fit flex mt-3">
+              <div className="w-fit flex mt-3" key={index}>
                 <Avatar
                   src={data?.user?.avatar}
                   alt="avatar"
@@ -64,4 +64,4 @@ const Comment = ({ data }) => {
   );
 };
 
-export default Comment;
+export default CommentItem;

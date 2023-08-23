@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import {
-  Avatar,
   Divider,
   ListItemIcon,
   ListItemText,
@@ -9,33 +8,32 @@ import {
   MenuItem,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
-import PublicIcon from '@mui/icons-material/Public';
-import EditIcon from '@mui/icons-material/Edit';
-import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
-import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from "@mui/icons-material/Edit";
+import CommentsDisabledIcon from "@mui/icons-material/CommentsDisabled";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-import { actionHaha, blankAvatar } from "../assets";
-import { Link, useNavigate } from "react-router-dom";
-import loggedInUser from "../data/user";
-import { useStateContext } from "../contexts/ContextProvider";
 import EditPostForm from "./EditPostForm";
+import { commentData } from "../data/commentData";
+import {
+  CommentSection,
+  PostActionSection,
+  PostCreatorInfo,
+  PostReactionQuantity,
+} from "../components";
+import PostImageSlider from "./PostImageSlider";
+import { POST_DETAIL } from "../constants/common";
 
-const user = loggedInUser;
+const comments = commentData;
 
-const Post = ({ data, className }) => {
+const Post = ({ data, className, type }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [showEditPostForm, setShowEditPostForm] = useState(false);
   const open = Boolean(anchorEl);
 
-  const { setPostDetail } = useStateContext();
-
-  const navigate = useNavigate();
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -45,41 +43,15 @@ const Post = ({ data, className }) => {
     handleClose();
   };
 
-  const handleNavigateToPostDetailPage = () => {
-    setPostDetail(data);
-    navigate(`/posts/${data.id}`);
-  };
-
   return (
     <>
       <div
         className={`${className} max-sm:full pt-4 pb-1 mt-3 bg-white rounded-md drop-shadow-sm`}
       >
-        {/* Post common info */}
         <div className="w-full flex justify-between px-4">
-          {/* User info */}
-          <div className="w-fit flex items-center">
-            <Link to={`/${user.username}`}>
-              <Avatar
-                src={blankAvatar}
-                alt="avatar"
-                sx={{ width: 40, height: 40 }}
-                className="cursor-pointer"
-              />
-            </Link>
-            <div className="flex-1 flex flex-col justify-center ml-2 gap-y-1">
-              <Link
-                to={`/${user.username}`}
-                className="font-semibold hover:underline cursor-pointer"
-              >{`${data.user.first_name} ${data.user.last_name}`}</Link>
-             <div className="flex items-center text-dark-gray">
-                <span onClick={handleNavigateToPostDetailPage} className="text-xs hover:underline cursor-pointer">{data.timestamp}</span>
-                <PublicIcon fontSize="inherit" className="ml-1.5 mb-0.5" />
-             </div>
-            </div>
-          </div>
-  
-          {/* Actions */}
+          {/* Creator info */}
+          <PostCreatorInfo post={data} />
+          {/* More actions */}
           <div
             className="w-fit flex items-center px-2.5 py-1 cursor-pointer hover:rounded-full hover:bg-gray active:bg-gray-2"
             aria-controls={open ? "post-menu" : undefined}
@@ -90,62 +62,29 @@ const Post = ({ data, className }) => {
             <MoreHorizIcon />
           </div>
         </div>
-  
+
         {/* Post content */}
         <div
           className="w-full my-3 px-4"
-          dangerouslySetInnerHTML={{ __html: data.content }}
+          dangerouslySetInnerHTML={{ __html: data?.content }}
         />
-        {/* Post images */}
-        {data.image && (
-          <div className="w-full">
-            <img src={data.image} alt="" />
-          </div>
-        )}
-        {/* Post reaction quantities */}
-        <div className="w-full flex justify-between px-4 py-3">
-          {/* Like */}
-          <div className="w-fit flex items-center">
-            <Avatar src={actionHaha} sx={{ width: 18, height: 18 }} />
-            <span className="ml-1 text-dark-gray text-sm">
-              Bạn, Văn Mãi và 100 người khác
-            </span>
-          </div>
-          {/* Comment */}
-          <div className="w-fit flex items-center">
-            <ChatBubbleOutlineOutlinedIcon
-              className="text-dark-gray"
-              fontSize="small"
-            />
-            <span className="text-sm text-dark ml-1 -mt-1">79</span>
-          </div>
+        {/* Post images slider */}
+        <div className="mt-3">
+          <PostImageSlider images={data?.images} />
+        </div>
+        {/* Post reaction quantity */}
+        <PostReactionQuantity commentQuantity={comments.length} />
+        <Divider variant="middle" />
+        {/* Post action section: like, comment, share */}
+        <div className="my-1">
+          <PostActionSection />
         </div>
         <Divider variant="middle" />
-        {/* Post reacting action */}
-        <div className="w-full flex justify-center items-center gap-x-1 mt-2">
-          <div className="w-fit flex items-center px-10 py-2 hover:bg-gray active:bg-gray-2 rounded-md cursor-pointer">
-            <Avatar src={actionHaha} sx={{ width: 18, height: 18 }} />
-            <span className="text-sm text-dark-gray ml-1 font-semibold">
-              Haha
-            </span>
-          </div>
-          <div onClick={handleNavigateToPostDetailPage} className="w-fit flex items-center px-6 py-2 hover:bg-gray active:bg-gray-2 rounded-md cursor-pointer">
-            <ChatBubbleOutlineOutlinedIcon
-              fontSize="small"
-              className="text-dark-gray -mb-0.5"
-            />
-            <span className="text-sm text-dark-gray ml-1 font-semibold">
-              Bình luận
-            </span>
-          </div>
-          <div className="w-fit flex items-center px-8 py-2 hover:bg-gray active:bg-gray-2 rounded-md cursor-pointer">
-            <ReplyOutlinedIcon fontSize="small" className="text-dark-gray" />
-            <span className="text-sm text-dark-gray ml-1 font-semibold">
-              Chia sẻ
-            </span>
-          </div>
+        {/* Comment section */}
+        <div className='mt-3'>
+          <CommentSection comments={comments} quantity={type === POST_DETAIL ? comments.length : 1} />
         </div>
-  
+
         {/* Post menu action popup */}
         <Menu
           id="post-menu"
@@ -178,7 +117,11 @@ const Post = ({ data, className }) => {
         </Menu>
       </div>
       {/* Post form popup */}
-      <EditPostForm data={data} show={showEditPostForm} setShow={setShowEditPostForm} />
+      <EditPostForm
+        data={data}
+        show={showEditPostForm}
+        setShow={setShowEditPostForm}
+      />
     </>
   );
 };

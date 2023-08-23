@@ -40,13 +40,13 @@ const PersonalPage = () => {
             <UserImageList images={images} />
           </div>
           {/* Posts */}
-          <div className="max-lg:w-full h-full flex flex-col max-lg:items-center">
+          <div className="w-full h-full flex flex-col max-lg:items-center">
             {posts.length > 0 &&
               posts.map((post, index) => (
                 <Post
                   key={index}
                   data={post}
-                  className="max-sm:w-full max-md:w-4/5 max-lg:w-150 w-128"
+                  className='max-sm:w-full max-md:w-4/5 max-lg:w-150 lg:w-128'
                 />
               ))}
           </div>

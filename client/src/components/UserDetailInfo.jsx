@@ -20,7 +20,7 @@ const UserDetailInfo = () => {
       </div>
       <div className="w-full flex items-center text-dark-gray mb-4">
         <SchoolIcon />
-        <span className="ml-2">Trường Đại học Mở Thành phố Hồ Chí Minh</span>
+        <span className="ml-2">Trường Đại học Mở TP.HCM</span>
       </div>
       <div className="w-full flex items-center text-dark-gray mb-4">
         <SpaceDashboardIcon />
