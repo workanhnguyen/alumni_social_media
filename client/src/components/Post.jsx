@@ -77,7 +77,7 @@ const Post = ({ data, className, type }) => {
         <Divider variant="middle" />
         {/* Post action section: like, comment, share */}
         <div className="my-1">
-          <PostActionSection />
+          <PostActionSection postId={data?.id} />
         </div>
         <Divider variant="middle" />
         {/* Comment section */}
