@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import {
+  Avatar,
   Divider,
   ListItemIcon,
   ListItemText,
@@ -8,9 +9,9 @@ import {
   MenuItem,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import EditIcon from "@mui/icons-material/Edit";
-import CommentsDisabledIcon from "@mui/icons-material/CommentsDisabled";
-import DeleteIcon from "@mui/icons-material/Delete";
+import AutoFixHighOutlinedIcon from '@mui/icons-material/AutoFixHighOutlined';
+import CommentsDisabledOutlinedIcon from '@mui/icons-material/CommentsDisabledOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 import EditPostForm from "./EditPostForm";
 import { commentData } from "../data/commentData";
@@ -22,6 +23,9 @@ import {
 } from "../components";
 import PostImageSlider from "./PostImageSlider";
 import { POST_DETAIL } from "../constants/common";
+import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
+import { actionHaha, actionHeart, actionLike } from "../assets";
+import { Link } from "react-router-dom";
 
 const comments = commentData;
 
@@ -52,15 +56,43 @@ const Post = ({ data, className, type }) => {
           {/* Creator info */}
           <PostCreatorInfo post={data} />
           {/* More actions */}
-          <div
-            className="w-fit flex items-center px-2.5 py-1 cursor-pointer hover:rounded-full hover:bg-gray active:bg-gray-2"
-            aria-controls={open ? "post-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
-          >
-            <MoreHorizIcon />
-          </div>
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <>
+                <div
+                  {...bindTrigger(popupState)}
+                  className="w-fit flex items-center px-3 py-0.5 hover:bg-gray active:bg-gray-2 rounded-full cursor-pointer"
+                >
+                  <MoreHorizIcon />
+                </div>
+                <Menu
+                  anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                  transformOrigin={{ vertical: "top", horizontal: "center" }}
+                  elevation={2}
+                  {...bindMenu(popupState)}
+                >
+                  <MenuItem onClick={popupState.close}>
+                    <div onClick={handleShowEditPostForm} className="flex items-center">
+                      <AutoFixHighOutlinedIcon fontSize="small" />
+                      <span className="ml-2">Chỉnh sửa bài viết</span>
+                    </div>
+                  </MenuItem>
+                  <MenuItem onClick={popupState.close}>
+                    <div className="flex items-center">
+                      <CommentsDisabledOutlinedIcon fontSize="small" />
+                      <span className="ml-2">Khóa bình luận</span>
+                    </div>
+                  </MenuItem>
+                  <MenuItem onClick={popupState.close}>
+                    <div className="flex items-center text-red">
+                      <DeleteOutlineOutlinedIcon fontSize="small" />
+                      <span className="ml-2">Xóa bài viết</span>
+                    </div>
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
+          </PopupState>
         </div>
 
         {/* Post content */}
@@ -81,40 +113,12 @@ const Post = ({ data, className, type }) => {
         </div>
         <Divider variant="middle" />
         {/* Comment section */}
-        <div className='mt-3'>
-          <CommentSection comments={comments} quantity={type === POST_DETAIL ? comments.length : 1} />
+        <div className="mt-3">
+          <CommentSection
+            comments={comments}
+            quantity={type === POST_DETAIL ? comments.length : 1}
+          />
         </div>
-
-        {/* Post menu action popup */}
-        <Menu
-          id="post-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
-        >
-          <MenuItem onClick={handleShowEditPostForm}>
-            <ListItemIcon>
-              <EditIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Chỉnh sửa bài viết</ListItemText>
-          </MenuItem>
-          <MenuItem>
-            <ListItemIcon>
-              <CommentsDisabledIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Khóa bình luận</ListItemText>
-          </MenuItem>
-          <Divider />
-          <MenuItem>
-            <ListItemIcon>
-              <DeleteIcon fontSize="small" className="text-red" />
-            </ListItemIcon>
-            <ListItemText className="text-red">Xóa bài viết</ListItemText>
-          </MenuItem>
-        </Menu>
       </div>
       {/* Post form popup */}
       <EditPostForm
