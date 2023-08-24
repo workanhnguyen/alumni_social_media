@@ -26,12 +26,12 @@ const CommentSection = ({ comments, quantity = 1 }) => {
         <div className="relative flex-1 flex items-center ml-1 rounded-3xl cursor-pointer hover:bg-gray-2 overflow-hidden">
           <input
             onChange={handleCommentContentChange}
-            className="w-full px-3 py-2 border-none outline-none text-dark-gray bg-gray"
+            className="w-full px-3 py-2 border-none outline-none bg-gray"
             placeholder="Viết bình luận..."
           />
           <span
             className={`absolute right-3 ${
-              commentContent === "" ? "hidden" : "block"
+              commentContent === "" ? "hidden" : "flex flex-col justify-center"
             } text-primary`}
           >
             <SendIcon fontSize="small" />
