@@ -4,19 +4,13 @@ import cookie from "react-cookies";
 
 import { HOME } from "../constants/page";
 import UserReducer from "../reducers/UserReducer";
+import { TOKEN, USER } from "../constants/common";
 
 const StateContext = createContext();
 
-const initUser = {
-  username: "anhnguyen",
-  firstName: "Anh",
-  lastName: "Nguyễn",
-  avatar:
-    "https://res.cloudinary.com/dougpz2fu/image/upload/v1691309723/mobile-assets/blank_avatar_peyifv.jpg",
-};
-
 export const ContextProvider = ({ children }) => {
-  const [user, dispatch] = useReducer(UserReducer, cookie.load("user") || initUser);
+  const [user, dispatch] = useReducer(UserReducer, cookie.load(USER) || null);
+  const token = cookie.load(TOKEN) || null;
 
   const [pageContent, setPageContent] = useState(HOME);
   const [postType, setPostType] = useState(null);
@@ -32,7 +26,8 @@ export const ContextProvider = ({ children }) => {
         postDetail,
         setPostDetail,
         user,
-        dispatch
+        dispatch,
+        token,
       }}
     >
       {children}

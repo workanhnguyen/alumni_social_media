@@ -29,9 +29,8 @@ public class UserRepositoryImp implements UserRepository {
     }
 
     @Override
-     public boolean authUser(String username, String password) {
+    public boolean authUser(String username, String password) {
         Users  u = this.getUserByUsername(username);
-        
         return this.passEncoder.matches(password, u.getPassword());
     }
 

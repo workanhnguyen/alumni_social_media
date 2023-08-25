@@ -1,3 +1,4 @@
+export const ROOT_PAGE = '/';
 export const ALUMNI_LOGIN = '/login/alumni';
 export const ALUMNI_REGISTER = '/register/alumni';
 export const LECTURER_LOGIN = '/login/lecturer';

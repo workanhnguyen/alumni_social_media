@@ -68,33 +68,17 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.formLogin()
-//                .usernameParameter("username")
-//                .passwordParameter("password");
-//
-//        http.formLogin().defaultSuccessUrl("/")
-//                .failureUrl("/login?error");
-//
-//        http.logout().logoutSuccessUrl("/login");
-//
-//        http.exceptionHandling()
-//                .accessDeniedPage("/login?accessDenied");
-
-//        http.authorizeRequests().antMatchers("/").permitAll()
-//            .antMatchers("/api/**")
-//            .access("hasRole('ROLE_ADMIN')");
-//        http.csrf().disable();
-
-        // Disable crsf cho đường dẫn /rest/**
-        http.csrf().ignoringAntMatchers("/api/**");
+        http.csrf().ignoringAntMatchers("/api/users/**");
         http.authorizeRequests().antMatchers("/api/users/login/").permitAll();
         http.authorizeRequests().antMatchers("/api/users/register/").permitAll();
-        http.authorizeRequests().antMatchers("/api/users/").permitAll();
-        http.antMatcher("/api/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
+
+        http.antMatcher("/api/users/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/**").access("hasRole('0') or hasRole('1')")
-                .antMatchers(HttpMethod.POST, "/api/**").access("hasRole('0') or hasRole('1')")
-                .antMatchers(HttpMethod.DELETE, "/api/**").access("hasRole('0') or hasRole('1')").and()
+                .antMatchers(HttpMethod.GET, "/api/users/current_user/").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/**").hasAnyAuthority("ADMIN")
+//                .antMatchers(HttpMethod.POST, "/api/**").access("hasRole('ADMIN') or hasRole('CLIENT')")
+//                .antMatchers(HttpMethod.DELETE, "/api/**").access("hasRole('ADMIN') or hasRole('CLIENT')")
+                .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
     }
