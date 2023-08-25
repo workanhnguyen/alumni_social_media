@@ -9,5 +9,5 @@ public interface UserService extends UserDetailsService {
     Users addUser(Map<String, String> params, MultipartFile avatar);
     Users getUserByUsername(String username);
     boolean authUser(String username, String password);
-    
+    boolean changePassword(String password, String newPassword, Users u);
 }

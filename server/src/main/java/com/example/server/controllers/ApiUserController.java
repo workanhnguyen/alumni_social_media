@@ -2,8 +2,10 @@ package com.example.server.controllers;
 
 import com.example.server.components.JwtService;
 import com.example.server.dtos.UserDto;
+
 import com.example.server.pojos.Users;
 import com.example.server.services.UserService;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,39 +52,41 @@ public class ApiUserController {
         return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
     }
     
-//    public ResponseEntity<UserDto> login(@RequestBody Users user) {
-//        if (this.userService.authUser(user.getUsername(), user.getPassword())) {
-//            String token = this.jwtService.generateTokenLogin(user.getUsername());
-//            Users loggedInUser = this.userService.getUserByUsername(user.getUsername());
-//
-//            UserDto response = new UserDto();
-//            response.setToken(token);
-//            response.setUser(loggedInUser);
-//
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }
-//        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-//    }
+    @PostMapping("/change_password/")
+    public ResponseEntity<String> changePassword(
+            @RequestParam String password,
+            @RequestParam String newPassword,
+            Principal user) {
+        Users u = this.userService.getUserByUsername(user.getName());
 
-    @GetMapping(path = "/current-user/", produces = MediaType.APPLICATION_JSON_VALUE)
+        if (this.userService.changePassword(password,newPassword, u )) {
+            return new ResponseEntity<>("Mật khẩu đã được thay đổi thành công", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Thay đổi mật khẩu thất bại", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    
+    
+    @GetMapping(path = "/current_user/", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin
-    public ResponseEntity<?> details(Principal user) {
+    public ResponseEntity<Users> details(Principal user) {
         Users u = this.userService.getUserByUsername(user.getName());
         return new ResponseEntity<>(u, HttpStatus.OK);
     }
-    
-    
-    
+
+
     private boolean isValidUserData(Map<String, String> params, MultipartFile avatar, String role) {
-        //role 1-GV, ko cần password
-        //rolw 2-CSV cần MSSV
-        if ("1".equals(role)) {
-           return params.containsKey("username") && params.containsKey("role") 
+        //role GV - LECTURER, ko cần password
+        //role CSV - ALUMNI cần MSSV
+        //r
+        if ("LECTURER".equals(role)) {
+            return params.containsKey("username") && params.containsKey("role")
                 && avatar != null && params.containsKey("firstName") 
                 && params.containsKey("lastName")
                 && params.containsKey("email");
         } else {
-           return params.containsKey("username") && params.containsKey("role") 
+            return params.containsKey("username") && params.containsKey("role")
                 && avatar != null && params.containsKey("password")
                 && params.containsKey("firstName") && params.containsKey("lastName")
                 && params.containsKey("email") && params.containsKey("studentId");
