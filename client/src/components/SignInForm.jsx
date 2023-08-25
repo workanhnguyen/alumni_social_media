@@ -1,45 +1,102 @@
 import React, { useState } from "react";
+import cookie from 'react-cookies';
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
+  CircularProgress,
 } from "@mui/material";
 
 import { ROLE_ALUMNI } from "../constants/role";
 import { Copyright } from "../components";
+import { getCurrentUser, loginUser } from "../apis/UserApi";
+import { DASHBOARD } from "../routes";
+import { useStateContext } from "../contexts/ContextProvider";
+import { LOGIN, TOKEN, USER } from "../constants/common";
 
 const defaultTheme = createTheme();
 
-export default function SignIn({ role }) {
-  const [showPassword, setShowPassword] = useState(false);
+export default function SignInForm({ role }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { dispatch } = useStateContext();
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  const [showProgress, setShowProgress] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [uAlert, setUAlert] = useState(false);
+  const [pAlert, setPAlert] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleLogin = async (body) => {
+
+    setShowProgress(true);
+
+    try {
+      let response = await loginUser(body);
+
+      if (response.status === 200) {
+        cookie.save(TOKEN, response.data);
+        let { data: user } = await getCurrentUser();
+
+        if (user) {
+          cookie.save(USER, user);
+
+          dispatch({
+            type: LOGIN,
+            payload: user
+          });
+
+          setShowProgress(false);
+          navigate(DASHBOARD, { replace: true });
+        }
+      }
+    } catch (e) {
+      setShowProgress(false);
+      
+      if (e.response.status === 400)
+        setAlertMessage("Tên tài khoản hoặc mật khẩu không chính xác!");
+      else
+        setAlertMessage("Đăng nhập thất bại, vui lòng thử lại sau!");
+    } finally {
+      setShowProgress(false);
+    }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get("username"),
-      password: data.get("password"),
-    });
+    setAlertMessage("");
+
+    const message = validate();
+
+    if (message === "") {
+      const loginData = { username, password };
+
+      handleLogin(loginData);
+    } else {
+      setAlertMessage(message);
+    }
+  };
+
+  const validate = () => {
+    let message = "";
+
+    if (username === "" || password === "")
+      message = "Vui lòng nhập đầy đủ thông tin!";
+
+    setUAlert(username === "");
+    setPAlert(password === "");
+
+    return message;
   };
 
   return (
@@ -66,64 +123,78 @@ export default function SignIn({ role }) {
             noValidate
             sx={{ mt: 1 }}
           >
-            {/* Username */}
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label={role === ROLE_ALUMNI ? "Mã số sinh viên" : "Tên đăng nhập"}
-              name="username"
-              autoComplete="username"
-              autoFocus
-            />
+            <Grid container>
+              {/* Username */}
+              <Grid item xs={12}>
+                <TextField
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  error={uAlert}
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="username"
+                  label={
+                    role === ROLE_ALUMNI ? "Mã số sinh viên" : "Tên đăng nhập"
+                  }
+                  name="username"
+                  autoComplete="username"
+                  autoFocus
+                />
+              </Grid>
 
-            {/* Password */}
-            <FormControl variant="outlined" fullWidth margin="normal" required>
-              <InputLabel htmlFor="password">Mật khẩu</InputLabel>
-              <OutlinedInput
-                id="password"
-                type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Mật khẩu"
-                name="password"
-              />
-            </FormControl>
+              {/* Password */}
+              <Grid item xs={12}>
+                <TextField
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  error={pAlert}
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="password"
+                  label="Mật khẩu"
+                  type="password"
+                  name="password"
+                  autoComplete="password"
+                />
+              </Grid>
 
-            <Link to="/dashboard">
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                disableElevation
-                size="large"
+              {/* Alert */}
+              <Grid
+                item
+                xs={12}
               >
-                Đăng nhập
-              </Button>
-            </Link>
-            <Grid container justifyContent='center'>
-              {role === ROLE_ALUMNI ? (
-                <Grid item className="flex justify-center cursor-pointer">
+                <div className={`w-full ${
+                  alertMessage === "" ? "hidden" : "flex justify-center mt-2 text-red"
+                } `}>{alertMessage}</div>
+              </Grid>
+
+              {/* Login button */}
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant={`${showProgress ? "outlined" : "contained"}`}
+                  sx={{ mt: 2, mb: 2 }}
+                  size="large"
+                >
+                  {showProgress ? <CircularProgress size={28} /> : "Đăng nhập"}
+                </Button>
+              </Grid>
+
+              {/* Switch login -> register */}
+              <Grid item xs={12}>
+                {role === ROLE_ALUMNI ? (
                   <Link
                     to="/register/alumni"
-                    className="underline mt-3 text-primary text-sm"
+                    className="w-full flex justify-center underline mt-3 text-primary text-sm"
                   >
                     Chưa có tài khoản? Đăng ký
                   </Link>
-                </Grid>
-              ) : null}
+                ) : null}
+              </Grid>
+
             </Grid>
           </Box>
         </Box>

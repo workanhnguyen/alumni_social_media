@@ -6,3 +6,5 @@ export { default as DashBoard } from './DashBoard';
 export { default as GroupPage } from './GroupPage';
 export { default as LetterPage } from './LetterPage';
 export { default as PersonalPage } from './PersonalPage';
+
+export { default as NotFoundPage } from './exceptions/NotFoundPage';

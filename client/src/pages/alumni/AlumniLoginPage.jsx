@@ -1,12 +1,14 @@
-import React from 'react'
+import React from "react";
 
-import { ROLE_ALUMNI } from '../../constants/role';
-import { SignInForm } from '../../components';
+import { ROLE_ALUMNI } from "../../constants/role";
+import { PageException, SignInForm } from "../../components";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { ALREADY_LOGIN } from "../../constants/common";
 
 const AlumniLogin = () => {
-  return (
-    <SignInForm role={ROLE_ALUMNI} />
-  );
-}
+  const { token } = useStateContext();
 
-export default AlumniLogin
+  return <>{token? <PageException type={ALREADY_LOGIN} /> : <SignInForm role={ROLE_ALUMNI} />}</>;
+};
+
+export default AlumniLogin;

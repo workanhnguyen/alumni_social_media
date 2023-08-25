@@ -1,9 +1,4 @@
-import {
-  Avatar,
-  Container,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Avatar, Container, Paper, Typography } from "@mui/material";
 import React from "react";
 import { logoLong } from "../assets";
 import { Link } from "react-router-dom";
@@ -35,12 +30,9 @@ const ChooseRole = () => {
                 Bạn là ...?
               </Typography>
               {roles.map((role, index) => (
-                <Link to={role.url}>
+                <Link key={index} to={role.url}>
                   <Paper
                     variant="outlined"
-                    elevation={2}
-                    key={index}
-                    fullWidth
                     className="w-full flex items-center px-6 py-2 cursor-pointer text-white hover:bg-primary hover:text-white hover:transition ease-linear duration-300"
                   >
                     <Avatar alt="Remy Sharp" src={role.icon} />

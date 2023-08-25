@@ -23,7 +23,7 @@ import { registerUser } from "../apis/UserApi";
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function SignUpForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [studentId, setStudentId] = useState("");
@@ -67,7 +67,6 @@ export default function SignUp() {
 
   const handleRegister = async (body) => {
     try {
-      
       setShowProgress(true);
 
       let { data } = await registerUser(body);
@@ -289,13 +288,16 @@ export default function SignUp() {
                   )}
                 </div>
               </Grid>
-              <Grid
-                item
-                className={`${
-                  alertMessage === "" ? "hidden" : "block"
-                } w-full flex justify-center text-red`}
-              >
-                {alertMessage}
+              <Grid item xs={12}>
+                <div
+                  className={`w-full ${
+                    alertMessage === ""
+                      ? "hidden"
+                      : "flex justify-center text-red"
+                  }`}
+                >
+                  {alertMessage}
+                </div>
               </Grid>
               <Grid item xs={12}>
                 {isRegisterSuccessfull ? (

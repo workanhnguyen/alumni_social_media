@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import cookie from 'react-cookies';
 
 import { Avatar, Container, Menu, MenuItem } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
@@ -12,6 +13,7 @@ import { blankAvatar, logo1, logo2 } from "../assets";
 import { GROUP, HOME, LETTER } from "../constants/page";
 import { useStateContext } from "../contexts/ContextProvider";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
+import { TOKEN, USER } from "../constants/common";
 
 const Header = () => {
   const { pageContent, setPageContent, user } = useStateContext();
@@ -23,7 +25,11 @@ const Header = () => {
   };
 
   const handleLogout = () => {
+    cookie.remove(TOKEN);
+    cookie.remove(USER);
+
     navigate('/', { replace: true })
+    window.location.reload();
   };
 
   return (
