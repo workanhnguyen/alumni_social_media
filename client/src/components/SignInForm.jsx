@@ -52,11 +52,11 @@ export default function SignInForm({ role }) {
           payload: data,
         });
 
-        navigate(ROOT_PAGE, { replace: true });
+        // navigate(ROOT_PAGE, { replace: true });
 
-        // if (response.data && data === false)
-        //   navigate(INFO_PAGE);
-        // else if (response.data && data) navigate(DASHBOARD);
+        if (response.data && data === false)
+          navigate(INFO_PAGE);
+        else if (response.data && data) navigate(DASHBOARD);
       }
     } catch (e) {
       setShowProgress(false);

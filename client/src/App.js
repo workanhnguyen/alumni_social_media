@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import cookie from "react-cookies";
+
 import {
   AlumniAddInfo,
   AlumniAddInfoPage,
@@ -28,40 +30,24 @@ import {
   INFO_PAGE,
 } from "./routes";
 import { useStateContext } from "./contexts/ContextProvider";
-import { ALREADY_LOGIN, NO_ACTIVE } from "./constants/common";
+import { ALREADY_LOGIN, NO_ACTIVE, TOKEN, USER } from "./constants/common";
 
 const App = () => {
   const { token, user } = useStateContext();
+  
+  console.log(token, user);
   return (
     <BrowserRouter>
       <Routes>
         {/* Public routes */}
-        <Route
-          path={ROOT_PAGE}
-          element={token && user ? <DashBoard /> : <ChooseRolePage />}
-        />
         <Route path={INFO_PAGE} element={<InfoPage type={NO_ACTIVE} />} />
         <Route
-          path={ALUMNI_LOGIN}
-          element={
-            user ? <InfoPage type={ALREADY_LOGIN} /> : <AlumniLoginPage />
-          }
-        />
-        <Route
-          path={LECTURER_LOGIN}
-          element={
-            user ? <InfoPage type={ALREADY_LOGIN} /> : <LecturerLoginPage />
-          }
-        />
-        <Route
-          path={ALUMNI_REGISTER}
-          element={
-            user ? <InfoPage type={ALREADY_LOGIN} /> : <AlumniRegisterPage />
-          }
+          path={ROOT_PAGE}
+          element={(user && user !== false) ? <DashBoard /> : <ChooseRolePage />}
         />
 
         {/* Authenticated and activated routes */}
-        {token && user ? (
+        {(user && user !== false) && (
           <>
             <Route path={DASHBOARD} element={<DashBoard />} />
             <Route path={GROUPS} element={<GroupPage />} />
@@ -70,10 +56,38 @@ const App = () => {
             <Route path={POST_DETAIL} element={<PostDetailPage />} />
             <Route path={ALUMNI_ADD_INFO} element={<AlumniAddInfoPage />} />
           </>
-        ) : null}
+        )}
+
+        {/* Unauthenticated and unactived routes */}
+        {(!user || user === false) && (
+          <>
+            <Route
+              path={ALUMNI_LOGIN}
+              element={
+                user ? <InfoPage type={ALREADY_LOGIN} /> : <AlumniLoginPage />
+              }
+            />
+            <Route
+              path={LECTURER_LOGIN}
+              element={
+                user ? <InfoPage type={ALREADY_LOGIN} /> : <LecturerLoginPage />
+              }
+            />
+            <Route
+              path={ALUMNI_REGISTER}
+              element={
+                user ? (
+                  <InfoPage type={ALREADY_LOGIN} />
+                ) : (
+                  <AlumniRegisterPage />
+                )
+              }
+            />
+          </>
+        )}
 
         {/* Redirect unknown paths */}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to={ROOT_PAGE} />} />
       </Routes>
     </BrowserRouter>
   );
