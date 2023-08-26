@@ -9,7 +9,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
-import { blankAvatar, logo1, logo2 } from "../assets";
+import { logo1, logo2 } from "../assets";
 import { GROUP, HOME, LETTER } from "../constants/page";
 import { useStateContext } from "../contexts/ContextProvider";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
@@ -81,12 +81,12 @@ const Header = () => {
                 >
                   <div className="md:flex md:items-center md:bg-gray md:px-4 md:py-2 md:rounded-md">
                     <p className="mr-2 font-semibold max-md:hidden">
-                      Anh Nguyễn
+                      {`${user?.lastName} ${user?.firstName}`}
                     </p>
                     <Avatar
                       sx={{ width: 35, height: 35 }}
                       alt="User Avatar"
-                      src={blankAvatar}
+                      src={user?.avatar}
                       className="cursor-pointer"
                     />
                   </div>
@@ -98,7 +98,7 @@ const Header = () => {
                   {...bindMenu(popupState)}
                 >
                   <MenuItem onClick={popupState.close}>
-                    <Link to={`/${user?.username}`} className="flex items-center">
+                    <Link to={`/users/${user?.username}`} className="flex items-center">
                       <AccountCircleOutlinedIcon fontSize="small" />
                       <span className="ml-2">Xem trang cá nhân</span>
                     </Link>

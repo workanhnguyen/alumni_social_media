@@ -11,6 +11,7 @@ import {
 import { DefaultLayout } from "../layouts";
 import { postData } from "../data";
 import { blankAvatar } from "../assets";
+import { useStateContext } from "../contexts/ContextProvider";
 
 const posts = postData;
 const images = [
@@ -22,14 +23,15 @@ const images = [
 ];
 
 const PersonalPage = () => {
+  const { user } = useStateContext(); 
   return (
     <DefaultLayout>
       <div className="w-full h-full flex flex-col items-center bg-white drop-shadow-sm">
         <div className="max-lg:w-full lg:w-235 flex flex-col items-center my-6 mt-16">
-          <CoverImage />
+          <CoverImage bgImage={user?.bgImage} />
           <div className="w-full flex max-lg:flex-col max-lg:items-center px-8">
-            <UserAvatar />
-            <UserCommonInfo />
+            <UserAvatar avatar={user?.avatar} />
+            <UserCommonInfo userInfo={user}  />
           </div>
         </div>
       </div>

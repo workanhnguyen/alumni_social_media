@@ -19,16 +19,16 @@ import {
 import { ROLE_ALUMNI } from "../constants/role";
 import { Copyright } from "../components";
 import { getCurrentUser, loginUser } from "../apis/UserApi";
-import { DASHBOARD } from "../routes";
+import { ALUMNI_ADD_INFO, DASHBOARD } from "../routes";
 import { useStateContext } from "../contexts/ContextProvider";
-import { LOGIN, TOKEN, USER } from "../constants/common";
+import { ALUMNI, LOGIN, TOKEN, USER } from "../constants/common";
 
 const defaultTheme = createTheme();
 
 export default function SignInForm({ role }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { dispatch } = useStateContext();
+  const { user, dispatch } = useStateContext();
 
   const [showProgress, setShowProgress] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -57,7 +57,11 @@ export default function SignInForm({ role }) {
           });
 
           setShowProgress(false);
-          navigate(DASHBOARD, { replace: true });
+
+          if (user.phone && user.bgImage && user.majorId)
+            navigate(DASHBOARD, { replace: true });
+          else
+            navigate(ALUMNI_ADD_INFO, { replace: true });
         }
       }
     } catch (e) {

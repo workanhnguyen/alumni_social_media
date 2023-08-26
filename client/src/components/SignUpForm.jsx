@@ -14,11 +14,11 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { CircularProgress } from "@mui/material";
 
 import { Copyright } from "../components";
 import { ALUMNI, EMAIL_REGEX } from "../constants/common";
 import { ALUMNI_LOGIN } from "../routes";
-import { CircularProgress } from "@mui/material";
 import { registerUser } from "../apis/UserApi";
 
 const defaultTheme = createTheme();

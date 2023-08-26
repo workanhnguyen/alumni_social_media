@@ -4,7 +4,7 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 import { blankAvatar } from "../assets";
 
-const CoverImage = () => {
+const CoverImage = ({ bgImage }) => {
   const [contentWidth, setContentWidth] = useState(window.innerWidth);
   useEffect(() => {
     const handleResize = () => {
@@ -25,7 +25,7 @@ const CoverImage = () => {
         <img className="w-full" src={blankAvatar} alt="" />
         <div className="absolute bottom-4 right-3 w-fit flex justify-center items-center p-2 bg-blackOverlay text-white rounded-md cursor-pointer">
           <CameraAltIcon />
-          <span className="ml-1 font-semibold max-md:hidden">Chỉnh sửa ảnh bìa</span>
+          <span className="ml-1 font-semibold max-md:hidden">{bgImage === null ? 'Thêm ảnh bìa' : 'Chỉnh sửa ảnh bìa' }</span>
         </div>
       </div>
   );

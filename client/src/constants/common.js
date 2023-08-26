@@ -2,6 +2,7 @@ export const POST_CREATION = 'POST_CREATION';
 export const POST_EDITION = 'POST_EDITION';
 export const POST_DETAIL = 'POST_DETAIL';
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const PHONE_REGEX = /^\d{10}$/;
 export const LECTURER = "LECTURER"
 export const ALUMNI = "ALUMNI";
 export const LOGIN = "LOGIN";

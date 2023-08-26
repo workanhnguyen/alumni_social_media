@@ -1,5 +1,6 @@
 export { default as ChooseRolePage } from './ChooseRolePage';
 export { default as AlumniLoginPage } from './alumni/AlumniLoginPage';
+export { default as AlumniAddInfo } from './alumni/AlumniAddInfo';
 export { default as AlumniRegisterPage } from './alumni/AlumniRegisterPage';
 export { default as LecturerLoginPage } from './lecturer/LecturerLoginPage';
 export { default as DashBoard } from './DashBoard';
