@@ -4,6 +4,7 @@
  */
 package com.example.server.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -57,6 +58,7 @@ public class Departments implements Serializable {
     @ManyToMany(mappedBy = "departmentsSet")
     private Set<AcademicYears> academicYearsSet;
     @OneToMany(mappedBy = "departmentId")
+     @JsonIgnore
     private Set<Majors> majorsSet;
 
     public Departments() {

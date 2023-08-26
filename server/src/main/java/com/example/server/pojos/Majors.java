@@ -4,6 +4,7 @@
  */
 package com.example.server.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -57,6 +58,7 @@ public class Majors implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @OneToMany(mappedBy = "majorId")
+     @JsonIgnore
     private Set<Users> usersSet;
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)

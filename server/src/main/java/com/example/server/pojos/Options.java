@@ -4,6 +4,7 @@
  */
 package com.example.server.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -58,6 +59,7 @@ public class Options implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @OneToMany(mappedBy = "optionId")
+     @JsonIgnore
     private Set<Answers> answersSet;
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
