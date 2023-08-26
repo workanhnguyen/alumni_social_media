@@ -13,4 +13,20 @@ import com.example.server.pojos.Posts;
 
 public interface PostRepository {
     Posts addPost(Posts p);
+    
+    Posts updatePost(Posts post);
+//
+    Boolean deletePost(Posts post);
+//
+//    Post lockPost(Post post);
+//
+//    Post unlockPost(Post post);
+//
+    Posts findPostById(Long id);
+//
+//    Post findPostByIdAndUserId(Long id, Long userId);
+//
+//    List<Post> findAllPosts();
+//
+//    List<Post> findPostsByUserId(Long userId, String direction);
 }

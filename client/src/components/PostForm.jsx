@@ -8,7 +8,7 @@ import { CustomTextField, ImageUploader } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 
 const PostForm = ({ data, show, setShow, type }) => {
-  const { loggingUser } = useStateContext();
+  const { user } = useStateContext();
   const postPanelRef = useRef();
 
   const handleClosePostPanel = () => { setShow(false); };
@@ -33,12 +33,12 @@ const PostForm = ({ data, show, setShow, type }) => {
         <Divider />
         <div className="w-full flex items-center mt-3">
           <Avatar
-            src={loggingUser?.avatar}
+            src={user?.avatar}
             alt="avt"
             sx={{ width: 40, height: 40 }}
           />
           <div className="flex-1 ml-2">
-            <p className="font-semibold">{`${loggingUser?.firstName} ${loggingUser?.lastName}`}</p>
+            <p className="font-semibold">{`${user?.lastName} ${user?.firstName}`}</p>
             <div className="w-fit flex items-center py-1 px-2 bg-gray-2 rounded-md">
               <PublicIcon sx={{ width: 12, height: 12 }} />
               <span className="ml-2 text-xs font-semibold">Công khai</span>

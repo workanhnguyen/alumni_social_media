@@ -10,7 +10,7 @@ import { POST_CREATION } from "../constants/common";
 const PostPanel = ({ className }) => {
     const [showPostForm, setShowPostForm] = useState(false);
 
-    const { postType, setPostType } = useStateContext();
+    const { postType, setPostType, user } = useStateContext();
 
     const handleShowPostForm = () => {
         setShowPostForm(true);
@@ -24,7 +24,7 @@ const PostPanel = ({ className }) => {
         >
           <div className="w-full flex">
             <Avatar
-              src={blankAvatar}
+              src={user?.avatar}
               alt="avatar"
               sx={{ width: 40, height: 40 }}
             />

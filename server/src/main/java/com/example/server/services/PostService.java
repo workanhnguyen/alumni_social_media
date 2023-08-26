@@ -14,4 +14,22 @@ import java.util.Map;
  */
 public interface PostService {
     Posts addPost(Map<String, String> params, Users u);
+    
+    Posts updatePost(Map<String, String> params, Users u, Long postId);
+    
+    Boolean deletePost(Long id, Users u);
+
+//    PostDto lockPost(Long id, Long userId);
+//
+//    PostDto unlockPost(Long id, Long userId);
+//
+    Posts findPostById(Long id);
+//
+//    List<PostDto> findAllPosts();
+//
+//    List<PostDto> getAllMyPostsAndSharePosts(Long currentUserId, String orderDir);
+//
+//    List<PostDto> findPostsByUserId(Long userId, String orderDir);
+//
+//    List<PostDto> getAllPosts();
 }

@@ -47,7 +47,7 @@ public class Comments implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Lob
     @Size(max = 65535)
     @Column(name = "content")
@@ -59,7 +59,7 @@ public class Comments implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @OneToMany(mappedBy = "belongsToCommentId")
-     @JsonIgnore
+    @JsonIgnore
     private Set<Comments> commentsSet;
     @JoinColumn(name = "belongs_to_comment_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -74,15 +74,15 @@ public class Comments implements Serializable {
     public Comments() {
     }
 
-    public Comments(Integer id) {
+    public Comments(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

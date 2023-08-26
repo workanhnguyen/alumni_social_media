@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import cookie from 'react-cookies';
+import cookie from "react-cookies";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -12,14 +12,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import {
-  CircularProgress,
-} from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 import { ROLE_ALUMNI } from "../constants/role";
 import { Copyright } from "../components";
 import { getCurrentUser, loginUser } from "../apis/UserApi";
-import { DASHBOARD } from "../routes";
+import { DASHBOARD, INFO_PAGE, ROOT_PAGE } from "../routes";
 import { useStateContext } from "../contexts/ContextProvider";
 import { LOGIN, TOKEN, USER } from "../constants/common";
 
@@ -38,7 +36,6 @@ export default function SignInForm({ role }) {
   const navigate = useNavigate();
 
   const handleLogin = async (body) => {
-
     setShowProgress(true);
 
     try {
@@ -46,27 +43,27 @@ export default function SignInForm({ role }) {
 
       if (response.status === 200) {
         cookie.save(TOKEN, response.data);
-        let { data: user } = await getCurrentUser();
 
-        if (user) {
-          cookie.save(USER, user);
+        let { data } = await getCurrentUser();
+        cookie.save(USER, data);
 
-          dispatch({
-            type: LOGIN,
-            payload: user
-          });
+        dispatch({
+          type: LOGIN,
+          payload: data,
+        });
 
-          setShowProgress(false);
-          navigate(DASHBOARD, { replace: true });
-        }
+        // navigate(ROOT_PAGE, { replace: true });
+
+        if (response.data && data === false)
+          navigate(INFO_PAGE);
+        else if (response.data && data) navigate(DASHBOARD);
       }
     } catch (e) {
       setShowProgress(false);
-      
+
       if (e.response.status === 400)
         setAlertMessage("Tên tài khoản hoặc mật khẩu không chính xác!");
-      else
-        setAlertMessage("Đăng nhập thất bại, vui lòng thử lại sau!");
+      else setAlertMessage("Đăng nhập thất bại, vui lòng thử lại sau!");
     } finally {
       setShowProgress(false);
     }
@@ -161,13 +158,16 @@ export default function SignInForm({ role }) {
               </Grid>
 
               {/* Alert */}
-              <Grid
-                item
-                xs={12}
-              >
-                <div className={`w-full ${
-                  alertMessage === "" ? "hidden" : "flex justify-center mt-2 text-red"
-                } `}>{alertMessage}</div>
+              <Grid item xs={12}>
+                <div
+                  className={`w-full ${
+                    alertMessage === ""
+                      ? "hidden"
+                      : "flex justify-center mt-2 text-red"
+                  } `}
+                >
+                  {alertMessage}
+                </div>
               </Grid>
 
               {/* Login button */}
@@ -194,7 +194,6 @@ export default function SignInForm({ role }) {
                   </Link>
                 ) : null}
               </Grid>
-
             </Grid>
           </Box>
         </Box>

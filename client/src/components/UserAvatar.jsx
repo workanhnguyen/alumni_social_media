@@ -3,13 +3,11 @@ import React from "react";
 import { Avatar } from "@mui/material";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
-import { blankAvatar } from "../assets";
-
-const UserAvatar = () => {
+const UserAvatar = ({ avatar }) => {
   return (
     <div className="relative w-44 h-44 flex justify-center items-center rounded-full bg-white -mt-8 max-lg:-mt-20 cursor-pointer">
       <Avatar
-        src={blankAvatar}
+        src={avatar}
         alt="avatar"
         sx={{ width: 168, height: 168 }}
         className="rounded-full"

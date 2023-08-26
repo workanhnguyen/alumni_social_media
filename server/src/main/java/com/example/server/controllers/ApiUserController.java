@@ -78,9 +78,12 @@ public class ApiUserController {
     
     @GetMapping(path = "/current_user/", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin
-    public ResponseEntity<Users> details(Principal user) {
+    public ResponseEntity<?> details(Principal user) {
         Users u = this.userService.getUserByUsername(user.getName());
-        return new ResponseEntity<>(u, HttpStatus.OK);
+
+        if (u.getIsActive())
+            return new ResponseEntity<>(u, HttpStatus.OK);
+        return new ResponseEntity<>(false, HttpStatus.OK);
     }
     
      @PostMapping(path = "/new")
