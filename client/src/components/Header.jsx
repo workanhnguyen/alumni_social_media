@@ -13,10 +13,10 @@ import { logo1, logo2 } from "../assets";
 import { GROUP, HOME, LETTER } from "../constants/page";
 import { useStateContext } from "../contexts/ContextProvider";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
-import { TOKEN, USER } from "../constants/common";
+import { LOGOUT, TOKEN, USER } from "../constants/common";
 
 const Header = () => {
-  const { pageContent, setPageContent, user } = useStateContext();
+  const { pageContent, setPageContent, user, dispatch } = useStateContext();
 
   const navigate = useNavigate();
 
@@ -25,11 +25,9 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    cookie.remove(TOKEN);
-    cookie.remove(USER);
+    dispatch({ type: LOGOUT });
 
     navigate('/', { replace: true })
-    window.location.reload();
   };
 
   return (

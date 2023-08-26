@@ -18,5 +18,3 @@ export { default as UserAvatar } from './UserAvatar';
 export { default as UserCommonInfo } from './UserCommonInfo';
 export { default as UserDetailInfo } from './UserDetailInfo';
 export { default as UserImageList } from './UserImageList';
-
-export { default as PageException } from './exceptions/PageException';

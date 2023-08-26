@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import cookie from 'react-cookies';
+import cookie from "react-cookies";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -12,23 +12,21 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import {
-  CircularProgress,
-} from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 import { ROLE_ALUMNI } from "../constants/role";
 import { Copyright } from "../components";
 import { getCurrentUser, loginUser } from "../apis/UserApi";
-import { ALUMNI_ADD_INFO, DASHBOARD } from "../routes";
+import { DASHBOARD, INFO_PAGE, ROOT_PAGE } from "../routes";
 import { useStateContext } from "../contexts/ContextProvider";
-import { ALUMNI, LOGIN, TOKEN, USER } from "../constants/common";
+import { LOGIN, TOKEN, USER } from "../constants/common";
 
 const defaultTheme = createTheme();
 
 export default function SignInForm({ role }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { user, dispatch } = useStateContext();
+  const { dispatch } = useStateContext();
 
   const [showProgress, setShowProgress] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -38,7 +36,6 @@ export default function SignInForm({ role }) {
   const navigate = useNavigate();
 
   const handleLogin = async (body) => {
-
     setShowProgress(true);
 
     try {
@@ -46,31 +43,27 @@ export default function SignInForm({ role }) {
 
       if (response.status === 200) {
         cookie.save(TOKEN, response.data);
-        let { data: user } = await getCurrentUser();
 
-        if (user) {
-          cookie.save(USER, user);
+        let { data } = await getCurrentUser();
+        cookie.save(USER, data);
 
-          dispatch({
-            type: LOGIN,
-            payload: user
-          });
+        dispatch({
+          type: LOGIN,
+          payload: data,
+        });
 
-          setShowProgress(false);
+        navigate(ROOT_PAGE, { replace: true });
 
-          if (user.phone && user.bgImage && user.majorId)
-            navigate(DASHBOARD, { replace: true });
-          else
-            navigate(ALUMNI_ADD_INFO, { replace: true });
-        }
+        // if (response.data && data === false)
+        //   navigate(INFO_PAGE);
+        // else if (response.data && data) navigate(DASHBOARD);
       }
     } catch (e) {
       setShowProgress(false);
-      
+
       if (e.response.status === 400)
         setAlertMessage("Tên tài khoản hoặc mật khẩu không chính xác!");
-      else
-        setAlertMessage("Đăng nhập thất bại, vui lòng thử lại sau!");
+      else setAlertMessage("Đăng nhập thất bại, vui lòng thử lại sau!");
     } finally {
       setShowProgress(false);
     }
@@ -165,13 +158,16 @@ export default function SignInForm({ role }) {
               </Grid>
 
               {/* Alert */}
-              <Grid
-                item
-                xs={12}
-              >
-                <div className={`w-full ${
-                  alertMessage === "" ? "hidden" : "flex justify-center mt-2 text-red"
-                } `}>{alertMessage}</div>
+              <Grid item xs={12}>
+                <div
+                  className={`w-full ${
+                    alertMessage === ""
+                      ? "hidden"
+                      : "flex justify-center mt-2 text-red"
+                  } `}
+                >
+                  {alertMessage}
+                </div>
               </Grid>
 
               {/* Login button */}
@@ -198,7 +194,6 @@ export default function SignInForm({ role }) {
                   </Link>
                 ) : null}
               </Grid>
-
             </Grid>
           </Box>
         </Box>

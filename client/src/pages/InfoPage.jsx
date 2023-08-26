@@ -2,10 +2,10 @@ import React from "react";
 
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { DASHBOARD, ROOT_PAGE } from "../../routes";
-import { ALREADY_LOGIN, UNAUTHORIZED } from "../../constants/common";
+import { DASHBOARD, ROOT_PAGE } from "../routes";
+import { ALREADY_LOGIN, NO_ACTIVE, UNAUTHORIZED } from "../constants/common";
 
-const PageException = ({ type }) => {
+const InfoPage = ({ type }) => {
   const navigate = useNavigate();
 
   const handleShowMessage = (type) => {
@@ -14,6 +14,8 @@ const PageException = ({ type }) => {
         return "Bạn đã đăng nhập rồi!";
       case UNAUTHORIZED:
         return "Bạn không có quyền truy cập trang này!";
+      case NO_ACTIVE:
+        return "Vui lòng chờ quản trị viên xác nhận tài khoản!";
       default:
         return;
     }
@@ -22,11 +24,13 @@ const PageException = ({ type }) => {
   const handleNavigate = (type) => {
     switch (type) {
       case ALREADY_LOGIN:
-        navigate(DASHBOARD, { replace: true });
+        navigate(ROOT_PAGE, { replace: true });
         break;
       case UNAUTHORIZED:
         navigate(ROOT_PAGE, { replace: true });
         break;
+      case NO_ACTIVE:
+        navigate(ROOT_PAGE, { replace: true });
       default:
         return;
     }
@@ -46,4 +50,4 @@ const PageException = ({ type }) => {
   );
 };
 
-export default PageException;
+export default InfoPage;

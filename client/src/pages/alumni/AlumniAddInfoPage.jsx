@@ -30,7 +30,7 @@ const defaultTheme = createTheme();
 const departments = departmentData;
 const majors = majorData;
 
-const AlumniAddInfo = () => {
+const AlumniAddInfoPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [coverImage, setCoverImage] = useState(null);
   const [department, setDepartment] = useState("");
@@ -280,4 +280,4 @@ const AlumniAddInfo = () => {
   );
 };
 
-export default AlumniAddInfo;
+export default AlumniAddInfoPage;

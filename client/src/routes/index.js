@@ -8,3 +8,4 @@ export const GROUPS = '/groups';
 export const LETTERS = '/letters';
 export const POST_DETAIL = '/posts/:postId';
 export const CURRENT_USER = '/users/:username';
+export const INFO_PAGE = "/info-page";

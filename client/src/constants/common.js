@@ -11,3 +11,4 @@ export const TOKEN = "token";
 export const USER = "user";
 export const ALREADY_LOGIN = "ALREADY_LOGIN";
 export const UNAUTHORIZED = "UNAUTHORIZED";
+export const NO_ACTIVE = "NO_ACTIVE";
