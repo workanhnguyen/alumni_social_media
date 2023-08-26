@@ -45,7 +45,6 @@ const AlumniAddInfoPage = () => {
   const [showProgress, setShowProgress] = useState(false);
   const [isUpdateSuccessful, setIsUpdateSuccessful] = useState(false);
 
-  const { user } = useStateContext();
   const fileInputRef = useRef();
 
   const handleChooseCoverImage = (e) => {

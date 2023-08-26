@@ -60,15 +60,6 @@ const App = () => {
           }
         />
 
-        {/* Unauthenticated routes */}
-        {/* {token === null && (
-          <>
-            <Route path={ALUMNI_LOGIN} element={<AlumniLoginPage />} />
-            <Route path={LECTURER_LOGIN} element={<LecturerLoginPage />} />
-            <Route path={ALUMNI_REGISTER} element={<AlumniRegisterPage />} />
-          </>
-        )} */}
-
         {/* Authenticated and activated routes */}
         {token && user ? (
           <>
@@ -80,6 +71,8 @@ const App = () => {
             <Route path={ALUMNI_ADD_INFO} element={<AlumniAddInfoPage />} />
           </>
         ) : null}
+
+        {/* Redirect unknown paths */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
