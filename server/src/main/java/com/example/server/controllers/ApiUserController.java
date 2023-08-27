@@ -2,8 +2,10 @@ package com.example.server.controllers;
 
 import com.example.server.components.JwtService;
 import com.example.server.dtos.UserDto;
+import com.example.server.pojos.Posts;
 
 import com.example.server.pojos.Users;
+import com.example.server.services.PostService;
 import com.example.server.services.UserService;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.Map;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @RestController
 @RequestMapping("/api/users")
@@ -25,6 +31,8 @@ public class ApiUserController {
     
     @Autowired
     private UserService userService;
+     @Autowired
+    private PostService postService;
 
     @PostMapping(path = "/register/",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
@@ -53,16 +61,16 @@ public class ApiUserController {
     }
     
     @PostMapping("/change_password/")
-    public ResponseEntity<String> changePassword(
+    public ResponseEntity<?> changePassword(
             @RequestParam String password,
             @RequestParam String newPassword,
             Principal user) {
         Users u = this.userService.getUserByUsername(user.getName());
 
         if (this.userService.changePassword(password,newPassword, u )) {
-            return new ResponseEntity<>("Mật khẩu đã được thay đổi thành công", HttpStatus.OK);
+            return new ResponseEntity<>( HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Thay đổi mật khẩu thất bại", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -76,6 +84,23 @@ public class ApiUserController {
         if (u.getIsActive())
             return new ResponseEntity<>(u, HttpStatus.OK);
         return new ResponseEntity<>(false, HttpStatus.OK);
+    }
+    
+     @PostMapping(path = "/new")
+    @CrossOrigin
+    public ResponseEntity<Posts> createPost(@RequestParam Map<String, String> params) {
+            // Thêm bài viết mới
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+                Posts p = this.postService.addPost(params, currentUser);
+                return new ResponseEntity<>(p, HttpStatus.CREATED);           
+            }
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            
+
+       
     }
 
 

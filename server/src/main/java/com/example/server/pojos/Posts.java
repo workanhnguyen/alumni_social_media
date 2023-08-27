@@ -4,6 +4,7 @@
  */
 package com.example.server.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -37,7 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Posts.findAll", query = "SELECT p FROM Posts p"),
     @NamedQuery(name = "Posts.findById", query = "SELECT p FROM Posts p WHERE p.id = :id"),
-    @NamedQuery(name = "Posts.findByIsSurvey", query = "SELECT p FROM Posts p WHERE p.isSurvey = :isSurvey"),
     @NamedQuery(name = "Posts.findByIsLocked", query = "SELECT p FROM Posts p WHERE p.isLocked = :isLocked"),
     @NamedQuery(name = "Posts.findByCreatedAt", query = "SELECT p FROM Posts p WHERE p.createdAt = :createdAt"),
     @NamedQuery(name = "Posts.findByUpdatedAt", query = "SELECT p FROM Posts p WHERE p.updatedAt = :updatedAt")})
@@ -48,13 +48,11 @@ public class Posts implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Lob
     @Size(max = 65535)
     @Column(name = "content")
     private String content;
-    @Column(name = "is_survey")
-    private Boolean isSurvey;
     @Column(name = "is_locked")
     private Boolean isLocked;
     @Column(name = "created_at")
@@ -63,32 +61,42 @@ public class Posts implements Serializable {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+    
     @OneToMany(mappedBy = "postId")
+    @JsonIgnore
     private Set<Images> imagesSet;
+    
     @OneToMany(mappedBy = "postId")
+    @JsonIgnore
     private Set<Comments> commentsSet;
+    
     @OneToMany(mappedBy = "postId")
+    @JsonIgnore
     private Set<Surveys> surveysSet;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Users userId;
+    
     @OneToMany(mappedBy = "postId")
+    @JsonIgnore
     private Set<Shares> sharesSet;
+    
     @OneToMany(mappedBy = "postId")
+    @JsonIgnore
     private Set<Reactions> reactionsSet;
 
     public Posts() {
     }
 
-    public Posts(Integer id) {
+    public Posts(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -98,14 +106,6 @@ public class Posts implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Boolean getIsSurvey() {
-        return isSurvey;
-    }
-
-    public void setIsSurvey(Boolean isSurvey) {
-        this.isSurvey = isSurvey;
     }
 
     public Boolean getIsLocked() {

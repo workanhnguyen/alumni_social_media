@@ -4,6 +4,7 @@
  */
 package com.example.server.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -65,8 +66,10 @@ public class Surveys implements Serializable {
     @ManyToMany(mappedBy = "surveysSet")
     private Set<Users> usersSet;
     @OneToMany(mappedBy = "surveyId")
+     @JsonIgnore
     private Set<Answers> answersSet;
     @OneToMany(mappedBy = "surveyId")
+     @JsonIgnore
     private Set<Questions> questionsSet;
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)

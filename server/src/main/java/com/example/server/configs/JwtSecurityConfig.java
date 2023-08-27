@@ -68,17 +68,19 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().ignoringAntMatchers("/api/users/**");
+        http.csrf().ignoringAntMatchers("/api/**");
         http.authorizeRequests().antMatchers("/api/users/login/").permitAll();
         http.authorizeRequests().antMatchers("/api/users/register/").permitAll();
 
-        http.antMatcher("/api/users/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
+        http.antMatcher("/api/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/users/current_user/").authenticated()
-                .antMatchers(HttpMethod.GET, "/api/**").hasAnyAuthority("ADMIN")
-//                .antMatchers(HttpMethod.POST, "/api/**").access("hasRole('ADMIN') or hasRole('CLIENT')")
+                //.antMatchers(HttpMethod.GET, "/api/**").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/posts/**").authenticated()
+                
 //                .antMatchers(HttpMethod.DELETE, "/api/**").access("hasRole('ADMIN') or hasRole('CLIENT')")
                 .and()
+                
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
     }
