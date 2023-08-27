@@ -75,12 +75,10 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         http.antMatcher("/api/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/users/current_user/").authenticated()
-                //.antMatchers(HttpMethod.GET, "/api/**").hasAnyAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/posts/**").authenticated()
-                
-//                .antMatchers(HttpMethod.DELETE, "/api/**").access("hasRole('ADMIN') or hasRole('CLIENT')")
-                .and()
-                
+                .antMatchers(HttpMethod.POST, "/api/**").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/**").authenticated()
+                .and()          
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
     }
