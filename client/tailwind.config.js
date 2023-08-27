@@ -36,6 +36,9 @@ module.exports = {
       height: {
         '128': '32rem',
         '150': '37.5rem',
+      },
+      margin: {
+        '18': '4.5rem'
       }
     },
   },

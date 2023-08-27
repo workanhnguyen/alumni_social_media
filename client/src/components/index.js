@@ -19,3 +19,4 @@ export { default as UserCommonInfo } from './UserCommonInfo';
 export { default as UserDetailInfo } from './UserDetailInfo';
 export { default as UserImageList } from './UserImageList';
 export { default as LoadingButton } from './LoadingButton';
+export { default as DeleteAlert } from './DeleteAlert';

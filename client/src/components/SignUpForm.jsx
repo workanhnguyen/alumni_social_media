@@ -305,6 +305,7 @@ export default function SignUpForm() {
                     color="success"
                     size="large"
                     variant="outlined"
+                    disableElevation
                     fullWidth
                     startIcon={<CheckCircleIcon />}
                     sx={{ mt: 0, mb: 2 }}

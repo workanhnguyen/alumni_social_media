@@ -12,3 +12,7 @@ export const USER = "user";
 export const ALREADY_LOGIN = "ALREADY_LOGIN";
 export const UNAUTHORIZED = "UNAUTHORIZED";
 export const NO_ACTIVE = "NO_ACTIVE";
+export const CREATE = "CREATE";
+export const UPDATE = "UPDATE";
+export const DELETE = "DELETE";
+export const LOCK_COMMENT = "LOCK_COMMENT";

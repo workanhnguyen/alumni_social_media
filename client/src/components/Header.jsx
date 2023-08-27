@@ -17,7 +17,7 @@ import { LOGOUT } from "../constants/common";
 import { ROLE_PAGE } from "../routes";
 
 const Header = () => {
-  const { pageContent, setPageContent, user, dispatch } = useStateContext();
+  const { pageContent, setPageContent, user, userDispatch } = useStateContext();
 
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    dispatch({ type: LOGOUT });
+    userDispatch({ type: LOGOUT });
 
     navigate(ROLE_PAGE, { replace: true })
     window.location.reload();

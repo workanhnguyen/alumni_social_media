@@ -7,6 +7,7 @@ import actionHaha from "./action-haha.svg";
 import actionHeart from "./action-heart.svg";
 import actionLike from "./action-like.svg";
 import placeholderImage from "./placeholder-image.jpg";
+import emptyPlaceholder1 from './empty-placeholder-1.svg';
 
 export {
   logoLong,
@@ -17,5 +18,6 @@ export {
   actionHaha,
   actionHeart,
   actionLike,
-  placeholderImage
+  placeholderImage,
+  emptyPlaceholder1
 };

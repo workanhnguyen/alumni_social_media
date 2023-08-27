@@ -1,11 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ImageEditor = ({ imageList }) => {
+const ImageEditor = ({ imageList=[], onImageChange }) => {
   const [imageFiles, setImageFiles] = useState([]);
-  const [imageUrls, setImageUrls] = useState(imageList === null ? [] : imageList);
+  const [imageUrls, setImageUrls] = useState(imageList);
 
   const fileInputRef = useRef();
 
@@ -25,6 +25,8 @@ const ImageEditor = ({ imageList }) => {
       prevImages.filter((_, index) => index !== indexToRemove)
     );
   };
+
+  useEffect(() => { onImageChange([...imageFiles, ...imageUrls]) }, [imageFiles, imageUrls]);
 
   return (
     <div className="w-full min-h-fit max-h-80 border mt-3 p-2 border-gray-2 rounded-md overflow-auto">

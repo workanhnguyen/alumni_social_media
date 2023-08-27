@@ -4,7 +4,9 @@ import { DefaultLayout } from '../layouts'
 const Group = () => {
   return (
     <DefaultLayout>
-        Group
+        <div className='w-full min-h-screen flex bg-gray'>
+          <div className='my-6 mt-20'>Groups</div>
+        </div>
     </DefaultLayout>
   )
 }

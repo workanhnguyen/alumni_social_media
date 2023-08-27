@@ -3,18 +3,21 @@ import React, { useRef, useState } from "react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ImageUploader = () => {
+const ImageUploader = ({ onImagesChange }) => {
   const [images, setImages] = useState([]);
   const fileInputRef = useRef();
+
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    setImages([...images, ...files]);
+    const newImages = [...images, ...files];
+    setImages(newImages);
+    onImagesChange(newImages);
   };
 
   const handleRemoveImage = (indexToRemove) => {
-    setImages((prevImages) =>
-      prevImages.filter((_, index) => index !== indexToRemove)
-    );
+    const newImages = images.filter((_, index) => index !== indexToRemove);
+    setImages(newImages);
+    onImagesChange(newImages);
   };
   return (
     <div className="w-full min-h-fit max-h-80 border mt-3 p-2 border-gray-2 rounded-md overflow-auto">

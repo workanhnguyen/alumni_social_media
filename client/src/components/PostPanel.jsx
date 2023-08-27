@@ -36,7 +36,7 @@ const PostPanel = ({ className }) => {
       </div>
 
       {/* Post form popup */}
-      <PostForm type={postType} show={showPostForm} setShow={setShowPostForm} />
+      <PostForm show={showPostForm} setShow={setShowPostForm} />
     </>
   );
 };

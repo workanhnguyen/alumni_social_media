@@ -12,10 +12,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { CircularProgress } from "@mui/material";
 
 import { ROLE_ALUMNI } from "../constants/role";
-import { Copyright } from "../components";
+import { Copyright, LoadingButton } from "../components";
 import { getCurrentUser, loginUser } from "../apis/UserApi";
 import { DASHBOARD, INFO_PAGE, ROOT_PAGE } from "../routes";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -26,7 +25,7 @@ const defaultTheme = createTheme();
 export default function SignInForm({ role }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { dispatch } = useStateContext();
+  const { userDispatch } = useStateContext();
 
   const [showProgress, setShowProgress] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -47,21 +46,20 @@ export default function SignInForm({ role }) {
         let { data } = await getCurrentUser();
         cookie.save(USER, data);
 
-        dispatch({
+        userDispatch({
           type: LOGIN,
           payload: data,
         });
 
         // navigate(ROOT_PAGE, { replace: true });
 
-        if (response.data && data === false)
-          navigate(INFO_PAGE);
+        if (response.data && data === false) navigate(INFO_PAGE);
         else if (response.data && data) navigate(DASHBOARD);
       }
     } catch (e) {
       setShowProgress(false);
 
-      if (e.response.status === 400)
+      if (e.response.status === 400 || e.response.status === 500)
         setAlertMessage("Tên tài khoản hoặc mật khẩu không chính xác!");
       else setAlertMessage("Đăng nhập thất bại, vui lòng thử lại sau!");
     } finally {
@@ -172,15 +170,19 @@ export default function SignInForm({ role }) {
 
               {/* Login button */}
               <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant={`${showProgress ? "outlined" : "contained"}`}
-                  sx={{ mt: 2, mb: 2 }}
-                  size="large"
-                >
-                  {showProgress ? <CircularProgress size={28} /> : "Đăng nhập"}
-                </Button>
+                {showProgress ? (
+                  <LoadingButton sx={{ mt: 2, mb: 2 }} size="large" fullWidth />
+                ) : (
+                  <Button
+                    type="submit"
+                    fullWidth
+                    disableElevation
+                    variant="contained"
+                    sx={{ mt: 2, mb: 2 }}
+                  >
+                    Đăng nhập
+                  </Button>
+                )}
               </Grid>
 
               {/* Switch login -> register */}

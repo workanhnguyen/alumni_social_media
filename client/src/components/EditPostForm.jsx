@@ -1,20 +1,66 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
 import PublicIcon from "@mui/icons-material/Public";
-import { Avatar, Button, Divider } from "@mui/material";
+import { Avatar, Box, Button, Divider } from "@mui/material";
 
-import { CustomTextField, ImageEditor } from "../components";
+import { CustomTextField, ImageEditor, LoadingButton } from "../components";
+import { updatePost } from "../apis/PostApi";
 import { useStateContext } from "../contexts/ContextProvider";
+import { UPDATE } from "../constants/common";
 
 const EditPostForm = ({ data, show, setShow }) => {
-  const { loggingUser } = useStateContext();
+  const [content, setContent] = useState(data?.content || "");
+  const [images, setImages] = useState(data?.images || []);
+
+  const { postDispatch } = useStateContext();
+
+  const [showProgress, setShowProgress] = useState(false);
   const postPanelRef = useRef();
 
-  const handleClosePostPanel = () => { setShow(false); };
+  const handleClosePostPanel = () => {
+    setShow(false);
+  };
 
+  const handleImageChange = (newImages) => {
+    setImages(newImages);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const process = async () => {
+      try {
+        setShowProgress(true);
+
+        const updatePostData = {
+          content: content,
+          isLocked: data?.isLocked,
+        };
+
+        console.log(updatePostData);
+
+        let res = await updatePost(data.id, updatePostData);
+
+        if (res.status === 200) {
+          postDispatch({ type: UPDATE, payload: res.data });
+
+          handleClosePostPanel();
+        }
+        console.log(res);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setShowProgress(false);
+      }
+    };
+
+    process();
+  };
   return (
-    <div
+    <Box
+      onSubmit={handleSubmit}
+      component="form"
       ref={postPanelRef}
       className={`${
         show ? "" : "hidden"
@@ -33,27 +79,37 @@ const EditPostForm = ({ data, show, setShow }) => {
         <Divider />
         <div className="w-full flex items-center mt-3">
           <Avatar
-            src={loggingUser?.avatar}
+            src={data?.userId?.avatar}
             alt="avt"
             sx={{ width: 40, height: 40 }}
           />
           <div className="flex-1 ml-2">
-            <p className="font-semibold">{`${loggingUser?.firstName} ${loggingUser?.lastName}`}</p>
+            <p className="font-semibold">{`${data?.userId?.lastName} ${data?.userId?.firstName}`}</p>
             <div className="w-fit flex items-center py-1 px-2 bg-gray-2 rounded-md">
               <PublicIcon sx={{ width: 12, height: 12 }} />
               <span className="ml-2 text-xs font-semibold">Công khai</span>
             </div>
           </div>
         </div>
-        <CustomTextField content={data?.content} />
-        <ImageEditor imageList={data?.images} />
+        <CustomTextField content={content} setContent={setContent} />
+        <ImageEditor imageList={images} onImageChange={handleImageChange} />
         <div className="mt-3">
-          <Button fullWidth disableElevation variant="contained">
-            Đăng
-          </Button>
+          {showProgress ? (
+            <LoadingButton fullWidth size="large" />
+          ) : (
+            <Button
+              type="submit"
+              disabled={content === "<p><br></p>"}
+              fullWidth
+              disableElevation
+              variant="contained"
+            >
+              Cập nhật
+            </Button>
+          )}
         </div>
       </div>
-    </div>
+    </Box>
   );
 };
 

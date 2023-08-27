@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 
 import ReactQuill from "react-quill";
 
-const CustomTextField = ({ content }) => {
-  const [text, setText] = useState(content || '');
+const CustomTextField = ({ content, setContent }) => {
   
   return (
-    <div className="mt-3">
+    <div className="max-h-40 mt-3 overflow-auto">
       <ReactQuill
         theme="snow"
-        value={text}
-        onChange={setText}
+        value={content}
+        onChange={setContent}
         placeholder="Bạn đang nghĩ gì thế?"
       />
     </div>
