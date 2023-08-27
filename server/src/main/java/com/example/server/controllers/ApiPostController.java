@@ -45,7 +45,7 @@ public class ApiPostController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(path = "/new", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/new/", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<Posts> createPost(@RequestBody Map<String, String> params) {
         // Thêm bài viết mới
@@ -59,7 +59,8 @@ public class ApiPostController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{id}/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
     public ResponseEntity<Posts> updatePost(@PathVariable("id") Long postId, @RequestBody Map<String, String> params) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
@@ -71,7 +72,8 @@ public class ApiPostController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/")
+    @CrossOrigin
     public ResponseEntity<String> deletePost(@PathVariable("id") Long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {

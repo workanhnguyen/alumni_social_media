@@ -46,7 +46,7 @@ public class ApiCommentController {
     @Autowired
     private CommentService commentService;
     
-    @PostMapping(path = "/new/posts/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/new/posts/{id}/", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<CommentDto> createComment(@PathVariable("id") Long postId, @RequestBody Map<String, String> params) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -65,7 +65,8 @@ public class ApiCommentController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
     
-    @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{id}/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
     public ResponseEntity<CommentDto> updateComment(@PathVariable("id") Long cmtId, @RequestBody Map<String, String> params) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
@@ -81,7 +82,8 @@ public class ApiCommentController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
     
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/")
+    @CrossOrigin
     public ResponseEntity<String> deleteComment(@PathVariable("id") Long cmtId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
