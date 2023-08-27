@@ -28,28 +28,33 @@ import {
   POST_DETAIL,
   ROOT_PAGE,
   INFO_PAGE,
+  ROLE_PAGE,
 } from "./routes";
 import { useStateContext } from "./contexts/ContextProvider";
-import { ALREADY_LOGIN, NO_ACTIVE, TOKEN, USER } from "./constants/common";
+import { ALREADY_LOGIN, NO_ACTIVE } from "./constants/common";
 
 const App = () => {
   const { token, user } = useStateContext();
-  
-  console.log(token, user);
+  const booleanUser = JSON.parse(
+    user === false || user === "false" ? user : null
+  );
+
+  const isActivated = user !== null && booleanUser !== false;
   return (
     <BrowserRouter>
       <Routes>
+        {/* Not authen || not active */}
+        {(!token || booleanUser === false) && (
+          <Route path={ROLE_PAGE} element={<ChooseRolePage />} />
+        )}
+
         {/* Public routes */}
         <Route path={INFO_PAGE} element={<InfoPage type={NO_ACTIVE} />} />
-        <Route
-          path={ROOT_PAGE}
-          element={(user && user !== false) ? <DashBoard /> : <ChooseRolePage />}
-        />
 
         {/* Authenticated and activated routes */}
-        {(user && user !== false) && (
+        {isActivated && (
           <>
-            <Route path={DASHBOARD} element={<DashBoard />} />
+            <Route path={ROOT_PAGE} element={<DashBoard />} />
             <Route path={GROUPS} element={<GroupPage />} />
             <Route path={LETTERS} element={<LetterPage />} />
             <Route path={CURRENT_USER} element={<PersonalPage />} />
@@ -59,24 +64,32 @@ const App = () => {
         )}
 
         {/* Unauthenticated and unactived routes */}
-        {(!user || user === false) && (
+        {(!user || booleanUser === false) && (
           <>
             <Route
               path={ALUMNI_LOGIN}
               element={
-                user ? <InfoPage type={ALREADY_LOGIN} /> : <AlumniLoginPage />
+                isActivated ? (
+                  <InfoPage type={ALREADY_LOGIN} />
+                ) : (
+                  <AlumniLoginPage />
+                )
               }
             />
             <Route
               path={LECTURER_LOGIN}
               element={
-                user ? <InfoPage type={ALREADY_LOGIN} /> : <LecturerLoginPage />
+                isActivated ? (
+                  <InfoPage type={ALREADY_LOGIN} />
+                ) : (
+                  <LecturerLoginPage />
+                )
               }
             />
             <Route
               path={ALUMNI_REGISTER}
               element={
-                user ? (
+                isActivated ? (
                   <InfoPage type={ALREADY_LOGIN} />
                 ) : (
                   <AlumniRegisterPage />
@@ -87,7 +100,14 @@ const App = () => {
         )}
 
         {/* Redirect unknown paths */}
-        <Route path="*" element={<Navigate to={ROOT_PAGE} />} />
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to={!token ? ROLE_PAGE : user === "false" ? ROLE_PAGE : ROOT_PAGE}
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

@@ -1,4 +1,5 @@
 export const ROOT_PAGE = '/';
+export const ROLE_PAGE = '/role';
 export const ALUMNI_LOGIN = '/login/alumni';
 export const ALUMNI_REGISTER = '/register/alumni';
 export const ALUMNI_ADD_INFO = '/add-info/alumni';

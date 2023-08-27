@@ -2,7 +2,7 @@ import React from "react";
 
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { ROOT_PAGE } from "../routes";
+import { ROLE_PAGE, ROOT_PAGE } from "../routes";
 import { ALREADY_LOGIN, NO_ACTIVE, UNAUTHORIZED } from "../constants/common";
 
 const InfoPage = ({ type }) => {
@@ -30,7 +30,7 @@ const InfoPage = ({ type }) => {
         navigate(ROOT_PAGE, { replace: true });
         break;
       case NO_ACTIVE:
-        navigate(ROOT_PAGE, { replace: true });
+        navigate(ROLE_PAGE, { replace: true });
       default:
         return;
     }
