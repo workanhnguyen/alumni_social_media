@@ -4,26 +4,35 @@
  */
 package com.example.server.services;
 
+import com.example.server.dtos.PostDto;
 import com.example.server.pojos.Posts;
 import com.example.server.pojos.Users;
+import java.util.List;
 import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
  * @author maidv
  */
 public interface PostService {
-    Posts addPost(Map<String, String> params, Users u);
+    PostDto addPost(Map<String, String> params, Users u, List<MultipartFile> files);
     
     Posts updatePost(Map<String, String> params, Users u, Long postId);
     
     Boolean deletePost(Long id, Users u);
+    
+    Long countPost();
+    
+    Long countPost(Users u);
 
-//    PostDto lockPost(Long id, Long userId);
+    Boolean lockPost(Long id, Users user);
+
+    Boolean unlockPost(Long id, Users user);
 //
-//    PostDto unlockPost(Long id, Long userId);
-//
-    Posts findPostById(Long id);
+//    Posts findPostById(Long id);
+    
+    PostDto findPostById(Long id);
 //
 //    List<PostDto> findAllPosts();
 //

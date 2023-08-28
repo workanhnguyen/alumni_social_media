@@ -47,7 +47,7 @@ public class Majors implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Size(max = 255)
     @Column(name = "name")
     private String name;
@@ -67,15 +67,15 @@ public class Majors implements Serializable {
     public Majors() {
     }
 
-    public Majors(Integer id) {
+    public Majors(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

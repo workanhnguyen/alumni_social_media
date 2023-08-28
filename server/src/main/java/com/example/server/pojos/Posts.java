@@ -74,7 +74,7 @@ public class Posts implements Serializable {
     @JsonIgnore
     private Set<Surveys> surveysSet;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Users userId;
     
     @OneToMany(mappedBy = "postId")
