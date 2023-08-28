@@ -4,9 +4,6 @@
  */
 package com.example.server.dtos;
 
-import com.example.server.pojos.Majors;
-import com.example.server.pojos.Users;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,19 +17,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDto {
+public class ImageDto {
     private Long id;
-    private String username;
-    private String email;
-    private String firstName;
-    private String lastName;
-    private String avatar;
-    private String bgImage;
-    private String phone;
-    private Date createdAt;
+    private String url;
     private Boolean isActive;
-    private String role;
-    private Date updatedAt;
-    private String studentId;
-    private Majors majorId;
 }

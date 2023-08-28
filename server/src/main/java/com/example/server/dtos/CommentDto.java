@@ -4,6 +4,7 @@
  */
 package com.example.server.dtos;
 
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,7 @@ import lombok.NoArgsConstructor;
 public class CommentDto {
     private Long id;
     private String content;
-    private String fullname;
+    private Date createdAt;
+    private Date updatedAt;
+    private UserDto user;
 }

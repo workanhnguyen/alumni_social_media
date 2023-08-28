@@ -5,7 +5,10 @@
 package com.example.server.repositories.impl;
 
 import com.example.server.pojos.Posts;
+import com.example.server.pojos.Users;
 import com.example.server.repositories.PostRepository;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +24,15 @@ import org.springframework.stereotype.Repository;
 public class PostRepositoryImp implements PostRepository {
     @Autowired
     private LocalSessionFactoryBean factory;
+    
+    @PersistenceContext
+    private EntityManager entityManager;
+    
     @Override
     public Posts addPost(Posts p) {
         Session s = this.factory.getObject().getCurrentSession();
         s.save(p);
+        s.flush();
         return p;
     }
     
@@ -42,19 +50,19 @@ public class PostRepositoryImp implements PostRepository {
         return true;
     }
 //
-//    @Override
-//    public Post lockPost(Post post) {
-//        Session s = this.factory.getObject().getCurrentSession();
-//        s.update(post);
-//        return post;
-//    }
-//
-//    @Override
-//    public Post unlockPost(Post post) {
-//        Session s = this.factory.getObject().getCurrentSession();
-//        s.update(post);
-//        return post;
-//    }
+    @Override
+    public Boolean lockPost(Posts post) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.update(post);
+        return true;
+    }
+
+    @Override
+    public Boolean unlockPost(Posts post) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.update(post);
+        return true;
+    }
 //
     @Override
     public Posts findPostById(Long id) {
@@ -100,6 +108,19 @@ public class PostRepositoryImp implements PostRepository {
 //        List<Post> posts = q.getResultList();
 //        return posts;
 //    }
+
+    @Override
+    public Long countPost() {
+        return entityManager.createQuery("SELECT COUNT(p) FROM Posts p ", Long.class)
+            .getSingleResult();    
+    }
+
+    @Override
+    public Long countPost(Users u) {
+        return entityManager.createQuery("SELECT COUNT(p) FROM Posts p WHERE p.userId.id = :userId " , Long.class)
+        .setParameter("userId", u.getId())
+        .getSingleResult();    
+    }
     
     
 }

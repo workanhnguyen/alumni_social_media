@@ -9,6 +9,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,31 +34,36 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Images.findByImageUrl", query = "SELECT i FROM Images i WHERE i.imageUrl = :imageUrl")})
 public class Images implements Serializable {
 
+   
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Size(max = 255)
     @Column(name = "image_url")
     private String imageUrl;
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Posts postId;
+    
+    @Column(name = "is_active")
+    private Boolean isActive;
 
     public Images() {
     }
 
-    public Images(Integer id) {
+    public Images(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -76,6 +83,15 @@ public class Images implements Serializable {
         this.postId = postId;
     }
 
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;

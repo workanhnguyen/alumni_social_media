@@ -5,6 +5,7 @@
 package com.example.server.repositories;
 
 import com.example.server.pojos.Posts;
+import com.example.server.pojos.Users;
 
 /**
  *
@@ -15,12 +16,16 @@ public interface PostRepository {
     Posts addPost(Posts p);
     
     Posts updatePost(Posts post);
-//
+
     Boolean deletePost(Posts post);
+    
+    Long countPost();
+    
+    Long countPost(Users u);
 //
-//    Post lockPost(Post post);
-//
-//    Post unlockPost(Post post);
+    Boolean lockPost(Posts post);
+
+    Boolean unlockPost(Posts post);
 //
     Posts findPostById(Long id);
 //

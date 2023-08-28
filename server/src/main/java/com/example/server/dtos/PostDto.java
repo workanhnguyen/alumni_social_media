@@ -4,9 +4,12 @@
  */
 package com.example.server.dtos;
 
+import com.example.server.pojos.Images;
 import com.example.server.pojos.Posts;
 import com.example.server.pojos.Users;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,11 +26,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PostDto {
     private Long id;
-    @NotBlank
     private String content;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
     private Boolean isLocked;
-    private Users userId;
+    private UserDto user;
+    private List<ImageDto> images;
     
 }

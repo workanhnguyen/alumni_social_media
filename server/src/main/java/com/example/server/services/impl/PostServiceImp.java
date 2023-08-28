@@ -4,18 +4,31 @@
  */
 package com.example.server.services.impl;
 
+import com.cloudinary.utils.ObjectUtils;
+import com.example.server.dtos.ImageDto;
+import com.example.server.dtos.PostDto;
+import com.example.server.dtos.UserDto;
+import com.example.server.pojos.Images;
 import com.example.server.pojos.Posts;
 import com.example.server.pojos.Users;
+import com.example.server.repositories.ImageRepository;
 import com.example.server.repositories.PostRepository;
+import com.example.server.services.ImageService;
 import com.example.server.services.PostService;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -26,9 +39,17 @@ public class PostServiceImp implements PostService {
 
     @Autowired
     private PostRepository postRepo;
+    
+    @Autowired
+    private ImageService imageService;
+    
+    @Autowired
+    private ImageRepository imageRepo;
+    
+    
 
     @Override
-    public Posts addPost(Map<String, String> params, Users u) {
+    public PostDto addPost(Map<String, String> params, Users u, List<MultipartFile> files) {
         LocalDateTime currentTime = LocalDateTime.now();
         Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
         Posts p = new Posts();
@@ -36,7 +57,16 @@ public class PostServiceImp implements PostService {
         p.setIsLocked(false);
         p.setCreatedAt(currentDate);
         p.setUserId(u);
-        return this.postRepo.addPost(p);
+        
+        this.postRepo.addPost(p);
+        
+        Posts savedPost = this.postRepo.findPostById(p.getId());
+        for(MultipartFile file: files )
+            this.imageService.addImage(file, savedPost);
+        
+        PostDto postDto = findPostById(p.getId());
+        
+        return postDto;
     }
 
     @Override
@@ -65,43 +95,36 @@ public class PostServiceImp implements PostService {
         return false;
     }
 //
-//    @Override
-//    public PostDto lockPost(Long id, Long userId) {
-//        Post post = postRepository.findPostById(id);
-//        if (post == null) {
-//            throw new ResourceNotFoundException("Post", "id", id);
-//        }
-//        post.setIsLocked(true);
-//        List<Role> roles = userService.getAllRoleOfUser(userId);
-//        Boolean hasAdminRole = roles.stream().anyMatch(r -> r.getName().equals("SYS_ADMIN"));
-//        if (hasAdminRole || post.getUserId() == userId) {
-//            return mapper.map(postRepository.lockPost(post), PostDto.class);
-//        } else {
-//            return null;
-//        }
-//    }
-//
-//    @Override
-//    public PostDto unlockPost(Long id, Long userId) {
-//        Post post = postRepository.findPostById(id);
-//        if (post == null) {
-//            throw new ResourceNotFoundException("Post", "id", id);
-//        }
-//        post.setIsLocked(false);
-//        List<Role> roles = userService.getAllRoleOfUser(userId);
-//        Boolean hasAdminRole = roles.stream().anyMatch(r -> r.getName().equals("SYS_ADMIN"));
-//        if (hasAdminRole || post.getUserId() == userId) {
-//            return mapper.map(postRepository.unlockPost(post), PostDto.class);
-//        } else {
-//            return null;
-//        }
-//    }
-//
     @Override
-    public Posts findPostById(Long id) {
-        Posts post = postRepo.findPostById(id);
-        return post;
+    public Boolean lockPost(Long id, Users u) {
+        Posts p = postRepo.findPostById(id);
+        if (p != null && Objects.equals(u.getId(), p.getUserId().getId())) {
+            p.setIsLocked(true);
+            postRepo.lockPost(p);
+            return true;
+        }
+        return false;
+       
     }
+
+    @Override
+    public Boolean unlockPost(Long id, Users u) {
+        Posts p = postRepo.findPostById(id);
+        if (p != null && Objects.equals(u.getId(), p.getUserId().getId())) {
+            p.setIsLocked(false);
+            postRepo.lockPost(p);
+            return true;
+        }
+        return false;
+    }
+//
+//    @Override
+//    public Posts findPostById(Long id) {
+//        Posts post = postRepo.findPostById(id);
+//        return post;
+//    }
+    
+    
 //
 //    @Override
 //    public List<PostDto> findAllPosts() {
@@ -156,5 +179,60 @@ public class PostServiceImp implements PostService {
 //        });
 //        return postDtos;
 //    }
+
+    @Override
+    public Long countPost() {
+        return this.postRepo.countPost();
+    }
+
+    @Override
+    public Long countPost(Users u) {
+        return this.postRepo.countPost(u);
+    }
+
+    @Override
+    public PostDto findPostById(Long id) {
+        Posts p = this.postRepo.findPostById(id);
+        List<Images> imagesList = imageRepo.findByPostId(p);
+        List<ImageDto> imagesDto = new ArrayList<>();
+        
+        imagesList.forEach(i -> {
+            ImageDto imgDto = ImageDto.builder()
+                    .id(i.getId())
+                    .url(i.getImageUrl())
+                    .isActive(i.getIsActive())
+                    .build();
+            imagesDto.add(imgDto);
+        });
+        
+        UserDto userDto = UserDto.builder()
+                .id(p.getUserId().getId())
+                .username(p.getUserId().getUsername())
+                .email(p.getUserId().getEmail())
+                .firstName(p.getUserId().getFirstName())
+                .lastName(p.getUserId().getLastName())
+                .avatar(p.getUserId().getAvatar())
+                .bgImage(p.getUserId().getBgImage())
+                .phone(p.getUserId().getPhone())
+                .createdAt(p.getUserId().getCreatedAt())
+                .updatedAt(p.getUserId().getUpdatedAt())
+                .isActive(p.getUserId().getIsActive())
+                .role(p.getUserId().getRole())
+                .studentId(p.getUserId().getStudentId())
+                .majorId(p.getUserId().getMajorId())
+                .build();
+        
+        PostDto postDto = PostDto.builder()
+                .id(p.getId())
+                .content(p.getContent())
+                .createdAt(p.getCreatedAt())
+                .updatedAt(p.getUpdatedAt())
+                .isLocked(p.getIsLocked())
+                .user(userDto)
+                .images(imagesDto)
+                .build();
+        
+        return postDto;
+    }
 
 }
