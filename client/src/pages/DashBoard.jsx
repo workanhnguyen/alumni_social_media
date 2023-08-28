@@ -46,7 +46,7 @@ const DashBoard = () => {
             </div>
             {/* Pagination */}
             {postCount !== 0 && (
-              <div className="w-full flex justify-center mt-24">
+              <div className="w-full flex justify-center mt-24 mb-3">
               <Pagination color="primary" count={Math.ceil(postCount/POST_PER_PAGE)} />
             </div>
             )}
