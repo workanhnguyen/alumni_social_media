@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { Button, Divider, Menu, MenuItem } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AutoFixHighOutlinedIcon from "@mui/icons-material/AutoFixHighOutlined";
 import CommentsDisabledOutlinedIcon from "@mui/icons-material/CommentsDisabledOutlined";
+import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 import EditPostForm from "./EditPostForm";
@@ -15,20 +26,60 @@ import {
   PostReactionQuantity,
 } from "../components";
 import PostImageSlider from "./PostImageSlider";
-import { DELETE, POST_DETAIL } from "../constants/common";
+import {
+  DELETE,
+  LOCK_COMMENT,
+  POST_DETAIL,
+  POST_NORMAL,
+  UNLOCK_COMMENT,
+} from "../constants/common";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { useStateContext } from "../contexts/ContextProvider";
-import { deletePost } from "../apis/PostApi";
+import { deletePost, lockPost, unlockPost } from "../apis/PostApi";
+import { useNavigate } from "react-router-dom";
+import { ROOT_PAGE } from "../routes";
 
 const Post = ({ data, className, type }) => {
   const { user, postDispatch, comments } = useStateContext();
+  const navigate = useNavigate();
 
   const [showEditPostForm, setShowEditPostForm] = useState(false);
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [openDeletePostDialog, setOpenDeletePostDialog] = useState(false);
   const [showDeleteProgress, setShowDeleteProgress] = useState(false);
 
   const handleShowEditPostForm = () => {
     setShowEditPostForm(true);
+  };
+
+  const handleLockComment = async (popupState) => {
+    try {
+      let res = await lockPost(data.id);
+
+      if (res.status === 200)
+        postDispatch({ type: LOCK_COMMENT, payload: res.data });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      popupState.close();
+    }
+  };
+
+  const handleUnlockComment = async (popupState) => {
+    try {
+      let res = await unlockPost(data.id);
+
+      if (res.status === 200)
+        postDispatch({ type: UNLOCK_COMMENT, payload: res.data });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      popupState.close();
+    }
+  };
+
+  const handleOpenDeletePostDialog = (popupState) => {
+    setOpenDeletePostDialog(true);
+    popupState.close();
   };
 
   const handleDeletePost = () => {
@@ -40,12 +91,13 @@ const Post = ({ data, className, type }) => {
         if (res.status === 200) {
           postDispatch({ type: DELETE, payload: data?.id });
 
-          setShowConfirmDialog(false);
+          navigate(ROOT_PAGE, { replace: true });
         }
       } catch (e) {
         console.log(e);
       } finally {
         setShowDeleteProgress(false);
+        setOpenDeletePostDialog(false);
       }
     };
     process();
@@ -60,7 +112,7 @@ const Post = ({ data, className, type }) => {
           {/* Creator info */}
           <PostCreatorInfo post={data} />
           {/* More actions */}
-          {user?.id === data?.userId?.id && (
+          {user?.id === data?.user?.id && (
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <>
@@ -85,17 +137,25 @@ const Post = ({ data, className, type }) => {
                         <span className="ml-2">Chỉnh sửa bài viết</span>
                       </div>
                     </MenuItem>
-                    <MenuItem onClick={popupState.close}>
-                      <div className="flex items-center">
-                        <CommentsDisabledOutlinedIcon fontSize="small" />
-                        <span className="ml-2">Khóa bình luận</span>
-                      </div>
-                    </MenuItem>
-                    <MenuItem onClick={popupState.close}>
-                      <div
-                        onClick={() => setShowConfirmDialog(true)}
-                        className="flex items-center text-red"
-                      >
+                    {data?.isLocked ? (
+                      <MenuItem onClick={() => handleUnlockComment(popupState)}>
+                        <div className="flex items-center">
+                          <CommentOutlinedIcon fontSize="small" />
+                          <span className="ml-2">Mở khóa bình luận</span>
+                        </div>
+                      </MenuItem>
+                    ) : (
+                      <MenuItem onClick={() => handleLockComment(popupState)}>
+                        <div className="flex items-center">
+                          <CommentsDisabledOutlinedIcon fontSize="small" />
+                          <span className="ml-2">Khóa bình luận</span>
+                        </div>
+                      </MenuItem>
+                    )}
+                    <MenuItem
+                      onClick={() => handleOpenDeletePostDialog(popupState)}
+                    >
+                      <div className="flex items-center text-red">
                         <DeleteOutlineOutlinedIcon fontSize="small" />
                         <span className="ml-2">Xóa bài viết</span>
                       </div>
@@ -135,7 +195,7 @@ const Post = ({ data, className, type }) => {
           ) : (
             <CommentSection
               postId={data?.id}
-              quantity={type === POST_DETAIL ? comments.length : 2}
+              quantity={type !== POST_DETAIL ? comments.length : 2}
             />
           )}
         </div>
@@ -147,45 +207,41 @@ const Post = ({ data, className, type }) => {
         setShow={setShowEditPostForm}
       />
 
-      {/* Confirm delete dialog */}
-      <div
-        className={`${
-          showConfirmDialog ? "" : "hidden"
-        } fixed w-screen h-screen top-0 bot-0 right-0 left-0 z-10 bg-blackOverlay`}
+      {/* Confirm delete post dialog */}
+      <Dialog
+        open={openDeletePostDialog}
+        onClose={() => setOpenDeletePostDialog(false)}
+        aria-labelledby="delete-post-dialog-title"
+        aria-describedby="delete-post-dialog-description"
       >
-        <div className="w-full h-screen flex items-center justify-center">
-          <div className="max-sm:w-11/12 w-128 flex flex-col bg-white rounded-md">
-            <div className="w-full flex justify-center">
-              <p className="font-bold p-4 text-xl">Xóa bài viết?</p>
-            </div>
-            <Divider />
-            <div className="px-4 py-2">
-              <p>Bài viết này sẽ bị xóa vĩnh viễn! Vẫn xóa?</p>
-            </div>
-            <div className="w-full flex justify-end px-4 pb-4 gap-4">
-              <Button
-                onClick={() => setShowConfirmDialog(!showConfirmDialog)}
-                variant="outlined"
-              >
-                Hủy
-              </Button>
-              {showDeleteProgress ? (
-                <LoadingButton color="error" />
-              ) : (
-                <Button
-                  onClick={handleDeletePost}
-                  disableElevation
-                  color="error"
-                  variant="contained"
-                  size="small"
-                >
-                  Xóa
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+        <DialogTitle id="delete-post-dialog-title">Xóa bài viết?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-post-dialog-description">
+            Bài viết này sẽ bị xóa vĩnh viễn! Vẫn xóa?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="outlined"
+            onClick={() => setOpenDeletePostDialog(false)}
+            autoFocus
+          >
+            Hủy
+          </Button>
+          {showDeleteProgress ? (
+            <LoadingButton color="error" />
+          ) : (
+            <Button
+              variant="contained"
+              color="error"
+              disableElevation
+              onClick={handleDeletePost}
+            >
+              Xóa
+            </Button>
+          )}
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

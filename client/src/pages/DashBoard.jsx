@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { Container } from "@mui/material";
+import { Container, Pagination } from "@mui/material";
 import { Post, PostPanel } from "../components";
 import { DefaultLayout } from "../layouts";
 import { useStateContext } from "../contexts/ContextProvider";
 import { emptyPlaceholder1 } from "../assets";
+import { countAllPosts } from '../apis/PostApi';
+import { POST_PER_PAGE } from "../constants/common";
 
 const DashBoard = () => {
   const { posts } = useStateContext();
+  const [postCount, setPostCount] = useState(0);
+  
+  useEffect(() => {
+    const handleGetCountAllPosts = async () => {
+      try {
+        let res = await countAllPosts();
+        setPostCount(res.data);
+      } catch(e) {
+        console.log(e);
+        return;
+      }
+    };
+
+    handleGetCountAllPosts();
+  }, [posts]);
+
   return (
     <>
       <DefaultLayout>
@@ -26,6 +44,12 @@ const DashBoard = () => {
                 </div>
               )}
             </div>
+            {/* Pagination */}
+            {postCount !== 0 && (
+              <div className="w-full flex justify-center mt-24">
+              <Pagination color="primary" count={Math.ceil(postCount/POST_PER_PAGE)} />
+            </div>
+            )}
           </Container>
         </div>
       </DefaultLayout>

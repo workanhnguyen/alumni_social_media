@@ -1,6 +1,7 @@
 export const POST_CREATION = 'POST_CREATION';
 export const POST_EDITION = 'POST_EDITION';
 export const POST_DETAIL = 'POST_DETAIL';
+export const POST_NORMAL = 'POST_NORMAL';
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const PHONE_REGEX = /^\d{10}$/;
 export const LECTURER = "LECTURER"
@@ -16,3 +17,7 @@ export const CREATE = "CREATE";
 export const UPDATE = "UPDATE";
 export const DELETE = "DELETE";
 export const LOCK_COMMENT = "LOCK_COMMENT";
+export const UNLOCK_COMMENT = "UNLOCK_COMMENT";
+export const POST_PER_PAGE = 10;
+export const TRUE = "TRUE";
+export const FALSE = "FALSE";

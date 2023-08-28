@@ -79,12 +79,12 @@ const EditPostForm = ({ data, show, setShow }) => {
         <Divider />
         <div className="w-full flex items-center mt-3">
           <Avatar
-            src={data?.userId?.avatar}
+            src={data?.user?.avatar}
             alt="avt"
             sx={{ width: 40, height: 40 }}
           />
           <div className="flex-1 ml-2">
-            <p className="font-semibold">{`${data?.userId?.lastName} ${data?.userId?.firstName}`}</p>
+            <p className="font-semibold">{`${data?.user?.lastName} ${data?.user?.firstName}`}</p>
             <div className="w-fit flex items-center py-1 px-2 bg-gray-2 rounded-md">
               <PublicIcon sx={{ width: 12, height: 12 }} />
               <span className="ml-2 text-xs font-semibold">Công khai</span>

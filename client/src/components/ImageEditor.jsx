@@ -73,7 +73,7 @@ const ImageEditor = ({ imageList=[], onImageChange }) => {
                 >
                   <CloseIcon fontSize="small" />
                 </div>
-                <img className="h-full" src={imageUrl} alt={`Preview ${index}`} />
+                <img className="h-full" src={imageUrl.url} alt={`Preview ${index}`} />
               </div>
             ))}
         </div>

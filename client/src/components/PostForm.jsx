@@ -14,11 +14,8 @@ const PostForm = ({ show, setShow }) => {
   const [images, setImages] = useState([]);
 
   const [showProgress, setShowProgress] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const { user, postDispatch } = useStateContext();
-
-  const handleClosePostPanel = () => {
-    setShow(false);
-  };
 
   const handleImageChange = (newImages) => {
     setImages(newImages);
@@ -29,34 +26,44 @@ const PostForm = ({ show, setShow }) => {
     setImages([]);
   };
 
+  const handleClosePostPanel = () => {
+    console.log(1);
+    handleClearInput();
+    setShowAlert(false);
+    setShow(false);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const process = async () => {
       setShowProgress(true);
-      const postData = {
-        content,
-      };
 
       try {
-        let res = await addNewPost(postData);
+        const post = new FormData();
+
+        post.append("content", content);
+        if (images.length > 0)
+          for (let i = 0; i < images.length; i++) {
+            post.append("files", images[i]);
+          }
+
+        let res = await addNewPost(post);
 
         if (res.status === 201) {
           postDispatch({ type: CREATE, payload: res.data });
 
-          handleClearInput();
+          handleClosePostPanel();
         }
       } catch (e) {
-        setShowProgress(false);
+        setShowAlert(true);
       } finally {
         setShowProgress(false);
-        handleClosePostPanel();
       }
     };
 
     process();
   };
-console.log(content)
   return (
     <Box
       onSubmit={handleSubmit}
@@ -88,6 +95,11 @@ console.log(content)
         </div>
         <CustomTextField content={content} setContent={setContent} />
         <ImageUploader onImagesChange={handleImageChange} />
+        {showAlert && (
+          <div className="mt-3 flex justify-center">
+            <p className="text-red">Đã xảy ra lỗi, vui lòng thử lại sau!</p>
+          </div>
+        )}
         <div className="mt-3">
           {showProgress ? (
             <LoadingButton fullWidth />
