@@ -46,7 +46,7 @@ public class Images implements Serializable {
     @Column(name = "image_url")
     private String imageUrl;
     @JoinColumn(name = "post_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Posts postId;
     
     @Column(name = "is_active")

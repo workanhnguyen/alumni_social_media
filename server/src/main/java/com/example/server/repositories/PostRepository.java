@@ -6,6 +6,7 @@ package com.example.server.repositories;
 
 import com.example.server.pojos.Posts;
 import com.example.server.pojos.Users;
+import java.util.List;
 
 /**
  *
@@ -28,10 +29,13 @@ public interface PostRepository {
     Boolean unlockPost(Posts post);
 //
     Posts findPostById(Long id);
-//
+
 //    Post findPostByIdAndUserId(Long id, Long userId);
-//
-//    List<Post> findAllPosts();
-//
-//    List<Post> findPostsByUserId(Long userId, String direction);
+
+    List<Posts> findAllPosts(int currentPage);
+
+    List<Posts> findPostsByUserId(Users userId);
+    
+    Long countCommentsByPostId(Long postId);
+  
 }

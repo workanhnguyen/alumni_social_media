@@ -7,10 +7,12 @@ package com.example.server.repositories.impl;
 import com.example.server.pojos.Posts;
 import com.example.server.pojos.Users;
 import com.example.server.repositories.PostRepository;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -83,31 +85,30 @@ public class PostRepositoryImp implements PostRepository {
 //        }
 //    }
 //
-//    @Override
-//    public List<Post> findAllPosts() {
-//        Session s = this.factory.getObject().getCurrentSession();
-//        Query q = s.createQuery("FROM Post p ORDER BY p.timestamp desc");
-//        List<Post> posts = q.getResultList();
-//        return posts;
-//    }
+    @Override
+    public List<Posts> findAllPosts(int currentPage) {
+        Session s = this.factory.getObject().getCurrentSession();
+        int pageSize = 10;
+        int startPosition = (currentPage - 1) * pageSize;
+        Query q = s.createQuery("FROM Posts p ORDER BY p.createdAt desc");
+        q.setFirstResult(startPosition);
+        q.setMaxResults(pageSize);
+
+        List<Posts> posts = q.getResultList();
+    
+        return posts;
+    }
 //
-//    @Override
-//    public List<Post> findPostsByUserId(Long userId, String direction) {
-//        Session s = this.factory.getObject().getCurrentSession();
-//        String queryString = "SELECT p FROM Post p LEFT JOIN Share s ON s.post.id = p.id " +
-//                "WHERE p.userId = :userId or s.userId = :userId ORDER BY ";
-//        if ("asc".equalsIgnoreCase(direction)) {
-//            queryString += "p.timestamp ASC";
-//        } else {
-//            queryString += "p.timestamp DESC";
-//        }
-//
-//        Query q = s.createQuery(queryString);
-//        q.setParameter("userId", userId);
-//
-//        List<Post> posts = q.getResultList();
-//        return posts;
-//    }
+    @Override
+    public List<Posts> findPostsByUserId(Users u) {
+        Session s = this.factory.getObject().getCurrentSession();
+        String queryString = "SELECT p FROM Posts p WHERE p.userId.id = :userId ";
+        Query q = s.createQuery(queryString);
+        q.setParameter("userId", u.getId());
+
+        List<Posts> posts = q.getResultList();
+        return posts;
+    }
 
     @Override
     public Long countPost() {
@@ -121,6 +122,12 @@ public class PostRepositoryImp implements PostRepository {
         .setParameter("userId", u.getId())
         .getSingleResult();    
     }
-    
-    
+
+    @Override
+    public Long countCommentsByPostId(Long postId) {
+        return entityManager.createQuery("SELECT COUNT(c) FROM Comments c WHERE c.postId.id = :postId " , Long.class)
+        .setParameter("postId", postId)
+        .getSingleResult();
+    }
+  
 }

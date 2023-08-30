@@ -72,10 +72,10 @@ public class Surveys implements Serializable {
      @JsonIgnore
     private Set<Questions> questionsSet;
     @JoinColumn(name = "post_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Posts postId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Users userId;
 
     public Surveys() {

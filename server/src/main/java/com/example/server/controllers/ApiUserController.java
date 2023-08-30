@@ -86,22 +86,6 @@ public class ApiUserController {
         return new ResponseEntity<>(false, HttpStatus.OK);
     }
     
-//     @PostMapping(path = "/new")
-//    @CrossOrigin
-//    public ResponseEntity<Posts> createPost(@RequestParam Map<String, String> params) {
-//            // Thêm bài viết mới
-//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//            if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-//                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//                Users currentUser = userService.getUserByUsername(userDetails.getUsername());
-//                Posts p = this.postService.addPost(params, currentUser);
-//                return new ResponseEntity<>(p, HttpStatus.CREATED);           
-//            }
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//            
-//
-//       
-//    }
 
     @GetMapping("/{username}/")
     @CrossOrigin

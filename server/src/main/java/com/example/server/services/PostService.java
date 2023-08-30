@@ -38,7 +38,9 @@ public interface PostService {
 //
 //    List<PostDto> getAllMyPostsAndSharePosts(Long currentUserId, String orderDir);
 //
-//    List<PostDto> findPostsByUserId(Long userId, String orderDir);
+    List<PostDto> findPostsByUserId(Users u);
 //
-//    List<PostDto> getAllPosts();
+    List<PostDto> getAllPosts(int currentPage);
+    
+    Long countCommentsByPostId(Long postId) ;
 }

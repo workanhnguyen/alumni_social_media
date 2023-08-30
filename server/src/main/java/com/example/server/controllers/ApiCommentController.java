@@ -6,13 +6,16 @@ package com.example.server.controllers;
 
 
 import com.example.server.dtos.CommentDto;
+import com.example.server.dtos.PostDto;
 import com.example.server.dtos.UserDto;
 import com.example.server.pojos.Comments;
 import com.example.server.pojos.Posts;
 import com.example.server.pojos.Users;
+import com.example.server.repositories.PostRepository;
 import com.example.server.services.CommentService;
 import com.example.server.services.PostService;
 import com.example.server.services.UserService;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -41,50 +45,29 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiCommentController {
     @Autowired
     private PostService postService;
+    
+    @Autowired
+    private PostRepository postRepo;
 
     @Autowired
     private UserService userService;
     
     @Autowired
-    private CommentService commentService;
+    private CommentService cmtService;
     
-//    @PostMapping(path = "/new/posts/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-//    @CrossOrigin
-//    public ResponseEntity<CommentDto> createComment(@PathVariable("id") Long postId, @RequestBody Map<String, String> params) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
-//            Posts currentPost = postService.findPostById(postId);
-//
-//            Comments cmt = this.commentService.addComment(params, currentUser, currentPost);
-//            CommentDto commentDto = new CommentDto();
-//            commentDto.setId(cmt.getId());
-//            commentDto.setContent(cmt.getContent());
-//            commentDto.setCreatedAt(cmt.getCreatedAt());
-//            commentDto.setUpdatedAt(cmt.getUpdatedAt());
-//            UserDto userDto = UserDto.builder()
-//                .id(currentUser.getId())
-//                .username(currentUser.getUsername())
-//                .email(currentUser.getEmail())
-//                .firstName(currentUser.getFirstName())
-//                .lastName(currentUser.getLastName())
-//                .phone(currentUser.getPhone())
-//                .createdAt(currentUser.getCreatedAt())
-//                .isActive(currentUser.getIsActive())
-//                .avatar(currentUser.getAvatar())
-//                .bgImage(currentUser.getBgImage())
-//                .role(currentUser.getRole())
-//                .updatedAt(currentUser.getUpdatedAt())
-//                .studentId(currentUser.getStudentId())
-////                .majorId(currentUser.getMajorId().getId())
-//                .build();
-//
-//            commentDto.setUser(userDto);
-//            return new ResponseEntity<>(commentDto, HttpStatus.CREATED);
-//        }
-//        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//    }
+    @PostMapping(path = "/new/posts/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<CommentDto> createComment(@PathVariable("id") Long postId, @RequestBody Map<String, String> params) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+            PostDto currentPost = postService.findPostById(postId);
+            CommentDto cmt = this.cmtService.addComment(params, currentUser, currentPost);
+            return new ResponseEntity<>(cmt, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
 
     @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
@@ -93,36 +76,12 @@ public class ApiCommentController {
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
-            Comments cmt = this.commentService.updateComment(params, currentUser, cmtId);
-            CommentDto commentDto = new CommentDto();
-            commentDto.setId(cmt.getId());
-            commentDto.setContent(cmt.getContent());
-            commentDto.setCreatedAt(cmt.getCreatedAt());
-            commentDto.setUpdatedAt(cmt.getUpdatedAt());
-            UserDto userDto = UserDto.builder()
-                .id(currentUser.getId())
-                .username(currentUser.getUsername())
-                .email(currentUser.getEmail())
-                .firstName(currentUser.getFirstName())
-                .lastName(currentUser.getLastName())
-                .phone(currentUser.getPhone())
-                .createdAt(currentUser.getCreatedAt())
-                .isActive(currentUser.getIsActive())
-                .avatar(currentUser.getAvatar())
-                .bgImage(currentUser.getBgImage())
-
-                .role(currentUser.getRole())
-                .updatedAt(currentUser.getUpdatedAt())
-                .studentId(currentUser.getStudentId())
-//                .majorId(currentUser.getMajorId().getId())
-                .build();
-
-            commentDto.setUser(userDto);
-            return new ResponseEntity<>(commentDto, HttpStatus.CREATED);
+            CommentDto cmtDto = cmtService.updateComment(params, currentUser, cmtId);
+            return new ResponseEntity<>(cmtDto, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    
+//    
     @DeleteMapping("/{id}")
     @CrossOrigin
     public ResponseEntity<String> deleteComment(@PathVariable("id") Long cmtId) {
@@ -130,7 +89,7 @@ public class ApiCommentController {
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
-            Boolean rs = commentService.deleteComment(cmtId, currentUser);
+            Boolean rs = cmtService.deleteComment(cmtId, currentUser);
             if (rs) {
                 return new ResponseEntity<>("TRUE", HttpStatus.OK);
             } else {
@@ -140,26 +99,43 @@ public class ApiCommentController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
+//    
+//    @GetMapping("/{id}")
+//    @CrossOrigin
+//    public ResponseEntity<String> getCommentId(@PathVariable("id") Long cmtId) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+//            Boolean rs = commentService.deleteComment(cmtId, currentUser);
+//            if (rs) {
+//                return new ResponseEntity<>("TRUE", HttpStatus.OK);
+//            } else {
+//                return ResponseEntity.badRequest().body("FALSE");
+//            }
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        }
+//    }
     
-    @GetMapping("/{id}")
+    @GetMapping("/posts/{id}")
     @CrossOrigin
-    public ResponseEntity<String> getCommentId(@PathVariable("id") Long cmtId) {
+    public ResponseEntity<List<CommentDto>> getCommentByPost(@PathVariable("id") Long postId, @RequestParam(defaultValue = "1") int page) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
-            Boolean rs = commentService.deleteComment(cmtId, currentUser);
-            if (rs) {
-                return new ResponseEntity<>("TRUE", HttpStatus.OK);
+            Posts p = postRepo.findPostById(postId);
+            List<CommentDto> listCmtDto = cmtService.getCmtByPosts(0, p);
+            if (listCmtDto != null) {
+                return new ResponseEntity<>(listCmtDto, HttpStatus.OK);
             } else {
-                return ResponseEntity.badRequest().body("FALSE");
+                return new ResponseEntity<>(null, HttpStatus.OK);
             }
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-    
-
 
 
 

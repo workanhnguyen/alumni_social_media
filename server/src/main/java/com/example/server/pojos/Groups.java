@@ -63,7 +63,7 @@ public class Groups implements Serializable {
     @ManyToMany
     private Set<Users> usersSet;
     @JoinColumn(name = "creator_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Users creatorId;
 
     public Groups() {

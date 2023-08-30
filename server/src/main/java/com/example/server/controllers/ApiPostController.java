@@ -69,7 +69,6 @@ public class ApiPostController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-
 //    @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
 //    @CrossOrigin
 //    public ResponseEntity<Posts> updatePost(@PathVariable("id") Long postId, @RequestBody Map<String, String> params) {
@@ -83,8 +82,6 @@ public class ApiPostController {
 //        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 //    }
     //ok
-
-
     @DeleteMapping("/{id}/")
     @CrossOrigin
     public ResponseEntity<String> deletePost(@PathVariable("id") Long postId) {
@@ -102,13 +99,7 @@ public class ApiPostController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-    //
-//    @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @CrossOrigin
-//    public ResponseEntity<List<Posts>> details(Principal user) {
-//        Users u = this.userService.getUserByUsername(user.getName());
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+
     //ok
     @GetMapping(path = "/counts/", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin
@@ -116,6 +107,7 @@ public class ApiPostController {
         Long count = this.postService.countPost();
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
+
     //ok
     @GetMapping(path = "/current_user/counts/", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin
@@ -184,5 +176,76 @@ public class ApiPostController {
         }
     }
 
+    @GetMapping(path = "/current_user/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<List<PostDto>> findPostsByCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+            List<PostDto> listPostDto = postService.findPostsByUserId(currentUser);
+            if (listPostDto != null) {
+                return new ResponseEntity<>(listPostDto, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.OK);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+    
+    @GetMapping(path = "/users/{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<List<PostDto>> findPostsByUserId(@PathVariable("id") Long userId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+            Users u = userService.getUserById(userId);
+            List<PostDto> listPostDto = postService.findPostsByUserId(u);
+            if (listPostDto != null) {
+                return new ResponseEntity<>(listPostDto, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.OK);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
 
+    @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<List<PostDto>> findAllPosts(@RequestParam(defaultValue = "1") int page) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+            
+            List<PostDto> listPostDto = postService.getAllPosts(page);
+            if (listPostDto != null) {
+                return new ResponseEntity<>(listPostDto, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.OK);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+    
+    
+    @GetMapping(path = "/{id}/count_cmt", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<Long> countCmtOfPost(@PathVariable("id") Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+            
+            Long commentCount = postService.countCommentsByPostId(postId);
+            return new ResponseEntity<>(commentCount, HttpStatus.OK);
+           
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }

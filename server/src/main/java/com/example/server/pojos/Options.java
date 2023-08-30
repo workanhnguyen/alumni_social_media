@@ -62,7 +62,7 @@ public class Options implements Serializable {
      @JsonIgnore
     private Set<Answers> answersSet;
     @JoinColumn(name = "question_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Questions questionId;
 
     public Options() {

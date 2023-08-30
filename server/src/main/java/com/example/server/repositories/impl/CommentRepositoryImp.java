@@ -8,8 +8,10 @@ import com.example.server.pojos.Comments;
 import com.example.server.pojos.Posts;
 import com.example.server.repositories.CommentRepository;
 import com.example.server.repositories.PostRepository;
+import java.util.List;
 import javax.transaction.Transactional;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -29,25 +31,44 @@ public class CommentRepositoryImp implements CommentRepository {
     public Comments addComment(Comments cmt) {
         Session s = this.factory.getObject().getCurrentSession();
         s.save(cmt);
+        s.flush();
         return cmt;
     }
 
     @Override
     public Comments findCommentById(Long id) {
         Session s = this.factory.getObject().getCurrentSession();
-        return s.get(Comments.class, id);    }
+        return s.get(Comments.class, id);
+    }
 
     @Override
     public Comments updateComment(Comments cmt) {
         Session s = this.factory.getObject().getCurrentSession();
         s.update(cmt);
-        return cmt;    
+        return cmt;
     }
 
     @Override
     public Boolean deleteComment(Comments cmt) {
         Session s = this.factory.getObject().getCurrentSession();
         s.delete(cmt);
-        return true;    
+        return true;
     }
+
+    @Override
+    public List<Comments> findAllCmts(int currentPage, Posts p) {
+        Session s = this.factory.getObject().getCurrentSession();
+        int pageSize = 10;
+        int startPosition = Math.max((currentPage - 1) * pageSize, 0);
+        String queryString = "SELECT c FROM Comments c WHERE c.postId = :postId ORDER BY c.createdAt desc";
+        Query q = s.createQuery(queryString);
+        q.setParameter("postId", p);
+        q.setFirstResult(startPosition);
+        q.setMaxResults(pageSize);
+
+        List<Comments> cmts = q.getResultList();
+
+        return cmts;
+    }
+
 }

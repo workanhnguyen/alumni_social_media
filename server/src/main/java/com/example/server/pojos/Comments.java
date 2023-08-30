@@ -62,13 +62,13 @@ public class Comments implements Serializable {
     @JsonIgnore
     private Set<Comments> commentsSet;
     @JoinColumn(name = "belongs_to_comment_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Comments belongsToCommentId;
     @JoinColumn(name = "post_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Posts postId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Users userId;
 
     public Comments() {

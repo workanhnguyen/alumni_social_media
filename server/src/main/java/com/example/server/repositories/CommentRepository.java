@@ -6,6 +6,7 @@ package com.example.server.repositories;
 
 import com.example.server.pojos.Comments;
 import com.example.server.pojos.Posts;
+import java.util.List;
 
 /**
  *
@@ -17,4 +18,6 @@ public interface CommentRepository {
    Comments findCommentById(Long id);
    Comments updateComment(Comments cmt);
    Boolean deleteComment(Comments cmt);
+   
+   List<Comments> findAllCmts(int currentPage, Posts p);
 }

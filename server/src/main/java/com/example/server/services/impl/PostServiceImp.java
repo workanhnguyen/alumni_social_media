@@ -25,7 +25,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -119,12 +121,6 @@ public class PostServiceImp implements PostService {
         }
         return false;
     }
-//
-//    @Override
-//    public Posts findPostById(Long id) {
-//        Posts post = postRepo.findPostById(id);
-//        return post;
-//    }
     
     
 //
@@ -155,32 +151,29 @@ public class PostServiceImp implements PostService {
 //        return postDtos;
 //    }
 //
-//    @Override
-//    public List<PostDto> findPostsByUserId(Long userId, String orderDir) {
-//        String direction = orderDir != null ? orderDir.toLowerCase() : "asc";
-//        List<Post> posts = postRepository.findPostsByUserId(userId, direction);
-//        return posts.stream()
-//                .map(p -> mapper.map(p, PostDto.class))
-//                .collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public List<PostDto> getAllPosts() {
-//        List<Post> posts = postRepository.findAllPosts();
-//        List<PostDto> postDtos = new ArrayList<>();
-//        posts.forEach(p -> {
-//            PostDto postDto = PostDto.builder()
-//                    .isLocked(p.getIsLocked())
-//                    .isSurvey(p.getIsSurvey())
-//                    .content(p.getContent())
-//                    .id(p.getId())
-//                    .userId(p.getUserId())
-//                    .timestamp(p.getTimestamp())
-//                    .build();
-//            postDtos.add(postDto);
-//        });
-//        return postDtos;
-//    }
+    @Override
+    public List<PostDto> findPostsByUserId(Users u) {
+      
+        List<Posts> posts = postRepo.findPostsByUserId(u);
+        List<PostDto> listPostDto = new ArrayList<>();
+        
+        posts.forEach(p -> {
+            PostDto postDto = this.findPostById(p.getId());
+            listPostDto.add(postDto);
+        });
+        return listPostDto;
+    }
+
+    @Override
+    public List<PostDto> getAllPosts(int currentPage) {
+        List<Posts> posts = postRepo.findAllPosts(currentPage);
+        List<PostDto> listPostDto = new ArrayList<>();
+         posts.forEach(p -> {
+            PostDto postDto = this.findPostById(p.getId());
+            listPostDto.add(postDto);
+        });
+        return listPostDto;
+    }
 
     @Override
     public Long countPost() {
@@ -236,5 +229,8 @@ public class PostServiceImp implements PostService {
         
         return postDto;
     }
-
+    
+     public Long countCommentsByPostId(Long postId) {
+        return this.postRepo.countCommentsByPostId(postId);
+    }
 }

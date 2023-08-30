@@ -62,7 +62,7 @@ public class Questions implements Serializable {
      @JsonIgnore
     private Set<Answers> answersSet;
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Surveys surveyId;
     @OneToMany(mappedBy = "questionId")
      @JsonIgnore
