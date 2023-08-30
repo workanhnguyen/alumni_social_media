@@ -58,10 +58,10 @@ public class Majors implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @OneToMany(mappedBy = "majorId")
-     @JsonIgnore
+    @JsonIgnore
     private Set<Users> usersSet;
     @JoinColumn(name = "department_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Departments departmentId;
 
     public Majors() {

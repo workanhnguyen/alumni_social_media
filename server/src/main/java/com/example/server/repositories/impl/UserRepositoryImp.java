@@ -11,6 +11,8 @@ import javax.transaction.Transactional;
 import org.hibernate.query.Query;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.List;
+
 @Repository
 @Transactional
 public class UserRepositoryImp implements UserRepository {
@@ -43,4 +45,26 @@ public class UserRepositoryImp implements UserRepository {
         return (Users) q.getSingleResult();
     }
 
+    @Override
+    public List<Users> getUsersByRole(String role) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("FROM Users WHERE role=:r");
+        q.setParameter("r", role);
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Users> getAllUsers() {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("FROM Users WHERE role <> 'ADMIN'");
+        return q.getResultList();
+    }
+
+    @Override
+    public Users getUserById(Long userId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("FROM Users WHERE id=:userId");
+        q.setParameter("userId", userId);
+        return (Users) q.getSingleResult();
+    }
 }

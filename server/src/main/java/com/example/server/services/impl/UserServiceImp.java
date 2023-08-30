@@ -13,10 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.security.core.GrantedAuthority;
@@ -106,7 +103,22 @@ public class UserServiceImp implements UserService {
         }
         return false;
     }
-    
+
+    @Override
+    public List<Users> getUsersByRole(String role) {
+        return userRepo.getUsersByRole(role);
+    }
+
+    @Override
+    public List<Users> getAllUsers() {
+        return userRepo.getAllUsers();
+    }
+
+    @Override
+    public Users getUserById(Long userId) {
+        return userRepo.getUserById(userId);
+    }
+
     private boolean isCreatedAtWithin24Hours(Date createdAt) {
         Date now = new Date();
         long timeDifferenceInMillis = now.getTime() - createdAt.getTime();

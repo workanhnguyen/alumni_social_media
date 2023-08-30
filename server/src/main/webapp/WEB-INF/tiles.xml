@@ -18,6 +18,11 @@
         <put-attribute name="content"
                        value="/WEB-INF/pages/list-user.jsp" />
     </definition>
+    <definition name="userDetail" extends="baseLayout">
+        <put-attribute name="title" value="Chi tiết người dùng" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/user-detail.jsp" />
+    </definition>
     <definition name="login" extends="baseLayout">
         <put-attribute name="title" value="Đăng nhập" />
         <put-attribute name="content" value="/WEB-INF/pages/login.jsp" />

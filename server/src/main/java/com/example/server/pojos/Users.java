@@ -145,7 +145,7 @@ public class Users implements Serializable {
     @JsonIgnore
     private Set<Posts> postsSet;
     @JoinColumn(name = "major_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Majors majorId;
     @OneToMany(mappedBy = "userId")
     @JsonIgnore

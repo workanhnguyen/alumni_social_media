@@ -103,6 +103,15 @@ public class ApiUserController {
 //       
 //    }
 
+    @GetMapping("/{username}/")
+    @CrossOrigin
+    public ResponseEntity<Users> getUserByUsername(@PathVariable("username") String username) {
+        Users u = this.userService.getUserByUsername(username);
+
+        if (u != null)
+            return new ResponseEntity<>(u, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
 
     private boolean isValidUserData(Map<String, String> params, MultipartFile avatar, String role) {
         //role GV - LECTURER, ko cần password

@@ -56,9 +56,10 @@ public class Departments implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @ManyToMany(mappedBy = "departmentsSet")
+    @JsonIgnore
     private Set<AcademicYears> academicYearsSet;
     @OneToMany(mappedBy = "departmentId")
-     @JsonIgnore
+    @JsonIgnore
     private Set<Majors> majorsSet;
 
     public Departments() {
