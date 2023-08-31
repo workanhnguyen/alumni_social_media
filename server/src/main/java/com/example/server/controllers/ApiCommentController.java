@@ -15,6 +15,8 @@ import com.example.server.repositories.PostRepository;
 import com.example.server.services.CommentService;
 import com.example.server.services.PostService;
 import com.example.server.services.UserService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,7 @@ public class ApiCommentController {
     @Autowired
     private CommentService cmtService;
     
-    @PostMapping(path = "/new/posts/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/new/posts/{id}/", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<CommentDto> createComment(@PathVariable("id") Long postId, @RequestBody Map<String, String> params) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -69,7 +71,7 @@ public class ApiCommentController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{id}/", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<CommentDto> updateComment(@PathVariable("id") Long cmtId, @RequestBody Map<String, String> params) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -82,7 +84,7 @@ public class ApiCommentController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 //    
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/")
     @CrossOrigin
     public ResponseEntity<String> deleteComment(@PathVariable("id") Long cmtId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -118,7 +120,7 @@ public class ApiCommentController {
 //        }
 //    }
     
-    @GetMapping("/posts/{id}")
+    @GetMapping("/posts/{id}/")
     @CrossOrigin
     public ResponseEntity<List<CommentDto>> getCommentByPost(@PathVariable("id") Long postId, @RequestParam(defaultValue = "1") int page) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -130,17 +132,10 @@ public class ApiCommentController {
             if (listCmtDto != null) {
                 return new ResponseEntity<>(listCmtDto, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(null, HttpStatus.OK);
+                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
             }
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-
-
-
-
-
-
-
 }
