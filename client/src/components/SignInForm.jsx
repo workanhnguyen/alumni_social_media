@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { ROLE_ALUMNI } from "../constants/role";
 import { Copyright, LoadingButton } from "../components";
 import { getCurrentUser, loginUser } from "../apis/UserApi";
-import { DASHBOARD, INFO_PAGE, ROOT_PAGE } from "../routes";
+import { DASHBOARD, INFO_PAGE } from "../routes";
 import { useStateContext } from "../contexts/ContextProvider";
 import { LOGIN, TOKEN, USER } from "../constants/common";
 

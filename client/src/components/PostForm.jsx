@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
 import PublicIcon from "@mui/icons-material/Public";
@@ -15,7 +15,7 @@ const PostForm = ({ show, setShow }) => {
 
   const [showProgress, setShowProgress] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const { user, postDispatch } = useStateContext();
+  const { user, postDispatch, setPostCount } = useStateContext();
 
   const handleImageChange = (newImages) => {
     setImages(newImages);
@@ -33,7 +33,7 @@ const PostForm = ({ show, setShow }) => {
     setShow(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleCreatePost = (e) => {
     e.preventDefault();
 
     const process = async () => {
@@ -51,6 +51,7 @@ const PostForm = ({ show, setShow }) => {
         let res = await addNewPost(post);
 
         if (res.status === 201) {
+          setPostCount(prev => prev + 1);
           postDispatch({ type: CREATE, payload: res.data });
 
           handleClosePostPanel();
@@ -66,7 +67,7 @@ const PostForm = ({ show, setShow }) => {
   };
   return (
     <Box
-      onSubmit={handleSubmit}
+      onSubmit={handleCreatePost}
       component="form"
       className={`${
         show ? "" : "hidden"

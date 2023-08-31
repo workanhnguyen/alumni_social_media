@@ -1,6 +1,8 @@
 import {
   CREATE,
   DELETE,
+  FETCH_ALL,
+  FETCH_BY_USER,
   LOCK_COMMENT,
   UNLOCK_COMMENT,
   UPDATE,
@@ -8,6 +10,9 @@ import {
 
 const PostReducer = (currentState, action) => {
   switch (action.type) {
+    case FETCH_ALL:
+    case FETCH_BY_USER:
+      return action.payload;
     case CREATE:
       return [action.payload, ...currentState];
     case UPDATE:

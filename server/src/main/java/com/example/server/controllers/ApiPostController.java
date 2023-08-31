@@ -206,7 +206,7 @@ public class ApiPostController {
             if (listPostDto != null) {
                 return new ResponseEntity<>(listPostDto, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(null, HttpStatus.OK);
+                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
             }
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -215,7 +215,7 @@ public class ApiPostController {
 
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin
-    public ResponseEntity<List<PostDto>> findAllPosts(@RequestParam(defaultValue = "1") int page) {
+    public ResponseEntity<List<PostDto>> findAllPosts(@RequestParam(value = "page") int page) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -225,7 +225,7 @@ public class ApiPostController {
             if (listPostDto != null) {
                 return new ResponseEntity<>(listPostDto, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(null, HttpStatus.OK);
+                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
             }
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -233,7 +233,7 @@ public class ApiPostController {
     }
     
     
-    @GetMapping(path = "/{id}/count_cmt", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{id}/count_cmt/", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin
     public ResponseEntity<Long> countCmtOfPost(@PathVariable("id") Long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

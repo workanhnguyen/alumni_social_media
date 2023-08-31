@@ -102,7 +102,7 @@ public class PostRepositoryImp implements PostRepository {
     @Override
     public List<Posts> findPostsByUserId(Users u) {
         Session s = this.factory.getObject().getCurrentSession();
-        String queryString = "SELECT p FROM Posts p WHERE p.userId.id = :userId ";
+        String queryString = "SELECT p FROM Posts p WHERE p.userId.id = :userId ORDER BY p.createdAt desc";
         Query q = s.createQuery(queryString);
         q.setParameter("userId", u.getId());
 

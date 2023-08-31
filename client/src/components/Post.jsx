@@ -30,22 +30,42 @@ import {
   DELETE,
   LOCK_COMMENT,
   POST_DETAIL,
-  POST_NORMAL,
   UNLOCK_COMMENT,
 } from "../constants/common";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { useStateContext } from "../contexts/ContextProvider";
-import { deletePost, lockPost, unlockPost } from "../apis/PostApi";
-import { useNavigate } from "react-router-dom";
-import { ROOT_PAGE } from "../routes";
+import {
+  deletePost,
+  getCommentQuantityByPostId,
+  lockPost,
+  unlockPost,
+} from "../apis/PostApi";
 
 const Post = ({ data, className, type }) => {
-  const { user, postDispatch, comments } = useStateContext();
-  const navigate = useNavigate();
+  const { user, postDispatch, comments, setPostCount, pageIndex } =
+    useStateContext();
+  const [commentQuantity, setCommentQuantity] = useState(0);
 
   const [showEditPostForm, setShowEditPostForm] = useState(false);
   const [openDeletePostDialog, setOpenDeletePostDialog] = useState(false);
   const [showDeleteProgress, setShowDeleteProgress] = useState(false);
+
+  useEffect(() => {
+    const process = async () => {
+      try {
+        let res = await getCommentQuantityByPostId(data?.id);
+
+        if (res.status === 200) {
+          setCommentQuantity(res.data);
+        }
+      } catch (e) {
+        return;
+      }
+    };
+
+    process();
+    console.log('re')
+  }, [comments, pageIndex, data]);
 
   const handleShowEditPostForm = () => {
     setShowEditPostForm(true);
@@ -55,8 +75,9 @@ const Post = ({ data, className, type }) => {
     try {
       let res = await lockPost(data.id);
 
-      if (res.status === 200)
+      if (res.status === 200) {
         postDispatch({ type: LOCK_COMMENT, payload: res.data });
+      }
     } catch (e) {
       console.log(e);
     } finally {
@@ -68,8 +89,9 @@ const Post = ({ data, className, type }) => {
     try {
       let res = await unlockPost(data.id);
 
-      if (res.status === 200)
+      if (res.status === 200) {
         postDispatch({ type: UNLOCK_COMMENT, payload: res.data });
+      }
     } catch (e) {
       console.log(e);
     } finally {
@@ -87,11 +109,9 @@ const Post = ({ data, className, type }) => {
       setShowDeleteProgress(true);
       try {
         let res = await deletePost(data?.id);
-        console.log(res);
         if (res.status === 200) {
           postDispatch({ type: DELETE, payload: data?.id });
-
-          navigate(ROOT_PAGE, { replace: true });
+          setPostCount((prev) => prev - 1);
         }
       } catch (e) {
         console.log(e);
@@ -179,7 +199,7 @@ const Post = ({ data, className, type }) => {
           </div>
         )}
         {/* Post reaction quantity */}
-        <PostReactionQuantity commentQuantity={comments.length} />
+        <PostReactionQuantity commentQuantity={commentQuantity} />
         <Divider variant="middle" />
         {/* Post action section: like, comment, share */}
         <div className="my-1">
