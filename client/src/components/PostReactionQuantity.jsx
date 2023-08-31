@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Avatar } from "@mui/material";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 
 import { actionHaha } from "../assets";
+import { getCommentQuantityByPostId } from "../apis/PostApi";
 
-const PostReactionQuantity = ({ commentQuantity }) => {
+const PostReactionQuantity = ({ postId, commentQuantity }) => {
+  
   return (
     <div className="w-full flex justify-between px-4 py-3">
       {/* Like quantities */}

@@ -29,26 +29,15 @@ import PostImageSlider from "./PostImageSlider";
 import {
   DELETE,
   LOCK_COMMENT,
-  POST_DETAIL,
   UNLOCK_COMMENT,
 } from "../constants/common";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { useStateContext } from "../contexts/ContextProvider";
-import {
-  deletePost,
-  getCommentQuantityByPostId,
-  lockPost,
-  unlockPost,
-} from "../apis/PostApi";
+import { deletePost, getCommentQuantityByPostId, lockPost, unlockPost } from "../apis/PostApi";
 
 const Post = ({ data, className, type }) => {
-  const { user, postDispatch, comments, setPostCount, pageIndex } =
-    useStateContext();
-  const [commentQuantity, setCommentQuantity] = useState(0);
 
-  const [showEditPostForm, setShowEditPostForm] = useState(false);
-  const [openDeletePostDialog, setOpenDeletePostDialog] = useState(false);
-  const [showDeleteProgress, setShowDeleteProgress] = useState(false);
+  const [commentQuantity, setCommentQuantity] = useState(0);
 
   useEffect(() => {
     const process = async () => {
@@ -62,10 +51,14 @@ const Post = ({ data, className, type }) => {
         return;
       }
     };
-
     process();
-    console.log('re')
-  }, [comments, pageIndex, data]);
+  }, []);
+
+  const { user, postDispatch, setPostCount } = useStateContext();
+
+  const [showEditPostForm, setShowEditPostForm] = useState(false);
+  const [openDeletePostDialog, setOpenDeletePostDialog] = useState(false);
+  const [showDeleteProgress, setShowDeleteProgress] = useState(false);
 
   const handleShowEditPostForm = () => {
     setShowEditPostForm(true);
@@ -122,6 +115,10 @@ const Post = ({ data, className, type }) => {
     };
     process();
   };
+
+  const handleCommentQuantityChange = (newCommentQuantity) => {
+    setCommentQuantity(newCommentQuantity);
+  }
 
   return (
     <>
@@ -199,7 +196,7 @@ const Post = ({ data, className, type }) => {
           </div>
         )}
         {/* Post reaction quantity */}
-        <PostReactionQuantity commentQuantity={commentQuantity} />
+        <PostReactionQuantity postId={data?.id} commentQuantity={commentQuantity} />
         <Divider variant="middle" />
         {/* Post action section: like, comment, share */}
         <div className="my-1">
@@ -213,10 +210,7 @@ const Post = ({ data, className, type }) => {
               <p className="text-dark-gray">Phần bình luận đã bị khóa</p>
             </div>
           ) : (
-            <CommentSection
-              postId={data?.id}
-              quantity={type !== POST_DETAIL ? comments.length : 2}
-            />
+            <CommentSection postId={data?.id} type={type} onCommentQuantityChange={handleCommentQuantityChange} />
           )}
         </div>
       </div>

@@ -10,7 +10,7 @@ import { getPostById } from "../apis/PostApi";
 const PostDetailPage = () => {
   const [postDetail, setPostDetail] = useState(null);
 
-  const { comments, posts } = useStateContext();
+  const { posts } = useStateContext();
   const { postId } = useParams();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const PostDetailPage = () => {
     };
 
     process();
-  }, [comments, posts, postId]);
+  }, [posts, postId]);
   return (
     <DefaultLayout>
       <div className="w-full min-h-screen flex flex-col items-center bg-gray">

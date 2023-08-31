@@ -2,7 +2,18 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import "moment/locale/vi";
 
-import { Avatar, Button, Divider, Menu, MenuItem } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import AutoFixHighOutlinedIcon from "@mui/icons-material/AutoFixHighOutlined";
@@ -16,13 +27,14 @@ import {
   deleteComment,
   updateComment,
 } from "../apis/CommentApi";
-import { CREATE, DELETE, UPDATE } from "../constants/common";
+import { CREATE, UPDATE } from "../constants/common";
 import LoadingButton from "./LoadingButton";
 
 moment.locale("vi");
 
-const CommentItem = ({ data }) => {
-  const { user, commentDispatch, comments } = useStateContext();
+const CommentItem = ({ data, onCommentDelete, onCommentUpdate, onCommentQuantityChange }) => {
+
+  const { commentDispatch } = useStateContext();
   const [commentContent, setCommentContent] = useState(data.content);
   const [responseCommentContent, setResponseCommentContent] = useState("");
 
@@ -30,10 +42,14 @@ const CommentItem = ({ data }) => {
   const [isSendResponseComment, setIsSendResponseComment] = useState(false);
   const [showEditInput, setShowEditInput] = useState(false);
   const [showResponseComment, setShowResponseComment] = useState(false);
-  const [showConfirmDeleteCommentDialog, setShowConfirmDeleteCommentDialog] =
-    useState(false);
+  const [openDeleteCommentDialog, setOpenDeleteCommentDialog] = useState(false);
   const [showDeleteCommentProgress, setShowDeleteCommentProgress] =
     useState(false);
+
+  const handleOpenDeleteCommentDialog = (popupState) => {
+    setOpenDeleteCommentDialog(true);
+    popupState.close();
+  };
 
   const handleCommentContentChange = (e) => {
     setCommentContent(e.target.value);
@@ -65,18 +81,16 @@ const CommentItem = ({ data }) => {
     const process = async () => {
       setIsSendingComment(true);
 
-      let editedComment = {
+      let editCommentData = {
         content: commentContent,
       };
 
       try {
-        let res = await updateComment(data.id, editedComment);
-        console.log(res);
+        let res = await updateComment(data.id, editCommentData);
 
         if (res.status === 201) {
+          onCommentUpdate(res.data);
           handleHideEditCommentField();
-
-          commentDispatch({ type: UPDATE, payload: res.data });
         }
       } catch (e) {
         console.log(e);
@@ -88,8 +102,6 @@ const CommentItem = ({ data }) => {
     process();
   };
 
-  console.log(showConfirmDeleteCommentDialog);
-
   const handleDeleteComment = () => {
     const process = async () => {
       setShowDeleteCommentProgress(true);
@@ -97,12 +109,13 @@ const CommentItem = ({ data }) => {
         let res = await deleteComment(data.id);
 
         if (res.status === 200) {
-          commentDispatch({ type: DELETE, payload: data.id });
+          onCommentDelete(data.id);
+          onCommentQuantityChange(prev => prev - 1);
         }
       } catch (e) {
         console.log(e);
       } finally {
-        setShowConfirmDeleteCommentDialog(false);
+        setOpenDeleteCommentDialog(false);
         setShowDeleteCommentProgress(false);
       }
     };
@@ -150,7 +163,7 @@ const CommentItem = ({ data }) => {
             <div className={`${showEditInput ? "flex-1" : ""} flex flex-col`}>
               <div className="flex text-sm break-all">
                 <div className="flex-1 p-2 bg-gray rounded-md">
-                  <p className="font-semibold">{`${data?.userId?.lastName} ${data?.userId?.firstName}`}</p>
+                  <p className="font-semibold">{`${data?.user?.lastName} ${data?.user?.firstName}`}</p>
                   {showEditInput ? (
                     <div className="relative flex-1 flex items-center cursor-pointer overflow-hidden">
                       <input
@@ -222,22 +235,19 @@ const CommentItem = ({ data }) => {
                               <span className="ml-2">Chỉnh sửa bình luận</span>
                             </div>
                           </MenuItem>
-                          <MenuItem>
-                            <div
-                              onClick={() =>
-                                setShowConfirmDeleteCommentDialog(
-                                  !showConfirmDeleteCommentDialog
-                                )
-                              }
-                              className="flex items-center text-red"
-                            >
+                          <MenuItem
+                            onClick={() =>
+                              handleOpenDeleteCommentDialog(popupState)
+                            }
+                          >
+                            <div className="flex items-center text-red">
                               <DeleteOutlineOutlinedIcon fontSize="small" />
                               <span>Xóa bình luận</span>
                             </div>
                           </MenuItem>
-                          <div
+                          {/* <div
                             className={`${
-                              showConfirmDeleteCommentDialog
+                              openDeleteCommentDialog
                                 ? "flex justify-between"
                                 : "hidden"
                             }`}
@@ -245,7 +255,7 @@ const CommentItem = ({ data }) => {
                             <MenuItem onClick={popupState.close}>
                               <Button
                                 onClick={() =>
-                                  setShowConfirmDeleteCommentDialog(false)
+                                  setOpenDeleteCommentDialog(false)
                                 }
                                 variant="outlined"
                               >
@@ -266,7 +276,7 @@ const CommentItem = ({ data }) => {
                                 </Button>
                               )}
                             </MenuItem>
-                          </div>
+                          </div> */}
                         </Menu>
                       </>
                     )}
@@ -363,6 +373,41 @@ const CommentItem = ({ data }) => {
           </div>
         )}
       </div>
+      {/* Confirm delete post dialog */}
+      <Dialog
+        open={openDeleteCommentDialog}
+        onClose={() => setOpenDeleteCommentDialog(false)}
+        aria-labelledby="delete-post-dialog-title"
+        aria-describedby="delete-post-dialog-description"
+      >
+        <DialogTitle id="delete-post-dialog-title">Xóa bình luận?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-post-dialog-description">
+            Bình luận này sẽ bị xóa vĩnh viễn! Vẫn xóa?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="outlined"
+            onClick={() => setOpenDeleteCommentDialog(false)}
+            autoFocus
+          >
+            Hủy
+          </Button>
+          {showDeleteCommentProgress ? (
+            <LoadingButton color="error" />
+          ) : (
+            <Button
+              variant="contained"
+              color="error"
+              disableElevation
+              onClick={handleDeleteComment}
+            >
+              Xóa
+            </Button>
+          )}
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

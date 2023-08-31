@@ -7,7 +7,7 @@ import { DefaultLayout } from "../layouts";
 import { useStateContext } from "../contexts/ContextProvider";
 import { emptyPlaceholder1 } from "../assets";
 import { countAllPosts, getAllPosts } from "../apis/PostApi";
-import { FETCH_ALL, POST_PER_PAGE } from "../constants/common";
+import { FETCH_ALL, POST_NORMAL, POST_PER_PAGE } from "../constants/common";
 
 const DashBoard = () => {
   const { posts, postDispatch, postCount, setPostCount, pageIndex, setPageIndex } = useStateContext();
@@ -37,7 +37,6 @@ const DashBoard = () => {
         return;
       }
     };
-    console.log("re-render");
 
     handleFetchAllPosts();
     handleGetCountAllPosts();
@@ -56,6 +55,7 @@ const DashBoard = () => {
                     key={index}
                     data={post}
                     className="sm:w-150 max-sm:w-full"
+                    type={POST_NORMAL}
                   />
                 ))
               ) : (
