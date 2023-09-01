@@ -8,28 +8,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import lombok.Getter;
 import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -64,8 +51,8 @@ public class Users implements Serializable {
     @Column(name = "id")
     private Long id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotNull(message = "{user.username.null}")
+    @Size(min = 5, max = 20, message = "{user.username.lengthErr}")
     @Column(name = "username", unique = true)
     private String username;
     @Basic(optional = false)
@@ -80,20 +67,23 @@ public class Users implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "email")
     private String email;
-    @Size(max = 255)
-    @NotNull
+    @Basic(optional = false)
+    @Size(min = 1, max = 255, message = "{user.firstName.lengthErr}")
+    @NotNull(message = "{user.firstName.null}")
     @Column(name = "first_name")
     private String firstName;
-    @Size(max = 255)
-    @NotNull
+    @Basic(optional = false)
+    @Size(min = 1, max = 255, message = "{user.lastName.lengthErr}")
+    @NotNull(message = "{user.lastName.null}")
     @Column(name = "last_name")
     private String lastName;
     // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
     @Size(max = 20)
     @Column(name = "phone")
     private String phone;
+    @Basic(optional = false)
     @Size(max = 255)
-    @NotNull
+    @NotNull(message = "{user.avatar.null}")
     @Column(name = "avatar")
     private String avatar;
     @Size(max = 255)
@@ -153,6 +143,9 @@ public class Users implements Serializable {
     @OneToMany(mappedBy = "userId")
     @JsonIgnore
     private Set<Reactions> reactionsSet;
+    @Getter
+    @Transient
+    private MultipartFile avatarFile;
 
     public Users() {
     }
@@ -376,6 +369,18 @@ public class Users implements Serializable {
 
     public void setReactionsSet(Set<Reactions> reactionsSet) {
         this.reactionsSet = reactionsSet;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public void setAvatarFile(MultipartFile avatarFile) {
+        this.avatarFile = avatarFile;
     }
 
     @Override
