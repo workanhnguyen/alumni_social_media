@@ -74,8 +74,27 @@ public class ApiUserController {
         }
     }
 
-    
-    
+    // Cái này chưa ổn
+    @DeleteMapping("/{id}/")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long userId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if the user is authenticated and has the role ADMIN
+        if (authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ADMIN"))) {
+            if (this.userService.deleteUserById(userId)) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+
+
+
     @GetMapping(path = "/current_user/", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin
     public ResponseEntity<?> details(Principal user) {
