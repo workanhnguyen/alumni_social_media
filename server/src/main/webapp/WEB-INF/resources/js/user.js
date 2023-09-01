@@ -25,6 +25,16 @@ function getMajorsByDepartment() {
             })
             .catch(error => console.error(error));
     });
+
+    // Load majors when the document is fully loaded
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch(`/server/api/majors?departmentId=${selectedDepartmentId}`)
+            .then(response => response.json())
+            .then(majors => {
+                populateMajorDropdown(majors);
+            })
+            .catch(error => console.error(error));
+    });
 }
 
 getMajorsByDepartment();
