@@ -2,6 +2,7 @@ package com.example.server.repositories.impl;
 
 import com.example.server.pojos.Users;
 import com.example.server.repositories.UserRepository;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -66,5 +67,22 @@ public class UserRepositoryImp implements UserRepository {
         Query q = s.createQuery("FROM Users WHERE id=:userId");
         q.setParameter("userId", userId);
         return (Users) q.getSingleResult();
+    }
+
+    @Override
+    public Boolean addOrUpdateUser(Users u) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            if (u.getId() == null) {
+                s.save(u);
+            } else {
+                s.update(u);
+            }
+
+            return true;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

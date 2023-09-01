@@ -119,6 +119,19 @@ public class UserServiceImp implements UserService {
         return userRepo.getUserById(userId);
     }
 
+    @Override
+    public Boolean addOrUpdateUser(Users u) {
+        if (!u.getAvatarFile().isEmpty()) {
+            try {
+                Map res = this.cloudinary.uploader().upload(u.getAvatarFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                u.setAvatar(res.get("secure_url").toString());
+            } catch (IOException e) {
+                Logger.getLogger(UserServiceImp.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+        return this.userRepo.addOrUpdateUser(u);
+    }
+
     private boolean isCreatedAtWithin24Hours(Date createdAt) {
         Date now = new Date();
         long timeDifferenceInMillis = now.getTime() - createdAt.getTime();
