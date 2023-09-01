@@ -10,8 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @ControllerAdvice
@@ -26,21 +28,24 @@ public class UserController {
     private MajorService majorService;
 
     @RequestMapping("/")
-    public String index(Model model, Principal loggedInUser) {
-        model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("role", "ALL");
+    public String index(Model model, Principal loggedInUser, @RequestParam Map<String, String> params) {
+        model.addAttribute("users", userService.getUsers(params));
+        model.addAttribute("authToken", "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTM2NDEyMzcsInVzZXJuYW1lIjoiYWRtaW4ifQ.VDUMF3Qf-vO6pmEJKEQaA25LDr8kcHJoAhCZr37x_c4");
 
         return loggedInUser != null ? "listUser" : "login";
     }
 
     @GetMapping("/users")
-    public String list(Model model, @RequestParam(value = "role", required = false) String role) {
-        if (role != null) {
-            model.addAttribute("users", userService.getUsersByRole(role));
-            model.addAttribute("role", role);
+    public String list(Model model, @RequestParam Map<String, String> params) {
+        if (params.get("role") != null) {
+            model.addAttribute("users", userService.getUsers(params));
+            model.addAttribute("role", params.get("role"));
+            return "listUser";
+        } else if (params.get("active") != null) {
+            model.addAttribute("users", userService.getUsers(params));
+            model.addAttribute("active", params.get("active"));
             return "listUser";
         } else {
-            model.addAttribute("role", "ALL");
             model.addAttribute("user", new Users());
             return "userDetail";
         }
@@ -50,8 +55,8 @@ public class UserController {
     public String update(@PathVariable(value = "id") Long id, Model model) {
         Users u = userService.getUserById(id);
         model.addAttribute("user", u);
-
         model.addAttribute("departments", departmentService.getAllDepartments());
+
         if (u.getMajorId() != null) {
             model.addAttribute("majors", majorService.getMajorsByDepartmentId(u.getMajorId().getDepartmentId().getId()));
         }
@@ -66,4 +71,12 @@ public class UserController {
                 return "redirect:/";
         return "userDetail";
     }
+
+//    @DeleteMapping("/users/{id}")
+//    public String delete(@PathVariable(value = "id") Long userId) {
+//        if (userService.deleteUserById(userId)) {
+//            return "redirect:/";
+//        }
+//        return "redirect:/";
+//    }
 }
