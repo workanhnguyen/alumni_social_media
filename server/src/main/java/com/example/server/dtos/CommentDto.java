@@ -4,7 +4,9 @@
  */
 package com.example.server.dtos;
 
+import com.example.server.pojos.Comments;
 import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,4 +26,5 @@ public class CommentDto {
     private Date createdAt;
     private Date updatedAt;
     private UserDto user;
+    private List<Comments> listComments;
 }

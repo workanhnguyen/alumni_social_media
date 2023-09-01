@@ -65,7 +65,23 @@ public class ApiCommentController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
             PostDto currentPost = postService.findPostById(postId);
-            CommentDto cmt = this.cmtService.addComment(params, currentUser, currentPost);
+            if (!currentPost.getIsLocked()){
+                CommentDto cmt = this.cmtService.addComment(params, currentUser, currentPost);
+                return new ResponseEntity<>(cmt, HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>( HttpStatus.LOCKED);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+    
+    @PostMapping(path = "/{id}/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<CommentDto> createCommentByCmt(@PathVariable("id") Long cmtId, @RequestBody Map<String, String> params) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+            CommentDto cmt = this.cmtService.addCommentByCmt(params, currentUser, cmtId);
             return new ResponseEntity<>(cmt, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -93,7 +109,7 @@ public class ApiCommentController {
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
             Boolean rs = cmtService.deleteComment(cmtId, currentUser);
             if (rs) {
-                return new ResponseEntity<>("TRUE", HttpStatus.OK);
+                return new ResponseEntity<>("TRUE", HttpStatus.NO_CONTENT);
             } else {
                 return ResponseEntity.badRequest().body("FALSE");
             }

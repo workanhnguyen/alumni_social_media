@@ -4,6 +4,7 @@
  */
 package com.example.server.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -32,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author maidv
  */
 @Entity
-@Table(name = "groups")
+@Table(name = "groupsjv")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Groups.findAll", query = "SELECT g FROM Groups g"),
@@ -47,7 +48,7 @@ public class Groups implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Size(max = 255)
     @Column(name = "group_name")
     private String groupName;
@@ -61,6 +62,7 @@ public class Groups implements Serializable {
         @JoinColumn(name = "group_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "id")})
     @ManyToMany
+    @JsonIgnore
     private Set<Users> usersSet;
     @JoinColumn(name = "creator_id", referencedColumnName = "id")
     @ManyToOne
@@ -69,15 +71,15 @@ public class Groups implements Serializable {
     public Groups() {
     }
 
-    public Groups(Integer id) {
+    public Groups(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

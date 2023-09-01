@@ -117,7 +117,7 @@ public class ApiUserController {
         //role GV - LECTURER, ko cần password
         //role CSV - ALUMNI cần MSSV
         //r
-        if ("LECTURER".equals(role)) {
+        if ("ROLE_  LECTURER".equals(role)) {
             return params.containsKey("username") && params.containsKey("role")
                 && avatar != null && params.containsKey("firstName") 
                 && params.containsKey("lastName")

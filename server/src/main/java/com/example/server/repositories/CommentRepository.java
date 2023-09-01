@@ -20,4 +20,6 @@ public interface CommentRepository {
    Boolean deleteComment(Comments cmt);
    
    List<Comments> findAllCmts(int currentPage, Posts p);
+   List<Comments> findAllCmtsByCmt(Comments cmt);
+
 }

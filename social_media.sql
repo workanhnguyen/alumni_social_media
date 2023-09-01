@@ -16,57 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `academic_year_department`
---
-
-DROP TABLE IF EXISTS `academic_year_department`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `academic_year_department` (
-  `academic_year_id` int NOT NULL,
-  `department_id` int NOT NULL,
-  PRIMARY KEY (`academic_year_id`,`department_id`),
-  KEY `department_id` (`department_id`),
-  CONSTRAINT `academic_year_department_ibfk_1` FOREIGN KEY (`academic_year_id`) REFERENCES `academic_years` (`id`),
-  CONSTRAINT `academic_year_department_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `academic_year_department`
---
-
-LOCK TABLES `academic_year_department` WRITE;
-/*!40000 ALTER TABLE `academic_year_department` DISABLE KEYS */;
-/*!40000 ALTER TABLE `academic_year_department` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `academic_years`
---
-
-DROP TABLE IF EXISTS `academic_years`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `academic_years` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `year` int DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `academic_years`
---
-
-LOCK TABLES `academic_years` WRITE;
-/*!40000 ALTER TABLE `academic_years` DISABLE KEYS */;
-/*!40000 ALTER TABLE `academic_years` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `answers`
 --
 
@@ -116,13 +65,13 @@ CREATE TABLE `comments` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `belongs_to_comment_id` (`belongs_to_comment_id`),
-  KEY `post_id` (`post_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`belongs_to_comment_id`) REFERENCES `comments` (`id`),
-  CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`),
+  KEY `comments_ibfk_1` (`belongs_to_comment_id`),
+  KEY `comments_ibfk_2` (`post_id`),
+  CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`belongs_to_comment_id`) REFERENCES `comments` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
   CONSTRAINT `comments_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,6 +80,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+INSERT INTO `comments` VALUES (9,'test cmt 4',NULL,2,1,'2023-08-27 19:13:27',NULL),(10,'test cmt 4',NULL,2,1,'2023-08-27 19:16:35',NULL),(11,'test cmt 4',NULL,2,1,'2023-08-27 19:18:16',NULL),(13,'test cmt 4',NULL,2,1,'2023-08-27 19:20:25',NULL),(14,'test cmt 4',NULL,2,1,'2023-08-27 19:22:29',NULL),(15,'test cmt 4',NULL,2,1,'2023-08-27 19:54:00',NULL),(16,'da update',NULL,21,1,'2023-08-30 19:01:25','2023-08-30 19:07:23'),(17,'test new cmt',16,21,1,'2023-09-01 19:08:53',NULL),(18,'test new cmt',16,21,1,'2023-09-01 19:39:48',NULL),(19,'test new cmt',17,21,1,'2023-09-01 19:40:00',NULL);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -147,7 +97,7 @@ CREATE TABLE `departments` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,6 +106,7 @@ CREATE TABLE `departments` (
 
 LOCK TABLES `departments` WRITE;
 /*!40000 ALTER TABLE `departments` DISABLE KEYS */;
+INSERT INTO `departments` VALUES (1,'CNTT','2023-09-01 18:40:52','2023-09-01 18:40:52'),(2,'KTKT','2023-09-01 18:40:52','2023-09-01 18:40:52'),(3,'XD','2023-09-01 18:40:52','2023-09-01 18:40:52'),(4,'DTDB','2023-09-01 18:40:52','2023-09-01 18:40:52'),(5,'NN','2023-09-01 18:40:52','2023-09-01 18:40:52'),(6,'Law','2023-09-01 18:40:52','2023-09-01 18:40:52'),(7,'CNSH','2023-09-01 18:40:52','2023-09-01 18:40:52');
 /*!40000 ALTER TABLE `departments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -171,7 +122,7 @@ CREATE TABLE `group_member` (
   `user_id` int NOT NULL,
   PRIMARY KEY (`group_id`,`user_id`),
   KEY `group_member_ibfk_2` (`user_id`),
-  CONSTRAINT `group_member_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
+  CONSTRAINT `group_member_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groupsjv` (`id`),
   CONSTRAINT `group_member_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -186,13 +137,13 @@ LOCK TABLES `group_member` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `groups`
+-- Table structure for table `groupsjv`
 --
 
-DROP TABLE IF EXISTS `groups`;
+DROP TABLE IF EXISTS `groupsjv`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `groups` (
+CREATE TABLE `groupsjv` (
   `id` int NOT NULL AUTO_INCREMENT,
   `group_name` varchar(255) DEFAULT NULL,
   `creator_id` int DEFAULT NULL,
@@ -200,17 +151,18 @@ CREATE TABLE `groups` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `creator_id` (`creator_id`),
-  CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `groupsjv_ibfk_1` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `groups`
+-- Dumping data for table `groupsjv`
 --
 
-LOCK TABLES `groups` WRITE;
-/*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `groups` ENABLE KEYS */;
+LOCK TABLES `groupsjv` WRITE;
+/*!40000 ALTER TABLE `groupsjv` DISABLE KEYS */;
+INSERT INTO `groupsjv` VALUES (2,'group 2',1,'2023-09-01 20:26:14',NULL);
+/*!40000 ALTER TABLE `groupsjv` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -221,13 +173,14 @@ DROP TABLE IF EXISTS `images`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `images` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `post_id` int DEFAULT NULL,
   `image_url` varchar(255) DEFAULT NULL,
+  `is_active` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `post_id` (`post_id`),
-  CONSTRAINT `images_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `images_ibfk_1` (`post_id`),
+  CONSTRAINT `images_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,6 +189,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
+INSERT INTO `images` VALUES (1,17,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693208762/kve0955xixjosllb3d9l.jpg',1),(2,17,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693208763/tds60dppj8aplmcjgk2m.jpg',1),(3,18,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211133/aqthbizqna295x1nwexu.jpg',1),(4,18,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211135/xmnlqgjfbk8gx23cgvez.jpg',1),(5,19,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211446/tc6fgqyrcml21at68fj3.jpg',1),(6,19,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211448/a9qzse11yi5j4zwq5clq.jpg',1),(9,21,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693212606/bbo61qbih83a981k6ywq.jpg',1),(10,21,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693212608/w9vc8nkmptzy7kkwefxw.jpg',1),(11,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693218679/ridcgsn66sxhxiglajrj.jpg',1),(12,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693218681/u3vtdsa4oxcgwukvmmjh.jpg',1),(13,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693218683/cscc0m3wldjhynahla3t.jpg',1);
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,7 +235,7 @@ CREATE TABLE `majors` (
   PRIMARY KEY (`id`),
   KEY `department_id` (`department_id`),
   CONSTRAINT `majors_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -290,6 +244,7 @@ CREATE TABLE `majors` (
 
 LOCK TABLES `majors` WRITE;
 /*!40000 ALTER TABLE `majors` DISABLE KEYS */;
+INSERT INTO `majors` VALUES (1,'Công nghệ thông tin',1,'2023-09-01 18:41:39','2023-09-01 18:41:39'),(2,'Khoa học máy tính',1,'2023-09-01 18:41:39','2023-09-01 18:41:39'),(3,'Hệ thống quản lý',1,'2023-09-01 18:41:39','2023-09-01 18:41:39');
 /*!40000 ALTER TABLE `majors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -331,7 +286,6 @@ DROP TABLE IF EXISTS `posts`;
 CREATE TABLE `posts` (
   `id` int NOT NULL AUTO_INCREMENT,
   `content` text,
-  `is_survey` tinyint(1) DEFAULT NULL,
   `is_locked` tinyint(1) DEFAULT NULL,
   `user_id` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -339,7 +293,7 @@ CREATE TABLE `posts` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -348,6 +302,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+INSERT INTO `posts` VALUES (1,'post 1',1,1,'2023-08-25 10:06:34','2023-08-25 10:06:34'),(2,'update2',1,1,'2023-08-26 06:57:48','2023-08-27 08:49:34'),(8,'test new 2',0,1,'2023-08-26 19:48:09',NULL),(9,'test new 2',0,1,'2023-08-26 20:39:17',NULL),(10,'test post image',0,1,'2023-08-28 00:27:48',NULL),(11,'test post image',0,1,'2023-08-28 00:28:27',NULL),(12,'test post image',0,1,'2023-08-28 00:37:16',NULL),(13,'test post image',0,1,'2023-08-28 07:38:50',NULL),(14,'test post image',0,1,'2023-08-28 07:40:15',NULL),(15,'test post image',0,1,'2023-08-28 07:41:15',NULL),(16,'test post image',0,1,'2023-08-28 07:42:55',NULL),(17,'test post image',0,1,'2023-08-28 07:46:00',NULL),(18,'test post image 2',0,1,'2023-08-28 08:25:31',NULL),(19,'test post image 2',0,1,'2023-08-28 08:30:45',NULL),(21,'test post image 22',0,1,'2023-08-28 08:50:04',NULL),(22,'test post image 22',0,1,'2023-08-28 09:10:17',NULL),(23,'test post image 22',0,1,'2023-08-28 10:31:17',NULL),(24,'test user 2 ',0,2,'2023-08-30 15:36:23','2023-08-30 15:36:23');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -548,11 +503,13 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `major_id` int DEFAULT NULL,
   `student_id` varchar(255) DEFAULT NULL,
+  `academic_year` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `major_id` (`major_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`major_id`) REFERENCES `majors` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -561,7 +518,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','$2a$10$I0/FI1Q0gRDrkKS1gGdSF.gZ1ozf0ztbcEzYtAG/UKmEVGiEfqtFO','maidv@gmail.com',NULL,NULL,NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1692606547/fwabgdzqggthmrsulyqt.jpg',NULL,NULL,NULL,NULL,'0','2023-08-21 09:04:28',NULL,NULL);
+INSERT INTO `users` VALUES (1,'admin','$2a$10$I0/FI1Q0gRDrkKS1gGdSF.gZ1ozf0ztbcEzYtAG/UKmEVGiEfqtFO','maidv@gmail.com','Mai','Van',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1692606547/fwabgdzqggthmrsulyqt.jpg',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-08-26 20:44:06',NULL,NULL,NULL),(2,'vananh','$2a$10$QCet25BP1PzJGzMKyb868.J5I8lQbdHxXLBGNu.YB90yAJs1arAXy','maidv1@gmail.com','Anh','Nguyen',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1692611960/pyzkzxpeptkm6e2khkds.jpg',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-08-25 23:13:43',NULL,NULL,NULL),(3,'vananh1','$2a$10$kIh0d2CH/lek./.p958SseIH4naurqqqXs./Zh1a18ZIQZSn3qCl6','vananh1@gmail.com','Anh','Nguyen',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1692643293/eerpjunb5fcoehe57j7f.jpg',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-08-25 23:13:43',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -574,4 +531,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-21 16:08:25
+-- Dump completed on 2023-09-02  3:45:54

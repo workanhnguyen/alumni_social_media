@@ -55,6 +55,23 @@ public class CommentServiceImp implements CommentService {
         CommentDto cmtDto = findCmtById(savedCmt.getId());
         return cmtDto;
     }
+    
+    @Override
+    public CommentDto addCommentByCmt(Map<String, String> params, Users u, Long cmtId) {
+        Comments rootCmt = this.cmtRepo.findCommentById(cmtId);
+        LocalDateTime currentTime = LocalDateTime.now();
+        Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
+        Comments cmt = new Comments();
+        cmt.setContent(params.get("content"));
+        cmt.setCreatedAt(currentDate);
+        cmt.setUserId(u);
+        cmt.setBelongsToCommentId(rootCmt);
+        cmt.setPostId(rootCmt.getPostId());
+        this.cmtRepo.addComment(cmt);
+        Comments savedCmt = this.cmtRepo.findCommentById(cmt.getId());
+        CommentDto cmtDto = findCmtById(savedCmt.getId());
+        return cmtDto;
+    }
 
     @Override
     public CommentDto updateComment(Map<String, String> params, Users u, Long cmtId) {
@@ -87,6 +104,8 @@ public class CommentServiceImp implements CommentService {
     @Override
     public CommentDto findCmtById(Long id) {
         Comments c = this.cmtRepo.findCommentById(id);
+        
+        List<Comments> cmts = this.cmtRepo.findAllCmtsByCmt(c);
            
         UserDto userDto = UserDto.builder()
                 .id(c.getUserId().getId())
@@ -111,6 +130,7 @@ public class CommentServiceImp implements CommentService {
                 .createdAt(c.getCreatedAt())
                 .updatedAt(c.getUpdatedAt())
                 .user(userDto)
+                .listComments(cmts)
                 .build();
         
         return cmtDto;

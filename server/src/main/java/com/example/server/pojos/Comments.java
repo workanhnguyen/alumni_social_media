@@ -63,9 +63,11 @@ public class Comments implements Serializable {
     private Set<Comments> commentsSet;
     @JoinColumn(name = "belongs_to_comment_id", referencedColumnName = "id")
     @ManyToOne
+    @JsonIgnore
     private Comments belongsToCommentId;
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @ManyToOne
+    @JsonIgnore
     private Posts postId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne

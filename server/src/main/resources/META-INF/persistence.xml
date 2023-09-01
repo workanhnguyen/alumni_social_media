@@ -22,7 +22,6 @@
     <class>com.example.server.pojos.Questions</class>
     <class>com.example.server.pojos.Letters</class>
     <class>com.example.server.pojos.Groups</class>
-    <class>com.example.server.pojos.AcademicYears</class>
     <class>com.example.server.pojos.Reactions</class>
     <class>com.example.server.pojos.GroupMembers</class>
     <class>com.example.server.pojos.Shares</class>

@@ -19,6 +19,8 @@ import java.util.Map;
 public interface CommentService {
    CommentDto addComment(Map<String, String> params, Users u, PostDto p);
    
+   CommentDto addCommentByCmt(Map<String, String> params, Users u, Long cmtId);
+   
    CommentDto updateComment(Map<String, String> params, Users u, Long cmtId);
 
    Boolean deleteComment(Long id, Users u);

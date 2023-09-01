@@ -60,7 +60,7 @@ public class CommentRepositoryImp implements CommentRepository {
         Session s = this.factory.getObject().getCurrentSession();
         int pageSize = 10;
         int startPosition = Math.max((currentPage - 1) * pageSize, 0);
-        String queryString = "SELECT c FROM Comments c WHERE c.postId = :postId ORDER BY c.createdAt desc";
+        String queryString = "SELECT c FROM Comments c WHERE c.postId = :postId AND c.belongsToCommentId = NULL ORDER BY c.createdAt desc";
         Query q = s.createQuery(queryString);
         q.setParameter("postId", p);
         q.setFirstResult(startPosition);
@@ -68,6 +68,16 @@ public class CommentRepositoryImp implements CommentRepository {
 
         List<Comments> cmts = q.getResultList();
 
+        return cmts;
+    }
+
+    @Override
+    public List<Comments> findAllCmtsByCmt(Comments cmt) {
+        Session s = this.factory.getObject().getCurrentSession();  
+        String queryString = "SELECT c FROM Comments c WHERE c.belongsToCommentId = :cmt ORDER BY c.createdAt desc";
+        Query q = s.createQuery(queryString);
+        q.setParameter("cmt", cmt);
+        List<Comments> cmts = q.getResultList();
         return cmts;
     }
 

@@ -81,6 +81,10 @@ public class Users implements Serializable {
     @Size(max = 20)
     @Column(name = "phone")
     private String phone;
+    
+    @Column(name = "academic_year")
+    private String academicYear;
+    
     @Basic(optional = false)
     @Size(max = 255)
     @NotNull(message = "{user.avatar.null}")
@@ -103,6 +107,7 @@ public class Users implements Serializable {
     private String role;
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
+    
     private Date updatedAt;
     @Size(max = 255)
     @Column(name = "student_id")

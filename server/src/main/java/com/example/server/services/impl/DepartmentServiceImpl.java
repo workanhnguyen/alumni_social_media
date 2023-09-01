@@ -14,6 +14,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Autowired
     private DepartmentRepository departmentRepository;
+    
     @Override
     public List<Departments> getAllDepartments() {
         return departmentRepository.getAllDepartments();

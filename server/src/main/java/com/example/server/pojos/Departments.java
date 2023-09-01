@@ -55,9 +55,7 @@ public class Departments implements Serializable {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
-    @ManyToMany(mappedBy = "departmentsSet")
-    @JsonIgnore
-    private Set<AcademicYears> academicYearsSet;
+    
     @OneToMany(mappedBy = "departmentId")
     @JsonIgnore
     private Set<Majors> majorsSet;
@@ -99,15 +97,6 @@ public class Departments implements Serializable {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    @XmlTransient
-    public Set<AcademicYears> getAcademicYearsSet() {
-        return academicYearsSet;
-    }
-
-    public void setAcademicYearsSet(Set<AcademicYears> academicYearsSet) {
-        this.academicYearsSet = academicYearsSet;
     }
 
     @XmlTransient
