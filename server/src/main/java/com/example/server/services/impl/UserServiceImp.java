@@ -110,8 +110,13 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public List<Users> getAllUsers() {
-        return userRepo.getAllUsers();
+    public List<Users> getIsActiveUser(boolean isActive) {
+        return userRepo.getIsActiveUser(isActive);
+    }
+
+    @Override
+    public List<Users> getUsers(Map<String, String> params) {
+        return this.userRepo.getUsers(params);
     }
 
     @Override
@@ -130,6 +135,11 @@ public class UserServiceImp implements UserService {
             }
         }
         return this.userRepo.addOrUpdateUser(u);
+    }
+
+    @Override
+    public Boolean deleteUserById(Long userId) {
+        return userRepo.deleteUserById(userId);
     }
 
     private boolean isCreatedAtWithin24Hours(Date createdAt) {

@@ -8,11 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import org.hibernate.query.Query;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Transactional
@@ -55,10 +61,42 @@ public class UserRepositoryImp implements UserRepository {
     }
 
     @Override
-    public List<Users> getAllUsers() {
+    public List<Users> getIsActiveUser(boolean isActive) {
         Session s = this.factory.getObject().getCurrentSession();
-        Query q = s.createQuery("FROM Users WHERE role <> 'ADMIN'");
+        Query q = s.createQuery("FROM Users WHERE isActive=:a");
+        q.setParameter("a", isActive);
         return q.getResultList();
+    }
+
+    @Override
+    public List<Users> getUsers(Map<String, String> params) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Users> q = b.createQuery(Users.class);
+        Root root = q.from(Users.class);
+        q.select(root);
+
+        if (params != null) {
+            List<Predicate> predicates = new ArrayList<>();
+
+            String role = params.get("role");
+            if (role != null && !role.isEmpty()) {
+                predicates.add(b.like(root.get("role"), String.format("%%%s%%", role)));
+            } else {
+                predicates.add(b.notLike(root.get("role"), String.format("%%%s%%", "ADMIN")));
+            }
+            String isActive = params.get("active");
+            if (isActive != null && !isActive.isEmpty()) {
+                predicates.add(b.equal(root.get("isActive"), Boolean.parseBoolean(isActive)));
+            }
+
+            q.where(predicates.toArray(Predicate[]::new));
+        }
+
+        q.orderBy(b.desc(root.get("id")));
+        Query query = s.createQuery(q);
+
+        return query.getResultList();
     }
 
     @Override
@@ -84,5 +122,18 @@ public class UserRepositoryImp implements UserRepository {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public Boolean deleteUserById(Long userId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Users u = this.getUserById(userId);
+
+        if (u != null) {
+            s.delete(u);
+            return true;
+        }
+
+        return false;
     }
 }

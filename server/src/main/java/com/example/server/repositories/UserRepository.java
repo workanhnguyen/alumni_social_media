@@ -12,7 +12,9 @@ public interface UserRepository {
 
     // Van Anh
     List<Users> getUsersByRole(String role);
-    List<Users> getAllUsers();
+    List<Users> getIsActiveUser(boolean isActive);
+    List<Users> getUsers(Map<String, String> params);
     Users getUserById(Long userId);
     Boolean addOrUpdateUser(Users u);
+    Boolean deleteUserById(Long userId);
 }
