@@ -120,4 +120,4 @@
         <button type="submit" class="w-100 btn btn-success mt-3">Cập nhật</button>
     </form:form>
 </div>
-<script src="<c:url value="/js/user.js" />"></script>
+<script src="<c:url value="/js/userDetail.js" />"></script>
