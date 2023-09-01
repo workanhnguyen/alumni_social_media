@@ -7,32 +7,52 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<c:url value="/users/${u.id}" var="addNewUser" />
 <div class="container-fluid">
     <h1 class="text-center mt-3 mb-3">CHI TIẾT NGƯỜI DÙNG</h1>
-    <form>
-        <div class="form-group">
+
+    <form:form method="post" action="${addNewUser}" modelAttribute="user" enctype="multipart/form-data">
+        <form:errors path="*" element="div" cssClass="alert alert-danger" />
+        <form:hidden path="id" />
+        <form:hidden path="password" />
+        <form:hidden path="avatar" />
+        <div class="form-floating mb-3 mt-3">
+            <form:input type="text" class="form-control" id="username" path="username" readonly="true" />
             <label for="username">Tên đăng nhập</label>
-            <input type="text" class="form-control" id="username" disabled value="${user.username}">
+            <form:errors path="username" element="div" class="text-danger" />
         </div>
-        <div class="form-group">
+        <div class="form-floating mb-3 mt-3">
+            
+            <form:input type="text" class="form-control" id="last-name" path="lastName" />
             <label for="last-name">Họ và tên đệm</label>
-            <input type="text" class="form-control" id="last-name" aria-describedby="emailHelp" placeholder="Nhập họ và tên đệm" value="${user.lastName}">
-            <%--        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>--%>
+            <form:errors path="lastName" element="div" class="text-danger" />
         </div>
-        <div class="form-group">
+        <div class="form-floating mb-3 mt-3">
+            <form:input type="text" class="form-control" id="first-name" path="firstName" />
             <label for="first-name">Tên</label>
-            <input type="text" class="form-control" id="first-name" placeholder="Nhập tên" value="${user.firstName}">
+            <form:errors path="firstName" element="div" class="text-danger" />
         </div>
         <c:if test="${user.role == 'ALUMNI'}">
-            <div class="form-group">
-                <label for="studentId">Mã số sinh viên</label>
-                <input type="text" class="form-control" id="studentId" value="${user.studentId}">
+            <div class="form-floating mb-3 mt-3">
+                <form:input type="text" class="form-control" id="student-id" path="studentId"/>
+                <label for="student-id">Mã số sinh viên</label>
             </div>
-            <div class="form-group">
-                <label for="department">Khoa</label>
-                <select class="form-select" id="department">
+            <div class="form-floating mb-3 mt-3">
+                <form:select class="form-select" id="department" path="majorId.departmentId">
                     <c:forEach items="${departments}" var="d">
                         <c:choose>
+                            <c:when test="${user.majorId == null}">
+                                <c:choose>
+                                    <c:when test="${d.id == 1}">
+                                        <option value="${d.id}" selected>${d.name}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${d.id}">${d.name}</option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:when>
                             <c:when test="${d.id == user.majorId.departmentId.id}">
                                 <option value="${d.id}" selected>${d.name}</option>
                             </c:when>
@@ -40,46 +60,53 @@
                                 <option value="${d.id}">${d.name}</option>
                             </c:otherwise>
                         </c:choose>
+                    </c:forEach>
+                </form:select>
+                <label for="department">Khoa</label>
+            </div>
+            <div class="form-floating mb-3 mt-3">
+                <form:select class="form-select" id="major" path="majorId">
+                    <c:forEach items="${majors}" var="m">
+                        <c:choose>
+                            <c:when test="${m.id == user.majorId.id}">
+                                <option value="${m.id}" selected>${m.name}</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${m.id}">${m.name}</option>
+                            </c:otherwise>
+                        </c:choose>
 
                     </c:forEach>
-                </select>
-            </div>
-            <div class="form-group">
+                </form:select>
                 <label for="major">Ngành học</label>
-                <select class="form-select" id="major">
-                    <option value="${user.majorId.id}">${user.majorId.name}</option>
-                </select>
             </div>
         </c:if>
-        <div class="form-group">
+        <div class="form-floating mb-3 mt-3">
+            <form:input type="email" class="form-control" id="email" path="email" />
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Nhập email" value="${user.email}">
+            <form:errors path="email" element="div" class="text-danger" />
         </div>
-        <div class="form-group">
+        <div class="form-floating mb-3 mt-3">
+            <form:input type="file" class="form-control"
+                        path="avatarFile" id="avatar"  />
+            <label for="avatar">Ảnh đại diện</label>
+            <c:if test="${user.avatar != null}">
+                <img src="${user.avatar}" width="120" />
+            </c:if>
+        </div>
+        <div class="form-floating mb-3 mt-3">
+            <form:input type="text" class="form-control" id="phone" path="phone"/>
             <label for="phone">Số điện thoại</label>
-            <input type="text" class="form-control" id="phone" placeholder="Nhập số điện thoại" value="${user.phone}">
         </div>
-        <div class="form-group">
-            <div class="input-group my-3">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="isActive">Tình trạng</label>
-                </div>
-                <select class="custom-select" id="isActive">
-                    <c:choose>
-                        <c:when test="${user.isActive == true}">
-                            <option value="true" selected>Đang sử dụng</option>
-                            <option value="false">Vô hiệu hóa</option>
-                        </c:when>
-                        <c:otherwise>
-                            <option value="false" selected>Đang bị khóa</option>
-                            <option value="true">Mở khóa</option>
-                        </c:otherwise>
-                    </c:choose>
-                </select>
-            </div>
+        <div class="form-floating mb-3 mt-3">
+            <form:select class="form-select" id="is-active" path="isActive">
+                            <option value="true" ${user.isActive ? 'selected' : ''}>Mở khóa</option>
+                            <option value="false" ${!user.isActive ? 'selected' : ''}>Khóa</option>
+            </form:select>
+            <label for="is-active">Tình trạng</label>
         </div>
-        <div class="form-group">
-            <label for="role">Vai trò</label>
+        <div class="form-floating mb-3 mt-3">
+            <form:hidden path="role" />
             <c:choose>
                 <c:when test="${user.role == 'ALUMNI'}">
                     <input type="text" class="form-control" id="role" disabled value="Cựu sinh viên">
@@ -88,8 +115,9 @@
                     <input type="text" class="form-control" id="role" disabled value="Giảng viên">
                 </c:otherwise>
             </c:choose>
+            <label for="role">Vai trò</label>
         </div>
-        <button type="submit" class="btn btn-success mt-3">Cập nhật</button>
-    </form>
+        <button type="submit" class="w-100 btn btn-success mt-3">Cập nhật</button>
+    </form:form>
 </div>
 <script src="<c:url value="/js/user.js" />"></script>

@@ -67,4 +67,3 @@
         </tbody>
     </table>
 </div>
-<script src="<c:url value="/js/user.js" />"></script>
