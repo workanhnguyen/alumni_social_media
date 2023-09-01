@@ -7,6 +7,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <div class="container">
     <h1 class="text-center mt-3 mb-3">DANH SÁCH NGƯỜI DÙNG</h1>
@@ -96,6 +97,13 @@
                     <a href="<c:url value="/users/${u.id}" />" class="btn btn-success">Cập nhật</a>
                     <button class="btn btn-danger" onclick="deleteUser('${apiDel}', '${authToken}')">Xóa</button>
                 </td>
+<%--                <sec:authorize access="hasRole('ROLE_ADMIN')">--%>
+<%--                    <td>--%>
+<%--                        <c:url value="/api/users/${u.id}/" var="apiDel"/>--%>
+<%--                        <a href="<c:url value="/users/${u.id}" />" class="btn btn-success">Cập nhật</a>--%>
+<%--                        <button class="btn btn-danger" onclick="deleteUser('${apiDel}', '${authToken}')">Xóa</button>--%>
+<%--                    </td>--%>
+<%--                </sec:authorize>--%>
             </tr>
         </c:forEach>
         </tbody>
