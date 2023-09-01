@@ -7,6 +7,7 @@ import com.example.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,23 +33,37 @@ public class UserController {
         return loggedInUser != null ? "listUser" : "login";
     }
 
-    @GetMapping("/users/{id}")
-    public String userDetail(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("departments", departmentService.getAllDepartments());
-        model.addAttribute("majors", majorService.getAllMajors());
-        return "userDetail";
-    }
-
     @GetMapping("/users")
-    public String allUsers(@RequestParam(value = "role", required = false) String role, Model model) {
+    public String list(Model model, @RequestParam(value = "role", required = false) String role) {
         if (role != null) {
             model.addAttribute("users", userService.getUsersByRole(role));
             model.addAttribute("role", role);
             return "listUser";
         } else {
+            model.addAttribute("role", "ALL");
             model.addAttribute("user", new Users());
-            return "addUser";
+            return "userDetail";
         }
+    }
+
+    @GetMapping("/users/{id}")
+    public String update(@PathVariable(value = "id") Long id, Model model) {
+        Users u = userService.getUserById(id);
+        model.addAttribute("user", u);
+
+        model.addAttribute("departments", departmentService.getAllDepartments());
+        if (u.getMajorId() != null) {
+            model.addAttribute("majors", majorService.getMajorsByDepartmentId(u.getMajorId().getDepartmentId().getId()));
+        }
+        return "userDetail";
+    }
+
+    @PostMapping("/users")
+    public String add(Model model, @ModelAttribute(value = "user") @Valid Users u, BindingResult rs) {
+        model.addAttribute("departments", departmentService.getAllDepartments());
+        if (!rs.hasErrors())
+            if (userService.addOrUpdateUser(u))
+                return "redirect:/";
+        return "userDetail";
     }
 }
