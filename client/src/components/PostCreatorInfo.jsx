@@ -22,7 +22,7 @@ const PostCreatorInfo = ({ post }) => {
 
   return (
     <div className="w-fit flex items-center">
-      <Link to={`/${post?.user?.username}`}>
+      <Link to={`/users/${post?.user?.username}`}>
         <Avatar
           src={post?.user?.avatar}
           alt="avatar"
@@ -32,7 +32,7 @@ const PostCreatorInfo = ({ post }) => {
       </Link>
       <div className="flex-1 flex flex-col justify-center ml-2">
         <Link
-          to={`/${post?.user?.username}`}
+          to={`/users/${post?.user?.username}`}
           className="font-semibold hover:underline cursor-pointer"
         >{`${post?.user?.lastName} ${post?.user?.firstName}`}</Link>
         <div className="flex items-center text-dark-gray">

@@ -11,7 +11,10 @@ import CommentReducer from "../reducers/CommentReducer";
 const StateContext = createContext();
 
 export const ContextProvider = ({ children }) => {
-  const [user, userDispatch] = useReducer(UserReducer, cookie.load(USER) || null);
+  const [user, userDispatch] = useReducer(
+    UserReducer,
+    cookie.load(USER) || null
+  );
   const [posts, postDispatch] = useReducer(PostReducer, []);
   const [comments, commentDispatch] = useReducer(CommentReducer, []);
   const token = cookie.load(TOKEN) || null;
@@ -21,6 +24,8 @@ export const ContextProvider = ({ children }) => {
   const [postDetail, setPostDetail] = useState(null);
   const [postCount, setPostCount] = useState(0);
   const [pageIndex, setPageIndex] = useState(1);
+  const [commentCount, setCommentCount] = useState(0);
+  const [commentIndex, setCommentIndex] = useState(1);
 
   return (
     <StateContext.Provider
@@ -39,7 +44,12 @@ export const ContextProvider = ({ children }) => {
         commentDispatch,
         postCount,
         setPostCount,
-        pageIndex, setPageIndex,
+        commentCount,
+        setCommentCount,
+        pageIndex,
+        setPageIndex,
+        commentIndex,
+        setCommentIndex,
         token,
       }}
     >

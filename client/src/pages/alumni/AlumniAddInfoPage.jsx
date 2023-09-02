@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
   Avatar,
@@ -21,7 +21,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { CircularProgress } from "@mui/material";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import { useStateContext } from "../../contexts/ContextProvider";
 import { departmentData, majorData } from "../../data";
@@ -29,18 +29,19 @@ import { LOGOUT, PHONE_REGEX } from "../../constants/common";
 import { useNavigate } from "react-router-dom";
 import { ROLE_PAGE } from "../../routes";
 import { updateUser } from "../../apis/UserApi";
+import { getAllDepartments } from "../../apis/DepartmentApi";
+import { getMajorsByDepartmentId } from "../../apis/MajorApi";
 
 const defaultTheme = createTheme();
-const departments = departmentData;
-const majors = majorData;
 
 const AlumniAddInfoPage = () => {
-
   const { user, userDispatch } = useStateContext();
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [coverImage, setCoverImage] = useState(null);
+  const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState("");
+  const [majors, setMajors] = useState([]);
   const [majorId, setMajorId] = useState("");
   const [year, setYear] = useState("");
 
@@ -55,6 +56,26 @@ const AlumniAddInfoPage = () => {
   const fileInputRef = useRef();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const process = async () => {
+      try {
+        let departmentRes = await getAllDepartments();
+        if (departmentRes.status === 200) {
+          setDepartments(departmentRes.data);
+
+          if (department !== "") {
+            let majorRes = await getMajorsByDepartmentId(department);
+            if (majorRes.status === 200) {
+              setMajors(majorRes.data);
+            }
+          }
+        }
+      } catch (e) {}
+    };
+
+    process();
+  }, [department]);
+
   const handleChooseCoverImage = (e) => {
     setCoverImage(e.target.files[0]);
   };
@@ -65,6 +86,15 @@ const AlumniAddInfoPage = () => {
 
   const handleDepartmentChange = (e) => {
     setDepartment(e.target.value);
+    setMajorId("");
+
+    const process = async () => {
+      try {
+        let res = await getMajorsByDepartmentId(e.target.value);
+      } catch (e) {}
+    };
+
+    process();
   };
 
   const handleMajorChange = (e) => {
@@ -74,9 +104,9 @@ const AlumniAddInfoPage = () => {
   const handleLogout = () => {
     userDispatch({ type: LOGOUT });
 
-    navigate(ROLE_PAGE, { replace: true })
+    navigate(ROLE_PAGE, { replace: true });
     window.location.reload();
-  }
+  };
 
   const update = async (id, body) => {
     try {
@@ -87,7 +117,7 @@ const AlumniAddInfoPage = () => {
       console.log(e);
       return false;
     }
-  }
+  };
 
   const handleUpdateUserInfo = (e) => {
     e.preventDefault();
@@ -146,8 +176,7 @@ const AlumniAddInfoPage = () => {
           <Typography marginBottom={1} component="h1" variant="h5">
             Thêm thông tin cựu sinh viên
           </Typography>
-          <Box
-          component='form'>
+          <Box component="form">
             <Grid container>
               {/* Phone number */}
               <Grid item xs={12}>
@@ -164,7 +193,7 @@ const AlumniAddInfoPage = () => {
                   autoFocus
                 />
               </Grid>
-  
+
               {/* Choose department */}
               <Grid item xs={12}>
                 <FormControl fullWidth margin="dense" required error={mAlert}>
@@ -184,30 +213,27 @@ const AlumniAddInfoPage = () => {
                   </Select>
                 </FormControl>
               </Grid>
-  
+
               {/* Choose majority */}
               <Grid item xs={12}>
                 <FormControl fullWidth margin="dense" required>
                   <InputLabel id="majority">Chọn ngành</InputLabel>
                   <Select
-                    disabled={department === ""}
                     labelId="majority"
                     id="majority"
                     value={majorId}
                     label="Chọn ngành"
                     onChange={handleMajorChange}
                   >
-                    {majors
-                      .filter((m) => m.departmentId === department)
-                      .map((major, index) => (
-                        <MenuItem key={index} value={major.id}>
-                          {major.name}
-                        </MenuItem>
-                      ))}
+                    {majors.map((major, index) => (
+                      <MenuItem key={index} value={major.id}>
+                        {major.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>
-  
+
               {/* Student year */}
               <Grid item xs={12}>
                 <TextField
@@ -222,7 +248,7 @@ const AlumniAddInfoPage = () => {
                   name="year"
                 />
               </Grid>
-  
+
               {/* Cover Image */}
               <Grid item xs={12}>
                 <div
@@ -259,7 +285,7 @@ const AlumniAddInfoPage = () => {
                   )}
                 </div>
               </Grid>
-  
+
               {/* Alert message */}
               <Grid item xs={12}>
                 <p
@@ -270,7 +296,7 @@ const AlumniAddInfoPage = () => {
                   {alertMessage}
                 </p>
               </Grid>
-  
+
               {/* Update button */}
               <Grid item xs={12}>
                 {isUpdateSuccessful ? (
@@ -299,21 +325,20 @@ const AlumniAddInfoPage = () => {
                 )}
               </Grid>
               <Grid item xs={12}>
-              <Button
-              onClick={handleLogout}
-                    color="error"
-                    size="large"
-                    variant="outlined"
-                    fullWidth
-                    startIcon={<LogoutIcon />}
-                    sx={{ mt: 0, mb: 2 }}
-                  >
-                    Thoát
-                  </Button>
+                <Button
+                  onClick={handleLogout}
+                  color="error"
+                  size="large"
+                  variant="outlined"
+                  fullWidth
+                  startIcon={<LogoutIcon />}
+                  sx={{ mt: 0, mb: 2 }}
+                >
+                  Thoát
+                </Button>
               </Grid>
             </Grid>
-          </Box
-         >
+          </Box>
         </Box>
       </Container>
       <input

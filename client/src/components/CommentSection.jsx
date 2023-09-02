@@ -1,28 +1,47 @@
 import React, { useEffect, useState } from "react";
 
 import SendIcon from "@mui/icons-material/Send";
-import { Avatar, Divider } from "@mui/material";
+import { Avatar, Divider, Pagination } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 
 import { blankAvatar } from "../assets";
 import { CommentItem } from "../components";
 import { addNewComment, getCommentsByPostId } from "../apis/CommentApi";
-import { POST_DETAIL } from "../constants/common";
+import { POST_DETAIL, COMMENT_PER_PAGE, CREATE } from "../constants/common";
 import { Link } from "react-router-dom";
+import { useStateContext } from "../contexts/ContextProvider";
+import { getCommentQuantityByPostId } from "../apis/PostApi";
 
-const CommentSection = ({ postId, type, onCommentQuantityChange }) => {
+const CommentSection = ({ isPostOwner, postId, type, onCommentQuantityChange }) => {
+  const {
+    comments,
+    commentDispatch,
+    commentCount,
+    setCommentCount,
+    commentIndex,
+    setCommentIndex,
+  } = useStateContext();
+
   const [commentList, setCommentList] = useState([]);
   const [updatedComment, setUpdatedComment] = useState(null);
+  const [deletedCommentId, setDeletedCommentId] = useState(null);
   const [commentContent, setCommentContent] = useState("");
   const [isSendingComment, setIsSendingComment] = useState(false);
 
   useEffect(() => {
     const handleLoadComment = async () => {
       try {
-        let res = await getCommentsByPostId(postId);
+        const commentPageData = new FormData();
+        commentPageData.append("page", commentIndex);
 
-        if (res.status === 200) {
-          setCommentList(res.data);
+        let commentRes = await getCommentsByPostId(postId, commentPageData);
+        let countRes = await getCommentQuantityByPostId(postId);
+
+        if (commentRes.status === 200) {
+          setCommentList(commentRes.data);
+        }
+        if (countRes.status === 200) {
+          setCommentCount(countRes.data);
         }
       } catch (e) {
         console.log(e);
@@ -30,7 +49,7 @@ const CommentSection = ({ postId, type, onCommentQuantityChange }) => {
     };
 
     handleLoadComment();
-  }, [updatedComment]);
+  }, [updatedComment, deletedCommentId, postId, commentIndex, comments]);
 
   const handleCommentContentChange = (e) => {
     setCommentContent(e.target.value);
@@ -49,7 +68,8 @@ const CommentSection = ({ postId, type, onCommentQuantityChange }) => {
 
         if (res.status === 201) {
           setCommentList((prev) => [res.data, ...prev]);
-          onCommentQuantityChange(prev => prev + 1);
+          commentDispatch({ type: CREATE, payload: res.data });
+          onCommentQuantityChange((prev) => prev + 1);
         }
       } catch (e) {
         console.log(e);
@@ -63,12 +83,19 @@ const CommentSection = ({ postId, type, onCommentQuantityChange }) => {
   };
 
   const onCommentDelete = (deletedCommentId) => {
-    setCommentList(commentList.filter(comment => comment.id !== deletedCommentId));
+    setDeletedCommentId(deletedCommentId);
+    setCommentList((prev) =>
+      prev.filter((comment) => comment.id !== deletedCommentId)
+    );
   };
 
   const onCommentUpdate = (updatedComment) => {
     setUpdatedComment(updatedComment);
-    setCommentList(prev => prev.filter(comment => comment.id === updatedComment.id ? updatedComment : comment));
+    setCommentList((prev) =>
+      prev.filter((comment) =>
+        comment.id === updatedComment.id ? updatedComment : comment
+      )
+    );
   };
 
   return (
@@ -99,14 +126,73 @@ const CommentSection = ({ postId, type, onCommentQuantityChange }) => {
       {type === POST_DETAIL ? (
         <div className="mt-6">
           {commentList.map((comment, index) => (
-            <CommentItem key={index} data={comment} onCommentDelete={onCommentDelete} onCommentUpdate={onCommentUpdate} onCommentQuantityChange={onCommentQuantityChange} />
+            <div key={index}>
+              <CommentItem
+              isPostOwner={isPostOwner}
+                data={comment}
+                onCommentDelete={onCommentDelete}
+                onCommentUpdate={onCommentUpdate}
+                onCommentQuantityChange={onCommentQuantityChange}
+              />
+              {comment.listComments && comment.listComments.length > 0 && (
+                <div>
+                  {comment.listComments.map((responseComment, resIndex) => (
+                    <div className="ml-10">
+                      <CommentItem
+                      isPostOwner={isPostOwner}
+                      showRes={false}
+                        key={resIndex}
+                        data={responseComment}
+                        onCommentDelete={onCommentDelete}
+                        onCommentUpdate={onCommentUpdate}
+                        onCommentQuantityChange={onCommentQuantityChange}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
+          {commentList.length !== 0 && (
+            <div className="w-full flex justify-center mb-3">
+            <Pagination
+              color="primary"
+              count={Math.ceil(commentCount / COMMENT_PER_PAGE)}
+              onChange={(event, page) => setCommentIndex(page)}
+              page={commentIndex}
+            />
+          </div>
+          )}
         </div>
       ) : (
         <>
           <div className="mt-6">
             {commentList.slice(0, 2).map((comment, index) => (
-              <CommentItem key={index} data={comment} onCommentDelete={onCommentDelete} onCommentUpdate={onCommentUpdate} onCommentQuantityChange={onCommentQuantityChange} />
+              <div key={index}>
+                <CommentItem
+                isPostOwner={isPostOwner}
+                  data={comment}
+                  onCommentDelete={onCommentDelete}
+                  onCommentUpdate={onCommentUpdate}
+                  onCommentQuantityChange={onCommentQuantityChange}
+                />
+                {comment.listComments && comment.listComments.length > 0 && (
+                  <div>
+                    {comment.listComments.map((responseComment, resIndex) => (
+                      <div className="ml-10" key={resIndex}>
+                        <CommentItem
+                        isPostOwner={isPostOwner}
+                        showRes={false}
+                          data={responseComment}
+                          onCommentDelete={onCommentDelete}
+                          onCommentUpdate={onCommentUpdate}
+                          onCommentQuantityChange={onCommentQuantityChange}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
           {commentList.length > 2 && (

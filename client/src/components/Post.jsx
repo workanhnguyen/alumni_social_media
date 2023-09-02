@@ -26,18 +26,26 @@ import {
   PostReactionQuantity,
 } from "../components";
 import PostImageSlider from "./PostImageSlider";
-import {
-  DELETE,
-  LOCK_COMMENT,
-  UNLOCK_COMMENT,
-} from "../constants/common";
+import { DELETE, LOCK_COMMENT, UNLOCK_COMMENT } from "../constants/common";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { useStateContext } from "../contexts/ContextProvider";
-import { deletePost, getCommentQuantityByPostId, lockPost, unlockPost } from "../apis/PostApi";
+import {
+  deletePost,
+  getCommentQuantityByPostId,
+  lockPost,
+  unlockPost,
+} from "../apis/PostApi";
+import { useNavigate } from "react-router-dom";
 
 const Post = ({ data, className, type }) => {
+  const { user, postDispatch, setPostCount, comments } = useStateContext();
 
   const [commentQuantity, setCommentQuantity] = useState(0);
+  const [showEditPostForm, setShowEditPostForm] = useState(false);
+  const [openDeletePostDialog, setOpenDeletePostDialog] = useState(false);
+  const [showDeleteProgress, setShowDeleteProgress] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const process = async () => {
@@ -52,13 +60,7 @@ const Post = ({ data, className, type }) => {
       }
     };
     process();
-  }, []);
-
-  const { user, postDispatch, setPostCount } = useStateContext();
-
-  const [showEditPostForm, setShowEditPostForm] = useState(false);
-  const [openDeletePostDialog, setOpenDeletePostDialog] = useState(false);
-  const [showDeleteProgress, setShowDeleteProgress] = useState(false);
+  }, [comments]);
 
   const handleShowEditPostForm = () => {
     setShowEditPostForm(true);
@@ -106,11 +108,11 @@ const Post = ({ data, className, type }) => {
           postDispatch({ type: DELETE, payload: data?.id });
           setPostCount((prev) => prev - 1);
         }
-      } catch (e) {
-        console.log(e);
-      } finally {
+      } catch (e) {} 
+      finally {
         setShowDeleteProgress(false);
         setOpenDeletePostDialog(false);
+        navigate(-1, { replace: true });
       }
     };
     process();
@@ -118,7 +120,7 @@ const Post = ({ data, className, type }) => {
 
   const handleCommentQuantityChange = (newCommentQuantity) => {
     setCommentQuantity(newCommentQuantity);
-  }
+  };
 
   return (
     <>
@@ -196,7 +198,10 @@ const Post = ({ data, className, type }) => {
           </div>
         )}
         {/* Post reaction quantity */}
-        <PostReactionQuantity postId={data?.id} commentQuantity={commentQuantity} />
+        <PostReactionQuantity
+          postId={data?.id}
+          commentQuantity={commentQuantity}
+        />
         <Divider variant="middle" />
         {/* Post action section: like, comment, share */}
         <div className="my-1">
@@ -210,7 +215,12 @@ const Post = ({ data, className, type }) => {
               <p className="text-dark-gray">Phần bình luận đã bị khóa</p>
             </div>
           ) : (
-            <CommentSection postId={data?.id} type={type} onCommentQuantityChange={handleCommentQuantityChange} />
+            <CommentSection
+              isPostOwner={data?.user?.id === user.id}
+              postId={data?.id}
+              type={type}
+              onCommentQuantityChange={handleCommentQuantityChange}
+            />
           )}
         </div>
       </div>

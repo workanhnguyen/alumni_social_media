@@ -24,17 +24,24 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import { useStateContext } from "../contexts/ContextProvider";
 import {
   addNewComment,
+  addResponseComment,
   deleteComment,
   updateComment,
 } from "../apis/CommentApi";
-import { CREATE, UPDATE } from "../constants/common";
+import { CREATE } from "../constants/common";
 import LoadingButton from "./LoadingButton";
 
 moment.locale("vi");
 
-const CommentItem = ({ data, onCommentDelete, onCommentUpdate, onCommentQuantityChange }) => {
-
-  const { commentDispatch } = useStateContext();
+const CommentItem = ({
+  isPostOwner,
+  data,
+  onCommentDelete,
+  onCommentUpdate,
+  onCommentQuantityChange,
+  showRes = true,
+}) => {
+  const { user, commentDispatch } = useStateContext();
   const [commentContent, setCommentContent] = useState(data.content);
   const [responseCommentContent, setResponseCommentContent] = useState("");
 
@@ -108,9 +115,9 @@ const CommentItem = ({ data, onCommentDelete, onCommentUpdate, onCommentQuantity
       try {
         let res = await deleteComment(data.id);
 
-        if (res.status === 200) {
+        if (res.status === 204) {
           onCommentDelete(data.id);
-          onCommentQuantityChange(prev => prev - 1);
+          onCommentQuantityChange((prev) => prev - 1);
         }
       } catch (e) {
         console.log(e);
@@ -131,7 +138,7 @@ const CommentItem = ({ data, onCommentDelete, onCommentUpdate, onCommentQuantity
         content: responseCommentContent,
       };
       try {
-        let res = await addNewComment(1, responseCommentData);
+        let res = await addResponseComment(data?.id, responseCommentData);
 
         if (res.status === 201) {
           commentDispatch({ type: CREATE, payload: res.data });
@@ -154,7 +161,7 @@ const CommentItem = ({ data, onCommentDelete, onCommentUpdate, onCommentQuantity
       <div className="w-full flex flex-col mb-3">
         <div className="flex">
           <Avatar
-            src={data?.user?.avatar}
+            src={data?.user?.avatar || data?.userId?.avatar}
             alt="avatar"
             sx={{ width: 32, height: 32 }}
           />
@@ -163,7 +170,9 @@ const CommentItem = ({ data, onCommentDelete, onCommentUpdate, onCommentQuantity
             <div className={`${showEditInput ? "flex-1" : ""} flex flex-col`}>
               <div className="flex text-sm break-all">
                 <div className="flex-1 p-2 bg-gray rounded-md">
-                  <p className="font-semibold">{`${data?.user?.lastName} ${data?.user?.firstName}`}</p>
+                  <p className="font-semibold">{`${
+                    data?.user?.lastName || data.userId?.lastName
+                  } ${data?.user?.firstName || data?.userId?.firstName}`}</p>
                   {showEditInput ? (
                     <div className="relative flex-1 flex items-center cursor-pointer overflow-hidden">
                       <input
@@ -204,48 +213,59 @@ const CommentItem = ({ data, onCommentDelete, onCommentUpdate, onCommentQuantity
                 </div>
 
                 {/* Comment actions */}
-                {showEditInput ? null : (
-                  <PopupState variant="popover" popupId="demo-popup-menu">
-                    {(popupState) => (
-                      <>
-                        <div
-                          {...bindTrigger(popupState)}
-                          className="w-fit h-fit flex items-center p-2 ml-1 hover:bg-gray active:bg-gray-2 rounded-full cursor-pointer"
-                        >
-                          <MoreHorizIcon fontSize="inherit" />
-                        </div>
-                        <Menu
-                          anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "left",
-                          }}
-                          transformOrigin={{
-                            vertical: "top",
-                            horizontal: "center",
-                          }}
-                          elevation={2}
-                          {...bindMenu(popupState)}
-                        >
-                          <MenuItem onClick={popupState.close}>
-                            <div
-                              className="flex items-center"
-                              onClick={handleShowEditCommentField}
-                            >
-                              <AutoFixHighOutlinedIcon fontSize="small" />
-                              <span className="ml-2">Chỉnh sửa bình luận</span>
-                            </div>
-                          </MenuItem>
-                          <MenuItem
-                            onClick={() =>
-                              handleOpenDeleteCommentDialog(popupState)
-                            }
+                {(!showEditInput &&
+                  (user.id === data?.user?.id ||
+                    user.id === data?.userId?.id) || isPostOwner) && (
+                    <PopupState variant="popover" popupId="demo-popup-menu">
+                      {(popupState) => (
+                        <>
+                          <div
+                            {...bindTrigger(popupState)}
+                            className="w-fit h-fit flex items-center p-2 ml-1 hover:bg-gray active:bg-gray-2 rounded-full cursor-pointer"
                           >
-                            <div className="flex items-center text-red">
-                              <DeleteOutlineOutlinedIcon fontSize="small" />
-                              <span>Xóa bình luận</span>
-                            </div>
-                          </MenuItem>
-                          {/* <div
+                            <MoreHorizIcon fontSize="inherit" />
+                          </div>
+                          <Menu
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "left",
+                            }}
+                            transformOrigin={{
+                              vertical: "top",
+                              horizontal: "center",
+                            }}
+                            elevation={2}
+                            {...bindMenu(popupState)}
+                          >
+                            {(user.id === data?.user?.id ||
+                              user.id === data?.userId?.id) && (
+                              <MenuItem onClick={popupState.close}>
+                                <div
+                                  className="flex items-center"
+                                  onClick={handleShowEditCommentField}
+                                >
+                                  <AutoFixHighOutlinedIcon fontSize="small" />
+                                  <span className="ml-2">
+                                    Chỉnh sửa bình luận
+                                  </span>
+                                </div>
+                              </MenuItem>
+                            )}
+                            {((user.id === data?.user?.id ||
+                              user.id === data?.userId?.id) ||
+                              isPostOwner) && (
+                                <MenuItem
+                                  onClick={() =>
+                                    handleOpenDeleteCommentDialog(popupState)
+                                  }
+                                >
+                                  <div className="flex items-center text-red">
+                                    <DeleteOutlineOutlinedIcon fontSize="small" />
+                                    <span>Xóa bình luận</span>
+                                  </div>
+                                </MenuItem>
+                              )}
+                            {/* <div
                             className={`${
                               openDeleteCommentDialog
                                 ? "flex justify-between"
@@ -277,20 +297,22 @@ const CommentItem = ({ data, onCommentDelete, onCommentUpdate, onCommentQuantity
                               )}
                             </MenuItem>
                           </div> */}
-                        </Menu>
-                      </>
-                    )}
-                  </PopupState>
-                )}
+                          </Menu>
+                        </>
+                      )}
+                    </PopupState>
+                  )}
               </div>
 
               <div className="flex items-center gap-3 mt-1 mx-2">
-                <span
-                  onClick={handleShowResponseComment}
-                  className="text-xs font-semibold cursor-pointer hover:underline"
-                >
-                  Phản hồi
-                </span>
+                {showRes && (
+                  <span
+                    onClick={handleShowResponseComment}
+                    className="text-xs font-semibold cursor-pointer hover:underline"
+                  >
+                    Phản hồi
+                  </span>
+                )}
                 <span className="text-xs">
                   {moment(data?.createdAt).fromNow()}
                 </span>
@@ -342,7 +364,9 @@ const CommentItem = ({ data, onCommentDelete, onCommentUpdate, onCommentQuantity
                 value={responseCommentContent}
                 onChange={handleResponseCommentContentChange}
                 className="w-full px-3 py-2 pr-16 text-sm border-none outline-none bg-gray"
-                placeholder={`Phản hồi ${data?.userId?.lastName} ${data?.userId?.firstName}`}
+                placeholder={`Phản hồi ${
+                  data?.userId?.lastName || data?.user?.lastName
+                } ${data?.userId?.firstName || data?.user?.firstName}`}
               />
             </div>
             <div className="absolute right-5 flex items-center">

@@ -51,9 +51,18 @@ export default function SignInForm({ role }) {
           payload: data,
         });
 
-        if (data.phone !== null && data.academicYear !== null && data.bgImage !== null && data.majorId !== null)
-          navigate(ROOT_PAGE, { replace: true });
-        else navigate(ALUMNI_ADD_INFO);
+        console.log(data.phone === "");
+
+        if (
+          data.phone === null ||
+          data.phone === "" ||
+          data.academicYear === null ||
+          data.academicYear === "" ||
+          data.bgImage === null ||
+          data.majorId === null
+        )
+          navigate(ALUMNI_ADD_INFO);
+        else navigate(ROOT_PAGE, { replace: true });
 
         if (response.data && data === false) navigate(INFO_PAGE);
         else if (response.data && data) navigate(DASHBOARD);

@@ -40,7 +40,7 @@ const App = () => {
   );
 
   const isActivated = user !== null && booleanUser !== false;
-  const isFullUserInfo = isActivated && user?.phone !== null && user?.academicYear !== null && user?.bgImage !== null && user?.majorId !== null;
+  const isFullUserInfo = isActivated && user?.phone !== null && user?.phone !== '' && user?.academicYear !== null && user?.academicYear !== '' && user?.bgImage !== null && user?.majorId !== null;
   return (
     <BrowserRouter>
       <Routes>

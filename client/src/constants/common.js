@@ -23,3 +23,4 @@ export const UNLOCK_COMMENT = "UNLOCK_COMMENT";
 export const POST_PER_PAGE = 10;
 export const TRUE = "TRUE";
 export const FALSE = "FALSE";
+export const COMMENT_PER_PAGE = 10;
