@@ -19,16 +19,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 
 @Repository
 @Transactional
 public class UserRepositoryImp implements UserRepository {
-    
+
     @Autowired
     private LocalSessionFactoryBean factory;
     @Autowired
     private BCryptPasswordEncoder passEncoder;
-    
+
     @Override
     public Users addUser(Users user) {
         Session s = this.factory.getObject().getCurrentSession();
@@ -39,17 +40,21 @@ public class UserRepositoryImp implements UserRepository {
 
     @Override
     public boolean authUser(String username, String password) {
-        Users  u = this.getUserByUsername(username);
+        Users u = this.getUserByUsername(username);
         return this.passEncoder.matches(password, u.getPassword());
     }
 
     @Override
-     public Users getUserByUsername(String username) {
+    public Users getUserByUsername(String username) {
         Session s = this.factory.getObject().getCurrentSession();
         Query q = s.createQuery("FROM Users WHERE username=:un");
         q.setParameter("un", username);
 
-        return (Users) q.getSingleResult();
+        try {
+            return (Users) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

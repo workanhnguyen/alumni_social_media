@@ -40,11 +40,14 @@ public class ApiUserController {
     @CrossOrigin
     public ResponseEntity<?> addUser(@RequestParam Map<String, String> params, @RequestPart MultipartFile avatar) {
         String role = params.get("role");
+
+        if (params.containsKey("username") && userService.getUserByUsername(params.get("username")) != null)
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         if (!isValidUserData(params, avatar, role)) {
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else {
             this.userService.addUser(params, avatar);
-            return new ResponseEntity<>(true, HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
     }
     
@@ -116,17 +119,17 @@ public class ApiUserController {
     private boolean isValidUserData(Map<String, String> params, MultipartFile avatar, String role) {
         //role GV - LECTURER, ko cần password
         //role CSV - ALUMNI cần MSSV
-        //r
-        if ("ROLE_  LECTURER".equals(role)) {
+
+        if ("ROLE_LECTURER".equals(role)) {
             return params.containsKey("username") && params.containsKey("role")
-                && avatar != null && params.containsKey("firstName") 
-                && params.containsKey("lastName")
-                && params.containsKey("email");
+                    && avatar != null && params.containsKey("firstName")
+                    && params.containsKey("lastName")
+                    && params.containsKey("email");
         } else {
             return params.containsKey("username") && params.containsKey("role")
-                && avatar != null && params.containsKey("password")
-                && params.containsKey("firstName") && params.containsKey("lastName")
-                && params.containsKey("email") && params.containsKey("studentId");
+                    && avatar != null && params.containsKey("password")
+                    && params.containsKey("firstName") && params.containsKey("lastName")
+                    && params.containsKey("email") && params.containsKey("studentId");
         }
     }
 }
