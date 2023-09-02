@@ -17,9 +17,10 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { CircularProgress } from "@mui/material";
 
 import { Copyright } from "../components";
-import { ALUMNI, EMAIL_REGEX } from "../constants/common";
+import { EMAIL_REGEX } from "../constants/common";
 import { ALUMNI_LOGIN } from "../routes";
 import { registerUser } from "../apis/UserApi";
+import { ROLE_ALUMNI } from "../constants/role";
 
 const defaultTheme = createTheme();
 
@@ -69,19 +70,21 @@ export default function SignUpForm() {
     try {
       setShowProgress(true);
 
-      let { data } = await registerUser(body);
+      let res = await registerUser(body);
 
-      if (data) {
+      if (res.status === 201) {
         handleResetInputField();
         setIsRegisterSuccessfull(true);
         setTimeout(() => navigate(ALUMNI_LOGIN), 2000);
+      }
+    } catch (err) {
+      if (err.response.status === 409) {
+        setAlertMessage("Mã số sinh viên này đã được đăng ký!");
+        setSIdAlert(true);
+        setShowProgress(false);
       } else {
         setAlertMessage("Đăng ký thất bại, vui lòng thử lại sau!");
       }
-    } catch (err) {
-      console.log(err);
-      setAlertMessage("Đăng ký thất bại, vui lòng thử lại sau!");
-      setShowProgress(false);
     } finally {
       setShowProgress(false);
     }
@@ -100,7 +103,7 @@ export default function SignUpForm() {
       userForm.append("firstName", firstName);
       userForm.append("lastName", lastName);
       userForm.append("email", email);
-      userForm.append("role", ALUMNI);
+      userForm.append("role", ROLE_ALUMNI);
       userForm.append("password", password);
       userForm.append("avatar", avatar, avatar.name);
 
