@@ -115,16 +115,16 @@ public class Users implements Serializable {
     @JoinTable(name = "user_letter", joinColumns = {
             @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
             @JoinColumn(name = "letter_id", referencedColumnName = "id")})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Letters> lettersSet;
     @JoinTable(name = "survey_participant", joinColumns = {
             @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
             @JoinColumn(name = "survey_id", referencedColumnName = "id")})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Surveys> surveysSet;
-    @ManyToMany(mappedBy = "usersSet")
+    @ManyToMany(mappedBy = "usersSet", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Groups> groupsSet;
     @OneToMany(mappedBy = "userId")

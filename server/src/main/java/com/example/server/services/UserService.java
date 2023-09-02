@@ -1,5 +1,6 @@
 package com.example.server.services;
 
+import com.example.server.dtos.UserDto;
 import com.example.server.pojos.Users;
 
 import java.util.List;
@@ -12,13 +13,15 @@ public interface UserService extends UserDetailsService {
     Users addUser(Map<String, String> params, MultipartFile avatar);
     Users getUserByUsername(String username);
     boolean authUser(String username, String password);
-    boolean changePassword(String password, String newPassword, Users u);
-
+    boolean changePassword( Map<String, String> params, Users u);
+    Boolean deleteUserById(Users u);
     // Van Anh
     List<Users> getUsersByRole(String role);
     List<Users> getIsActiveUser(boolean isActive);
     List<Users> getUsers(Map<String, String> params);
     Users getUserById(Long userId);
     Boolean addOrUpdateUser(Users u);
-    Boolean deleteUserById(Long userId);
+
+    UserDto userToUserDto(Users user);
+    
 }

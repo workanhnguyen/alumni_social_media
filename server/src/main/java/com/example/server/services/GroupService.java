@@ -5,9 +5,11 @@
 package com.example.server.services;
 
 
+import com.example.server.dtos.GroupDto;
 import com.example.server.pojos.Groups;
 import com.example.server.pojos.Users;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -19,4 +21,13 @@ public interface GroupService {
     Groups editGroup(Map<String, String> params, Long grId);
     
     Boolean deleteGroup(Long id);
+    
+    Groups findGroupById(Long grId);
+    
+    
+    Boolean addUserToGroup(Users user, Groups group);
+    
+    Boolean removeUserFromGroup(Groups gr, Users user);
+    
+    GroupDto getGroupMembers(Long groupId);
 }

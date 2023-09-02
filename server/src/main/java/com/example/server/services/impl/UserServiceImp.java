@@ -2,6 +2,7 @@ package com.example.server.services.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.example.server.dtos.UserDto;
 import com.example.server.pojos.Users;
 import com.example.server.repositories.UserRepository;
 import com.example.server.services.UserService;
@@ -21,6 +22,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+
 @Service
 public class UserServiceImp implements UserService {
 
@@ -31,18 +33,19 @@ public class UserServiceImp implements UserService {
     @Autowired
     private Cloudinary cloudinary;
     
-    LocalDateTime currentTime = LocalDateTime.now();
-    Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
+    
     
     @Override
     public Users addUser(Map<String, String> params, MultipartFile avatar) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
         Users u = new Users();
         u.setEmail(params.get("email"));
         u.setFirstName(params.get("firstName"));
         u.setLastName(params.get("lastName"));
         u.setUsername(params.get("username"));
         u.setIsActive(false);
-        u.setCreatedAt(this.currentDate);
+        u.setCreatedAt(currentDate);
         u.setRole(params.get("role"));
         String role = params.get("role");
         if ("ROLE_ALUMNI".equals(role)) {
@@ -91,13 +94,15 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean changePassword(String password, String newPassword, Users u) {
-        password = this.passwordEncoder.encode(password);
-        if( passwordEncoder.matches(password, u.getPassword()))
+    public boolean changePassword( Map<String, String> params, Users u) {       
+        LocalDateTime currentTime = LocalDateTime.now();
+        Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
+        if( passwordEncoder.matches(params.get("password"), u.getPassword()))
         {
-            u.setPassword(this.passwordEncoder.encode(newPassword));
-            u.setUpdatedAt(this.currentDate);
-            return true;
+            u.setPassword(this.passwordEncoder.encode(params.get("newPassword")));
+            u.setUpdatedAt(currentDate);
+           
+            return  this.userRepo.addOrUpdateUser(u);
         }
         return false;
     }
@@ -144,8 +149,13 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Boolean deleteUserById(Long userId) {
-        return userRepo.deleteUserById(userId);
+    public Boolean deleteUserById(Users u) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
+        u.setUpdatedAt(currentDate);
+        u.setIsActive(false);
+        return this.userRepo.addOrUpdateUser(u);
+        
     }
 
     private boolean isCreatedAtWithin24Hours(Date createdAt) {
@@ -155,4 +165,28 @@ public class UserServiceImp implements UserService {
 
         return timeDifferenceInMillis <= twentyFourHoursInMillis;
     }
+    
+    @Override
+    public UserDto userToUserDto(Users user) {
+        UserDto userDto = UserDto.builder()
+            .id(user.getId())
+            .username(user.getUsername())
+            .email(user.getEmail())
+            .firstName(user.getFirstName())
+            .lastName(user.getLastName())
+            .avatar(user.getAvatar())
+            .bgImage(user.getBgImage())
+            .phone(user.getPhone())
+            .createdAt(user.getCreatedAt())
+            .isActive(user.getIsActive())
+            .role(user.getRole())
+            .updatedAt(user.getUpdatedAt())
+            .studentId(user.getStudentId())
+            .majorId(user.getMajorId())
+            .groupsSet(user.getGroupsSet())
+            .build();
+        return userDto;
+    }
+
+
 }

@@ -5,6 +5,8 @@
 package com.example.server.repositories;
 
 import com.example.server.pojos.Groups;
+import com.example.server.pojos.Users;
+import java.util.Set;
 
 /**
  *
@@ -15,4 +17,8 @@ public interface GroupRepository {
     Groups updateGroup(Groups gr);
     Groups findGroupById(Long id);
     Boolean deleteGroup(Groups gr);
+    Boolean addUsertoGr(Groups gr, Users user);
+    Boolean removeUserFromGroup(Groups gr, Users user);
+    
+    Set<Users> getGroupMembers(Long groupId);
 }

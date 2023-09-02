@@ -144,7 +144,7 @@ public class ApiCommentController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
             Posts p = postRepo.findPostById(postId);
-            List<CommentDto> listCmtDto = cmtService.getCmtByPosts(0, p);
+            List<CommentDto> listCmtDto = cmtService.getCmtByPosts(page, p);
             if (listCmtDto != null) {
                 return new ResponseEntity<>(listCmtDto, HttpStatus.OK);
             } else {
