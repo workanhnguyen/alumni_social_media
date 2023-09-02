@@ -34,7 +34,7 @@
             <label for="first-name">Tên</label>
             <form:errors path="firstName" element="div" class="text-danger" />
         </div>
-        <c:if test="${user.role == 'ALUMNI'}">
+        <c:if test="${user.role == 'ROLE_ALUMNI'}">
             <div class="form-floating mb-3 mt-3">
                 <form:input type="text" class="form-control" id="student-id" path="studentId"/>
                 <label for="student-id">Mã số sinh viên</label>

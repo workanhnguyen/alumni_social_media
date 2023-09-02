@@ -27,11 +27,11 @@
                         <a class="btn px-4 py-2 text-decoration-none ${role == null && active == null ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
                            href="<c:url value="/" />">Tất cả</a></li>
                     <li>
-                        <a class="btn px-4 py-2 text-decoration-none ${role == 'ALUMNI' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
-                           href="<c:url value="/users?role=ALUMNI" />">Cựu sinh viên</a></li>
+                        <a class="btn px-4 py-2 text-decoration-none ${role == 'ROLE_ALUMNI' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
+                           href="<c:url value="/users?role=ROLE_ALUMNI" />">Cựu sinh viên</a></li>
                     <li>
-                        <a class="btn px-4 py-2 text-decoration-none ${role == 'LECTURER' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
-                           href="<c:url value="/users?role=LECTURER" />">Giảng viên</a>
+                        <a class="btn px-4 py-2 text-decoration-none ${role == 'ROLE_LECTURER' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
+                           href="<c:url value="/users?role=ROLE_LECTURER" />">Giảng viên</a>
                     </li>
                     <li>
                         <a class="btn px-4 py-2 text-decoration-none ${active == 'true' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
@@ -71,10 +71,10 @@
                 <td>${u.firstName}</td>
                 <td>
                     <c:choose>
-                        <c:when test="${u.role == 'ALUMNI'}">
+                        <c:when test="${u.role == 'ROLE_ALUMNI'}">
                             Cựu sinh viên
                         </c:when>
-                        <c:when test="${u.role == 'LECTURER'}">
+                        <c:when test="${u.role == 'ROLE_LECTURER'}">
                             Giảng viên
                         </c:when>
                         <c:otherwise>
