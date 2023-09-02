@@ -6,6 +6,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 
 const UserDetailInfo = ({ userInfo }) => {
+  console.log(userInfo);
   return (
     <div className="w-full max-sm:w-full max-md:w-4/5 max-lg:w-150 h-fit p-4 bg-white drop-shadow-sm rounded-md">
       <div className="flex justify-between items-center mb-4">
@@ -21,7 +22,7 @@ const UserDetailInfo = ({ userInfo }) => {
       </div>
       <div className="w-full flex items-center text-dark-gray mb-4">
         <BookmarkIcon />
-        <span className="ml-2">Ngành {userInfo?.majorId.name}</span>
+        <span className="ml-2">Ngành {userInfo?.majorId?.name}</span>
       </div>
       <div className="w-full flex items-center text-dark-gray">
         <AccessTimeFilledIcon />

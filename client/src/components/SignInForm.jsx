@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { ROLE_ALUMNI } from "../constants/role";
 import { Copyright, LoadingButton } from "../components";
 import { getCurrentUser, loginUser } from "../apis/UserApi";
-import { DASHBOARD, INFO_PAGE } from "../routes";
+import { ALUMNI_ADD_INFO, DASHBOARD, INFO_PAGE, ROOT_PAGE } from "../routes";
 import { useStateContext } from "../contexts/ContextProvider";
 import { LOGIN, TOKEN, USER } from "../constants/common";
 
@@ -51,7 +51,9 @@ export default function SignInForm({ role }) {
           payload: data,
         });
 
-        // navigate(ROOT_PAGE, { replace: true });
+        if (data.phone !== null && data.academicYear !== null && data.bgImage !== null && data.majorId !== null)
+          navigate(ROOT_PAGE, { replace: true });
+        else navigate(ALUMNI_ADD_INFO);
 
         if (response.data && data === false) navigate(INFO_PAGE);
         else if (response.data && data) navigate(DASHBOARD);

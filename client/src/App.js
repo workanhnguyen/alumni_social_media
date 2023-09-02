@@ -40,6 +40,7 @@ const App = () => {
   );
 
   const isActivated = user !== null && booleanUser !== false;
+  const isFullUserInfo = isActivated && user?.phone !== null && user?.academicYear !== null && user?.bgImage !== null && user?.majorId !== null;
   return (
     <BrowserRouter>
       <Routes>
@@ -54,12 +55,18 @@ const App = () => {
         {/* Authenticated and activated routes */}
         {isActivated && (
           <>
-            <Route path={ROOT_PAGE} element={<DashBoard />} />
-            <Route path={GROUPS} element={<GroupPage />} />
-            <Route path={LETTERS} element={<LetterPage />} />
-            <Route path={CURRENT_USER} element={<PersonalPage />} />
-            <Route path={POST_DETAIL} element={<PostDetailPage />} />
+          {isFullUserInfo ? (
+            <>
+              <Route path={ROOT_PAGE} element={<DashBoard />} />
+              <Route path={GROUPS} element={<GroupPage />} />
+              <Route path={LETTERS} element={<LetterPage />} />
+              <Route path={CURRENT_USER} element={<PersonalPage />} />
+              <Route path={POST_DETAIL} element={<PostDetailPage />} />
+            </>
+          ) : (
             <Route path={ALUMNI_ADD_INFO} element={<AlumniAddInfoPage />} />
+          )}
+            
           </>
         )}
 
@@ -104,7 +111,7 @@ const App = () => {
           path="*"
           element={
             <Navigate
-              to={!token ? ROLE_PAGE : user === "false" ? ROLE_PAGE : ROOT_PAGE}
+              to={!token ? ROLE_PAGE : booleanUser === false ? ROLE_PAGE : isFullUserInfo ? ROOT_PAGE : ALUMNI_ADD_INFO}
             />
           }
         />

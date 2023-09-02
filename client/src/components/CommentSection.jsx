@@ -6,7 +6,7 @@ import { CircularProgress } from "@mui/material";
 
 import { blankAvatar } from "../assets";
 import { CommentItem } from "../components";
-import { addNewComment, getAllComments } from "../apis/CommentApi";
+import { addNewComment, getCommentsByPostId } from "../apis/CommentApi";
 import { POST_DETAIL } from "../constants/common";
 import { Link } from "react-router-dom";
 
@@ -19,7 +19,7 @@ const CommentSection = ({ postId, type, onCommentQuantityChange }) => {
   useEffect(() => {
     const handleLoadComment = async () => {
       try {
-        let res = await getAllComments(postId);
+        let res = await getCommentsByPostId(postId);
 
         if (res.status === 200) {
           setCommentList(res.data);
