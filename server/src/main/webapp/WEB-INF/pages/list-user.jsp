@@ -61,10 +61,12 @@
         </thead>
         <tbody>
         <c:forEach items="${users}" var="u">
-            <tr>
+            <tr class="align-middle">
                 <th scope="row" id="userId">${u.id}</th>
                 <td>
-                    <img src="${u.avatar}" alt="avatar-${u.username}" width="120"/>
+                    <div style="width: 60px; height: 60px;" class="rounded-circle overflow-hidden">
+                        <img src="${u.avatar}" alt="avatar-${u.username}" class="w-100 h-100" />
+                    </div>
                 </td>
 
                 <td>${u.lastName}</td>
