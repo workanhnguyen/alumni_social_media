@@ -74,7 +74,7 @@ public class ApiCommentController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
     
-    @PostMapping(path = "/{id}/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/{id}/comments/", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<CommentDto> createCommentByCmt(@PathVariable("id") Long cmtId, @RequestBody Map<String, String> params) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -82,6 +82,7 @@ public class Users implements Serializable {
     @Column(name = "phone")
     private String phone;
     
+    @Getter
     @Column(name = "academic_year")
     private String academicYear;
     
@@ -382,6 +383,18 @@ public class Users implements Serializable {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public String getAcademicYear() {
+        return academicYear;
+    }
+
+    public void setAcademicYear(String academicYear) {
+        this.academicYear = academicYear;
+    }
+
+    public MultipartFile getAvatarFile() {
+        return avatarFile;
     }
 
     public void setAvatarFile(MultipartFile avatarFile) {
