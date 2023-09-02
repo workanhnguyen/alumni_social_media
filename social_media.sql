@@ -122,7 +122,7 @@ CREATE TABLE `comments` (
   CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`belongs_to_comment_id`) REFERENCES `comments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `comments_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +131,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (9,'test cmt 4',NULL,2,1,'2023-08-27 19:13:27',NULL),(10,'test cmt 4',NULL,2,1,'2023-08-27 19:16:35',NULL),(11,'test cmt 4',NULL,2,1,'2023-08-27 19:18:16',NULL),(13,'test cmt 4',NULL,2,1,'2023-08-27 19:20:25',NULL),(14,'test cmt 4',NULL,2,1,'2023-08-27 19:22:29',NULL),(15,'test cmt 4',NULL,2,1,'2023-08-27 19:54:00',NULL),(16,'da update',NULL,21,1,'2023-08-30 19:01:25','2023-08-30 19:07:23'),(17,'test new cmt',16,21,1,'2023-09-01 19:08:53',NULL),(18,'test new cmt',16,21,1,'2023-09-01 19:39:48',NULL),(19,'test new cmt',17,21,1,'2023-09-01 19:40:00',NULL);
+INSERT INTO `comments` VALUES (9,'0395457434',NULL,2,14,'2023-08-27 19:13:27','2023-09-02 08:13:39'),(10,'test cmt 4',NULL,2,1,'2023-08-27 19:16:35',NULL),(11,'test cmt 4',NULL,2,1,'2023-08-27 19:18:16',NULL),(13,'test cmt 4',NULL,2,1,'2023-08-27 19:20:25',NULL),(14,'test cmt 4',NULL,2,1,'2023-08-27 19:22:29',NULL),(15,'test cmt 4',NULL,2,1,'2023-08-27 19:54:00',NULL),(16,'da update',NULL,21,1,'2023-08-30 19:01:25','2023-08-30 19:07:23'),(17,'test new cmt',16,21,1,'2023-09-01 19:08:53',NULL),(18,'test new cmt',16,21,1,'2023-09-01 19:39:48',NULL),(19,'test new cmt',17,21,1,'2023-09-01 19:40:00',NULL),(62,'Comment 1 updated',NULL,27,15,'2023-09-02 11:40:14','2023-09-02 12:14:35'),(63,'Comment 1',NULL,27,14,'2023-09-02 11:40:29',NULL);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,7 +259,7 @@ CREATE TABLE `images` (
   PRIMARY KEY (`id`),
   KEY `images_ibfk_1` (`post_id`),
   CONSTRAINT `images_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -268,7 +268,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
-INSERT INTO `images` VALUES (1,17,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693208762/kve0955xixjosllb3d9l.jpg',1),(2,17,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693208763/tds60dppj8aplmcjgk2m.jpg',1),(3,18,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211133/aqthbizqna295x1nwexu.jpg',1),(4,18,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211135/xmnlqgjfbk8gx23cgvez.jpg',1),(5,19,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211446/tc6fgqyrcml21at68fj3.jpg',1),(6,19,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211448/a9qzse11yi5j4zwq5clq.jpg',1),(9,21,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693212606/bbo61qbih83a981k6ywq.jpg',1),(10,21,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693212608/w9vc8nkmptzy7kkwefxw.jpg',1),(11,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693218679/ridcgsn66sxhxiglajrj.jpg',1),(12,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693218681/u3vtdsa4oxcgwukvmmjh.jpg',1),(13,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693218683/cscc0m3wldjhynahla3t.jpg',1);
+INSERT INTO `images` VALUES (1,17,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693208762/kve0955xixjosllb3d9l.jpg',1),(2,17,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693208763/tds60dppj8aplmcjgk2m.jpg',1),(3,18,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211133/aqthbizqna295x1nwexu.jpg',1),(4,18,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211135/xmnlqgjfbk8gx23cgvez.jpg',1),(5,19,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211446/tc6fgqyrcml21at68fj3.jpg',1),(6,19,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693211448/a9qzse11yi5j4zwq5clq.jpg',1),(9,21,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693212606/bbo61qbih83a981k6ywq.jpg',1),(10,21,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693212608/w9vc8nkmptzy7kkwefxw.jpg',1),(11,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693218679/ridcgsn66sxhxiglajrj.jpg',1),(12,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693218681/u3vtdsa4oxcgwukvmmjh.jpg',1),(13,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693218683/cscc0m3wldjhynahla3t.jpg',1),(16,27,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693644594/w1qgkhs02axbcjfnwn6p.jpg',1);
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -372,7 +372,7 @@ CREATE TABLE `posts` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -381,7 +381,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'post 1',1,1,'2023-08-25 10:06:34','2023-08-25 10:06:34'),(2,'update2',1,1,'2023-08-26 06:57:48','2023-08-27 08:49:34'),(8,'test new 2',0,1,'2023-08-26 19:48:09',NULL),(9,'test new 2',0,1,'2023-08-26 20:39:17',NULL),(10,'test post image',0,1,'2023-08-28 00:27:48',NULL),(11,'test post image',0,1,'2023-08-28 00:28:27',NULL),(12,'test post image',0,1,'2023-08-28 00:37:16',NULL),(13,'test post image',0,1,'2023-08-28 07:38:50',NULL),(14,'test post image',0,1,'2023-08-28 07:40:15',NULL),(15,'test post image',0,1,'2023-08-28 07:41:15',NULL),(16,'test post image',0,1,'2023-08-28 07:42:55',NULL),(17,'test post image',0,1,'2023-08-28 07:46:00',NULL),(18,'test post image 2',0,1,'2023-08-28 08:25:31',NULL),(19,'test post image 2',0,1,'2023-08-28 08:30:45',NULL),(21,'test post image 22',0,1,'2023-08-28 08:50:04',NULL),(22,'test post image 22',0,1,'2023-08-28 09:10:17',NULL),(23,'test post image 22',0,1,'2023-08-28 10:31:17',NULL),(24,'test user 2 ',0,2,'2023-08-30 15:36:23','2023-08-30 15:36:23');
+INSERT INTO `posts` VALUES (1,'post 1',1,1,'2023-08-25 10:06:34','2023-08-25 10:06:34'),(2,'update2',1,1,'2023-08-26 06:57:48','2023-08-27 08:49:34'),(8,'test new 2',0,1,'2023-08-26 19:48:09',NULL),(9,'test new 2',0,1,'2023-08-26 20:39:17',NULL),(10,'test post image',0,1,'2023-08-28 00:27:48',NULL),(11,'test post image',0,1,'2023-08-28 00:28:27',NULL),(12,'test post image',0,1,'2023-08-28 00:37:16',NULL),(13,'test post image',0,1,'2023-08-28 07:38:50',NULL),(14,'test post image',0,1,'2023-08-28 07:40:15',NULL),(15,'test post image',0,1,'2023-08-28 07:41:15',NULL),(16,'test post image',0,1,'2023-08-28 07:42:55',NULL),(17,'test post image',0,1,'2023-08-28 07:46:00',NULL),(18,'test post image 2',0,1,'2023-08-28 08:25:31',NULL),(19,'test post image 2',0,1,'2023-08-28 08:30:45',NULL),(21,'test post image 22',0,1,'2023-08-28 08:50:04',NULL),(22,'test post image 22',0,1,'2023-08-28 09:10:17',NULL),(23,'test post image 22',0,1,'2023-08-28 10:31:17',NULL),(24,'test user 2 ',0,2,'2023-08-30 15:36:23','2023-08-30 15:36:23'),(27,'<p>Post test 1</p>',0,14,'2023-09-02 08:49:50',NULL);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -586,7 +586,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `major_id` (`major_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`major_id`) REFERENCES `majors` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -595,7 +595,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','$2a$10$I0/FI1Q0gRDrkKS1gGdSF.gZ1ozf0ztbcEzYtAG/UKmEVGiEfqtFO','maidv@gmail.com','Mai','Van',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1692606547/fwabgdzqggthmrsulyqt.jpg',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-08-26 20:44:06',NULL,NULL,NULL),(2,'vananh','$2a$10$QCet25BP1PzJGzMKyb868.J5I8lQbdHxXLBGNu.YB90yAJs1arAXy','maidv1@gmail.com','Anh','Nguyen',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1692611960/pyzkzxpeptkm6e2khkds.jpg',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-08-25 23:13:43',NULL,NULL,NULL),(3,'vananh1','$2a$10$kIh0d2CH/lek./.p958SseIH4naurqqqXs./Zh1a18ZIQZSn3qCl6','vananh1@gmail.com','Anh','Nguyen',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1692643293/eerpjunb5fcoehe57j7f.jpg',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-08-25 23:13:43',NULL,NULL,NULL),(5,'dhthanh','$2a$10$r4bN.0l8iJNRQjLfM5irPeHSwblzfc1C3/WiuG2t3ywCz2FZE5t72','thanh.dh@ou.edu.vn','Thành','Dương Hữu','','https://res.cloudinary.com/dz5z2md5y/image/upload/v1693612878/uk7uq2o0um3awxfuomhw.jpg',NULL,NULL,NULL,1,'ROLE_LECTURER',NULL,NULL,NULL,'Thạc sĩ'),(6,'2051012010','$2a$10$IppIlswH3GyUtcX7I7Nq2eahJcgZNrvEAovF4K73LB6tJ2pzzod3C','2051050265mai@ou.edu.vn','Mãi','Đặng Văn','0385673456','https://res.cloudinary.com/dz5z2md5y/image/upload/v1693615363/xw4ozysrkow8oxiujdlg.png',NULL,NULL,NULL,0,'ROLE_ALUMNI',NULL,1,'2051050265','2020');
+INSERT INTO `users` VALUES (1,'admin','$2a$10$I0/FI1Q0gRDrkKS1gGdSF.gZ1ozf0ztbcEzYtAG/UKmEVGiEfqtFO','maidv@gmail.com','Mai','Van',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1692606547/fwabgdzqggthmrsulyqt.jpg',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-08-26 20:44:06',NULL,NULL,NULL),(2,'vananh','$2a$10$QCet25BP1PzJGzMKyb868.J5I8lQbdHxXLBGNu.YB90yAJs1arAXy','maidv1@gmail.com','Anh','Nguyen',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1692611960/pyzkzxpeptkm6e2khkds.jpg',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-08-25 23:13:43',NULL,NULL,NULL),(3,'vananh1','$2a$10$kIh0d2CH/lek./.p958SseIH4naurqqqXs./Zh1a18ZIQZSn3qCl6','vananh1@gmail.com','Anh','Nguyen',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1692643293/eerpjunb5fcoehe57j7f.jpg',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-08-25 23:13:43',NULL,NULL,NULL),(5,'dhthanh','$2a$10$r4bN.0l8iJNRQjLfM5irPeHSwblzfc1C3/WiuG2t3ywCz2FZE5t72','thanh.dh@ou.edu.vn','Thành','Dương Hữu','','https://res.cloudinary.com/dz5z2md5y/image/upload/v1693612878/uk7uq2o0um3awxfuomhw.jpg',NULL,NULL,NULL,1,'ROLE_LECTURER',NULL,NULL,NULL,'Thạc sĩ'),(14,'2051012004','$2a$10$PqaQVxzYH2S0M/wYeqoVGO1gQu/G.C9owhVuc08ZNqGqxscxCFXOO','2051012004anh@ou.edu.vn','Anh','Nguyễn Vân','0395457434','https://res.cloudinary.com/dz5z2md5y/image/upload/v1693622180/dvowsxlsyfzc3nquja8j.jpg','https://res.cloudinary.com/dz5z2md5y/image/upload/v1693622180/dvowsxlsyfzc3nquja8j.jpg',NULL,'2023-09-02 02:24:06',1,'ROLE_ALUMNI','2023-09-02 08:34:17',2,'2051012004','2020'),(15,'2051050265','$2a$10$nM2sltyLMlm0xMFB8jmiqOgFJ4JKu6PsWLpreu3h81IVSwwnyCDbe','2051050265mai@ou.edu.vn','Mãi','Đặng Văn','','https://res.cloudinary.com/dz5z2md5y/image/upload/v1693623235/ow5mqrfdasfz7oewftx0.jpg','https://res.cloudinary.com/dz5z2md5y/image/upload/v1693623235/ow5mqrfdasfz7oewftx0.jpg',NULL,NULL,1,'ROLE_ALUMNI','2023-09-02 12:38:11',1,'2051050265','');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -608,4 +608,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-02  9:05:48
+-- Dump completed on 2023-09-02 20:11:12
