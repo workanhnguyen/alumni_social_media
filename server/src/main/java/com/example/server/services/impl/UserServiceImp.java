@@ -45,11 +45,11 @@ public class UserServiceImp implements UserService {
         u.setCreatedAt(this.currentDate);
         u.setRole(params.get("role"));
         String role = params.get("role");
-        if ("ALUMNI".equals(role)) {
+        if ("ROLE_ALUMNI".equals(role)) {
             u.setStudentId(params.get("studentId")); 
             u.setPassword(this.passwordEncoder.encode(params.get("password")));
         } else {
-            u.setPassword(this.passwordEncoder.encode("Abc@123"));
+            u.setPassword(this.passwordEncoder.encode("ou@123"));
         }
         if (!avatar.isEmpty()) {
             try {
@@ -72,12 +72,10 @@ public class UserServiceImp implements UserService {
     
     @Override
     public boolean authUser(String username, String password) {
-        Users u = this.userRepo.getUserByUsername(username);
-        Boolean check = isCreatedAtWithin24Hours(u.getCreatedAt());
-        if (this.userRepo.authUser(username, password))
-            return true;
+//        Users u = this.userRepo.getUserByUsername(username);
+//        Boolean check = isCreatedAtWithin24Hours(u.getCreatedAt());
 
-        return false;
+        return this.userRepo.authUser(username, password);
     }
 
     @Override
@@ -126,10 +124,18 @@ public class UserServiceImp implements UserService {
 
     @Override
     public Boolean addOrUpdateUser(Users u) {
-        if (!u.getAvatarFile().isEmpty()) {
+        if (u.getAvatarFile() != null && !u.getAvatarFile().isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(u.getAvatarFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
                 u.setAvatar(res.get("secure_url").toString());
+            } catch (IOException e) {
+                Logger.getLogger(UserServiceImp.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+        if (u.getBgImageFile() != null && !u.getBgImageFile().isEmpty()) {
+            try {
+                Map res = this.cloudinary.uploader().upload(u.getBgImageFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                u.setBgImage(res.get("secure_url").toString());
             } catch (IOException e) {
                 Logger.getLogger(UserServiceImp.class.getName()).log(Level.SEVERE, null, e);
             }

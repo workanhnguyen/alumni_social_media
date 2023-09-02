@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -29,5 +30,18 @@ public class MajorRepositoryImpl implements MajorRepository {
         Query q = s.createQuery("FROM Majors WHERE departmentId.id=:departmentId");
         q.setParameter("departmentId", departmentId);
         return q.getResultList();
+    }
+
+    @Override
+    public Majors getMajorById(Long majorId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("FROM Majors WHERE id=:majorId");
+        q.setParameter("majorId", majorId);
+
+        try {
+            return (Majors) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

@@ -7,4 +7,5 @@ import java.util.List;
 public interface MajorService {
     List<Majors> getAllMajors();
     List<Majors> getMajorsByDepartmentId(Integer departmentId);
+    Majors getMajorById(Long majorId);
 }

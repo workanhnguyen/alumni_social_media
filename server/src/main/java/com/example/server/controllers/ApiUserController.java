@@ -1,10 +1,9 @@
 package com.example.server.controllers;
 
 import com.example.server.components.JwtService;
-import com.example.server.dtos.UserDto;
-import com.example.server.pojos.Posts;
 
 import com.example.server.pojos.Users;
+import com.example.server.services.MajorService;
 import com.example.server.services.PostService;
 import com.example.server.services.UserService;
 import java.security.Principal;
@@ -12,12 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
 import java.util.Map;
+
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,8 +29,10 @@ public class ApiUserController {
     
     @Autowired
     private UserService userService;
-     @Autowired
+    @Autowired
     private PostService postService;
+    @Autowired
+    private MajorService majorService;
 
     @PostMapping(path = "/register/",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
@@ -64,6 +64,7 @@ public class ApiUserController {
     }
     
     @PostMapping("/change_password/")
+    @CrossOrigin
     public ResponseEntity<?> changePassword(
             @RequestParam String password,
             @RequestParam String newPassword,
@@ -76,6 +77,24 @@ public class ApiUserController {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @PutMapping(path = "/{id}/",
+//            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
+//            produces = {MediaType.APPLICATION_JSON_VALUE})
+//    @CrossOrigin
+//    public ResponseEntity<?> updateUser(@RequestParam Map<String, String> params, @RequestPart(name = "bgImage") MultipartFile bgImage) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+//            currentUser.setPhone(params.get("phone"));
+//            currentUser.setBgImageFile(bgImage);
+//            if (userService.addOrUpdateUser(currentUser))
+//                return new ResponseEntity<>(userService.getUserById(currentUser.getId()), HttpStatus.OK);
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//    }
 
     // Cái này chưa ổn
 //    @DeleteMapping("/{id}/")
@@ -132,4 +151,23 @@ public class ApiUserController {
                     && params.containsKey("email") && params.containsKey("studentId");
         }
     }
+
+    private Users populateUser(Users currentUser, Map<String, String> params, MultipartFile avatar, MultipartFile bgImage) {
+        if (params.containsKey("phone")) {
+            currentUser.setPhone(params.get("phone"));
+        }
+        if (params.containsKey("majorId")) {
+            currentUser.setMajorId(majorService.getMajorById(Long.parseLong(params.get("majorId"))));
+        }
+        if (params.containsKey("academicYear")) {
+            currentUser.setAcademicYear(params.get("academicYear"));
+        }
+        // Set to empty if avatar is null
+        currentUser.setAvatarFile(avatar);
+        // Set to empty if bgImage is null
+        currentUser.setBgImageFile(bgImage);
+        // Return the updated currentUser object
+        return currentUser;
+    }
+
 }

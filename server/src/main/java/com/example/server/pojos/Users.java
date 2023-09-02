@@ -5,6 +5,7 @@
 package com.example.server.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -19,29 +20,28 @@ import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- *
  * @author maidv
  */
 @Entity
 @Table(name = "users")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
-    @NamedQuery(name = "Users.findById", query = "SELECT u FROM Users u WHERE u.id = :id"),
-    @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
-    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
-    @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
-    @NamedQuery(name = "Users.findByFirstName", query = "SELECT u FROM Users u WHERE u.firstName = :firstName"),
-    @NamedQuery(name = "Users.findByLastName", query = "SELECT u FROM Users u WHERE u.lastName = :lastName"),
-    @NamedQuery(name = "Users.findByPhone", query = "SELECT u FROM Users u WHERE u.phone = :phone"),
-    @NamedQuery(name = "Users.findByAvatar", query = "SELECT u FROM Users u WHERE u.avatar = :avatar"),
-    @NamedQuery(name = "Users.findByBgImage", query = "SELECT u FROM Users u WHERE u.bgImage = :bgImage"),
-    @NamedQuery(name = "Users.findByPasswordResetToken", query = "SELECT u FROM Users u WHERE u.passwordResetToken = :passwordResetToken"),
-    @NamedQuery(name = "Users.findByCreatedAt", query = "SELECT u FROM Users u WHERE u.createdAt = :createdAt"),
-    @NamedQuery(name = "Users.findByIsActive", query = "SELECT u FROM Users u WHERE u.isActive = :isActive"),
-    @NamedQuery(name = "Users.findByRole", query = "SELECT u FROM Users u WHERE u.role = :role"),
-    @NamedQuery(name = "Users.findByUpdatedAt", query = "SELECT u FROM Users u WHERE u.updatedAt = :updatedAt"),
-    @NamedQuery(name = "Users.findByStudentId", query = "SELECT u FROM Users u WHERE u.studentId = :studentId")})
+        @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
+        @NamedQuery(name = "Users.findById", query = "SELECT u FROM Users u WHERE u.id = :id"),
+        @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
+        @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
+        @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
+        @NamedQuery(name = "Users.findByFirstName", query = "SELECT u FROM Users u WHERE u.firstName = :firstName"),
+        @NamedQuery(name = "Users.findByLastName", query = "SELECT u FROM Users u WHERE u.lastName = :lastName"),
+        @NamedQuery(name = "Users.findByPhone", query = "SELECT u FROM Users u WHERE u.phone = :phone"),
+        @NamedQuery(name = "Users.findByAvatar", query = "SELECT u FROM Users u WHERE u.avatar = :avatar"),
+        @NamedQuery(name = "Users.findByBgImage", query = "SELECT u FROM Users u WHERE u.bgImage = :bgImage"),
+        @NamedQuery(name = "Users.findByPasswordResetToken", query = "SELECT u FROM Users u WHERE u.passwordResetToken = :passwordResetToken"),
+        @NamedQuery(name = "Users.findByCreatedAt", query = "SELECT u FROM Users u WHERE u.createdAt = :createdAt"),
+        @NamedQuery(name = "Users.findByIsActive", query = "SELECT u FROM Users u WHERE u.isActive = :isActive"),
+        @NamedQuery(name = "Users.findByRole", query = "SELECT u FROM Users u WHERE u.role = :role"),
+        @NamedQuery(name = "Users.findByUpdatedAt", query = "SELECT u FROM Users u WHERE u.updatedAt = :updatedAt"),
+        @NamedQuery(name = "Users.findByStudentId", query = "SELECT u FROM Users u WHERE u.studentId = :studentId")})
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,7 +59,7 @@ public class Users implements Serializable {
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "password")
-    
+
     private String password;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
@@ -81,11 +81,10 @@ public class Users implements Serializable {
     @Size(max = 20)
     @Column(name = "phone")
     private String phone;
-    
-    @Getter
+
     @Column(name = "academic_year")
     private String academicYear;
-    
+
     @Basic(optional = false)
     @Size(max = 255)
     @NotNull(message = "{user.avatar.null}")
@@ -96,7 +95,7 @@ public class Users implements Serializable {
     private String bgImage;
     @Size(max = 255)
     @Column(name = "password_reset_token")
-    
+
     private String passwordResetToken;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -108,20 +107,20 @@ public class Users implements Serializable {
     private String role;
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
-    
+
     private Date updatedAt;
     @Size(max = 255)
     @Column(name = "student_id")
     private String studentId;
     @JoinTable(name = "user_letter", joinColumns = {
-        @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "letter_id", referencedColumnName = "id")})
+            @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
+            @JoinColumn(name = "letter_id", referencedColumnName = "id")})
     @ManyToMany
     @JsonIgnore
     private Set<Letters> lettersSet;
     @JoinTable(name = "survey_participant", joinColumns = {
-        @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "survey_id", referencedColumnName = "id")})
+            @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
+            @JoinColumn(name = "survey_id", referencedColumnName = "id")})
     @ManyToMany
     @JsonIgnore
     private Set<Surveys> surveysSet;
@@ -149,9 +148,10 @@ public class Users implements Serializable {
     @OneToMany(mappedBy = "userId")
     @JsonIgnore
     private Set<Reactions> reactionsSet;
-    @Getter
     @Transient
     private MultipartFile avatarFile;
+    @Transient
+    private MultipartFile bgImageFile;
 
     public Users() {
     }
@@ -183,7 +183,7 @@ public class Users implements Serializable {
         this.username = username;
     }
 
-    
+
     public String getPassword() {
         return password;
     }
@@ -401,6 +401,14 @@ public class Users implements Serializable {
         this.avatarFile = avatarFile;
     }
 
+    public MultipartFile getBgImageFile() {
+        return bgImageFile;
+    }
+
+    public void setBgImageFile(MultipartFile bgImageFile) {
+        this.bgImageFile = bgImageFile;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -425,5 +433,5 @@ public class Users implements Serializable {
     public String toString() {
         return "com.example.server.pojos.Users[ id=" + id + " ]";
     }
-    
+
 }

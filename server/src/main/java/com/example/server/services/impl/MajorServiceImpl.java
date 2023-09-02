@@ -21,4 +21,9 @@ public class MajorServiceImpl implements MajorService {
     public List<Majors> getMajorsByDepartmentId(Integer departmentId) {
         return majorRepository.getMajorsByDepartmentId(departmentId);
     }
+
+    @Override
+    public Majors getMajorById(Long majorId) {
+        return majorRepository.getMajorById(majorId);
+    }
 }

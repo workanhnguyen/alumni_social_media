@@ -7,4 +7,5 @@ import java.util.List;
 public interface MajorRepository {
     List<Majors> getAllMajors();
     List<Majors> getMajorsByDepartmentId(Integer departmentId);
+    Majors getMajorById(Long majorId);
 }
