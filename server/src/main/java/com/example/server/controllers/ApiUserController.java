@@ -54,17 +54,17 @@ public class ApiUserController {
     
     @PostMapping("/login/")
     @CrossOrigin
-    public ResponseEntity<String> login(@RequestBody Users user) {
+    public ResponseEntity<?> login(@RequestBody Users user) {
         if (this.userService.authUser(user.getUsername(), user.getPassword())) {
             String token = this.jwtService.generateTokenLogin(user.getUsername());
             Users u = userService.getUserByUsername(user.getUsername());
             if (u.getIsActive())
                 return new ResponseEntity<>(token, HttpStatus.OK);
             else
-                return new ResponseEntity<>("account is locked", HttpStatus.LOCKED);
+                return ResponseEntity.status(HttpStatus.LOCKED).build();
         }
 
-        return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
     
     @PatchMapping("/change_password/")
