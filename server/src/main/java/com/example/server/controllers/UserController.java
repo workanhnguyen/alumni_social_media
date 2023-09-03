@@ -1,5 +1,6 @@
 package com.example.server.controllers;
 
+import com.example.server.components.JwtService;
 import com.example.server.pojos.Users;
 import com.example.server.services.DepartmentService;
 import com.example.server.services.MajorService;
@@ -21,7 +22,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private JwtService jwtService;
     @Autowired
     private DepartmentService departmentService;
     @Autowired
@@ -29,8 +31,9 @@ public class UserController {
 
     @RequestMapping("/")
     public String index(Model model, Principal loggedInUser, @RequestParam Map<String, String> params) {
+        String dynamicToken = jwtService.generateTokenLogin(loggedInUser.getName());
         model.addAttribute("users", userService.getUsers(params));
-        model.addAttribute("authToken", "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTM2NDEyMzcsInVzZXJuYW1lIjoiYWRtaW4ifQ.VDUMF3Qf-vO6pmEJKEQaA25LDr8kcHJoAhCZr37x_c4");
+        model.addAttribute("authToken", dynamicToken);
 
         return loggedInUser != null ? "listUser" : "login";
     }

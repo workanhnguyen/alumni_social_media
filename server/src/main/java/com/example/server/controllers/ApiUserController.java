@@ -102,18 +102,18 @@ public class ApiUserController {
 //    }
 
     @DeleteMapping("/{id}/")
+    @CrossOrigin
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        if (authentication != null && authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
             Users userDelete = userService.getUserById(userId);
             if (this.userService.deleteUserById(userDelete)) {
-                return new ResponseEntity<>( true,HttpStatus.OK);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             } else {
-                return new ResponseEntity<>( false,HttpStatus.BAD_REQUEST);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
         }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @GetMapping(path = "/current_user/", produces = MediaType.APPLICATION_JSON_VALUE)

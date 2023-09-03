@@ -97,7 +97,7 @@
                 <td>
                     <c:url value="/api/users/${u.id}/" var="apiDel"/>
                     <a href="<c:url value="/users/${u.id}" />" class="btn btn-success">Cập nhật</a>
-                    <button class="btn btn-danger" onclick="deleteUser('${apiDel}', '${authToken}')">Xóa</button>
+                    <button class="btn btn-danger" onclick="deleteUser('${apiDel}', '${authToken}')">Khóa người dùng</button>
                 </td>
 <%--                <sec:authorize access="hasRole('ROLE_ADMIN')">--%>
 <%--                    <td>--%>

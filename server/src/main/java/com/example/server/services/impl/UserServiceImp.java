@@ -7,6 +7,7 @@ import com.example.server.pojos.Users;
 import com.example.server.repositories.UserRepository;
 import com.example.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,9 +33,7 @@ public class UserServiceImp implements UserService {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private Cloudinary cloudinary;
-    
-    
-    
+
     @Override
     public Users addUser(Map<String, String> params, MultipartFile avatar) {
         LocalDateTime currentTime = LocalDateTime.now();
@@ -79,18 +78,6 @@ public class UserServiceImp implements UserService {
 //        Boolean check = isCreatedAtWithin24Hours(u.getCreatedAt());
 
         return this.userRepo.authUser(username, password);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users u = this.userRepo.getUserByUsername(username);
-        if (u == null) {
-            throw new UsernameNotFoundException("Invalid");
-        }
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(u.getRole()));
-        return new org.springframework.security.core.userdetails.User(
-                u.getUsername(), u.getPassword(), authorities);
     }
 
     @Override
@@ -188,5 +175,16 @@ public class UserServiceImp implements UserService {
         return userDto;
     }
 
-
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Users u = this.userRepo.getUserByUsername(username);
+        if (u == null) {
+            throw new UsernameNotFoundException("User not found");
+        } else {
+            Set<GrantedAuthority> authorities = new HashSet<>();
+            authorities.add(new SimpleGrantedAuthority(u.getRole()));
+            return new org.springframework.security.core.userdetails.User(
+                    u.getUsername(), u.getPassword(), authorities);
+        }
+    }
 }
