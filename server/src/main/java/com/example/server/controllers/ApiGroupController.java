@@ -97,6 +97,7 @@ public class ApiGroupController {
     }
     
     @PostMapping("/{groupId}/add_user/{userId}")
+    @CrossOrigin
     public ResponseEntity<String> addUserToGroup(@PathVariable Long groupId, @PathVariable Long userId) {
         Groups group = grService.findGroupById(groupId);
         Users user = userService.getUserById(userId);
@@ -113,6 +114,7 @@ public class ApiGroupController {
     
     
     @DeleteMapping("/{groupId}/remove_user/{userId}")
+    @CrossOrigin
     public ResponseEntity<String> removeUserFromGroup(@PathVariable Long groupId, @PathVariable Long userId) {
         Groups group = grService.findGroupById(groupId);
         Users user = userService.getUserById(userId);
@@ -130,6 +132,7 @@ public class ApiGroupController {
     
     
     @GetMapping("/{groupId}/members")
+    @CrossOrigin
     public ResponseEntity<GroupDto> getGroupMembers(@PathVariable Long groupId) {
         GroupDto grDto = grService.getGroupMembers(groupId);
         return ResponseEntity.ok(grDto);

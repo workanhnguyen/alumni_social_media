@@ -169,6 +169,7 @@ public class UserServiceImp implements UserService {
             .role(user.getRole())
             .updatedAt(user.getUpdatedAt())
             .studentId(user.getStudentId())
+            .academicYear(user.getAcademicYear())
             .majorId(user.getMajorId())
             .groupsSet(user.getGroupsSet())
             .build();
@@ -186,5 +187,26 @@ public class UserServiceImp implements UserService {
             return new org.springframework.security.core.userdetails.User(
                     u.getUsername(), u.getPassword(), authorities);
         }
+    }
+
+    @Override
+    public UserDto updateAvatarUser(MultipartFile avatar, Users u) {
+        if (!avatar.isEmpty()) {
+            try {
+                Map res = this.cloudinary.uploader().upload(avatar.getBytes(),
+                        ObjectUtils.asMap("resource_type", "auto"));
+                u.setAvatar(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(UserServiceImp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        Boolean rs = this.userRepo.addOrUpdateUser(u);
+        
+        if (rs) {
+            UserDto userDto = userToUserDto(u);
+            return userDto;
+        }
+        
+        return null;
     }
 }

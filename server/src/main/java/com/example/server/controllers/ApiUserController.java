@@ -7,7 +7,7 @@ import com.example.server.pojos.Users;
 import com.example.server.services.MajorService;
 import com.example.server.services.PostService;
 import com.example.server.services.UserService;
-import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -83,23 +83,22 @@ public class ApiUserController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-//    @PutMapping(path = "/{id}/",
-//            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
-//            produces = {MediaType.APPLICATION_JSON_VALUE})
-//    @CrossOrigin
-//    public ResponseEntity<?> updateUser(@RequestParam Map<String, String> params, @RequestPart(name = "bgImage") MultipartFile bgImage) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
-//            currentUser.setPhone(params.get("phone"));
-//            currentUser.setBgImageFile(bgImage);
-//            if (userService.addOrUpdateUser(currentUser))
-//                return new ResponseEntity<>(userService.getUserById(currentUser.getId()), HttpStatus.OK);
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//    }
+    @PatchMapping(path = "/current_user/avatar", 
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, 
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<?> updateAvatarUser(@RequestParam MultipartFile avatar) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+            UserDto userDto = userService.updateAvatarUser(avatar, currentUser);
+            if (userDto != null )
+                return new ResponseEntity<>(userDto, HttpStatus.OK);
+            return new ResponseEntity(false,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
 
     @DeleteMapping("/{id}/")
     @CrossOrigin

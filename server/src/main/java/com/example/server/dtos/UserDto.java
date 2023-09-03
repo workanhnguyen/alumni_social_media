@@ -36,6 +36,7 @@ public class UserDto {
     private String role;
     private Date updatedAt;
     private String studentId;
+    private String academicYear;
     private Majors majorId;
     private Set<Groups> groupsSet;
 }
