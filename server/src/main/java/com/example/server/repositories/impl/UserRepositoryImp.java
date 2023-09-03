@@ -125,6 +125,7 @@ public class UserRepositoryImp implements UserRepository {
         Session s = this.factory.getObject().getCurrentSession();
         try {
             if (u.getId() == null) {
+                u.setPassword(this.passEncoder.encode(u.getPassword()));
                 s.save(u);
             } else {
                 s.update(u);

@@ -26,8 +26,6 @@ public class UserController {
     @Autowired
     private JwtService jwtService;
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-    @Autowired
     private DepartmentService departmentService;
     @Autowired
     private MajorService majorService;
@@ -86,8 +84,13 @@ public class UserController {
 
     // GET - Create new empty bean user
     @GetMapping("/users/new")
-    public String createEmptyUser(Model model) {
-        Users u = new Users();
+    public String createEmptyUser(Model model, @ModelAttribute(value = "user") Users user) {
+        Users u = user;
+        if (user.getLastName() != null) u.setLastName(user.getLastName().trim());
+        if (user.getFirstName() != null) u.setFirstName(user.getFirstName().trim());
+        if (user.getAcademicYear() != null) u.setAcademicYear(user.getAcademicYear().trim());
+        if (user.getEmail() != null) u.setEmail(user.getEmail().trim());
+        if (user.getPhone() != null) u.setPhone(user.getPhone().trim());
         u.setPassword("ou@123");
         u.setRole("ROLE_LECTURER");
         u.setIsActive(true);
@@ -103,28 +106,41 @@ public class UserController {
 
         boolean customError = user.getAvatarFile() == null || user.getAvatarFile().isEmpty()
                 || user.getBgImageFile() == null || user.getBgImageFile().isEmpty()
-                || user.getPhone() == null || user.getPhone().isEmpty()
-                || user.getAcademicYear() == null || user.getAcademicYear().isEmpty();
+                || user.getPhone() == null || user.getPhone().trim().isEmpty()
+                || user.getAcademicYear() == null || user.getAcademicYear().trim().isEmpty() || (user.getUsername() != null && userService.getUserByUsername(user.getUsername()) != null);
 
-        user.setPassword(this.passwordEncoder.encode("ou@123"));
-        user.setRole("ROLE_LECTURER");
-        user.setIsActive(true);
+//        Users u = user;
+//        if (user.getLastName() != null) u.setLastName(user.getLastName().trim());
+//        if (user.getFirstName() != null) u.setFirstName(user.getFirstName().trim());
+//        if (user.getAcademicYear() != null) u.setAcademicYear(user.getAcademicYear().trim());
+//        if (user.getEmail() != null) u.setEmail(user.getEmail().trim());
+//        if (user.getPhone() != null) u.setPhone(user.getPhone().trim());
+//        u.setPassword("ou@123");
+//        u.setRole("ROLE_LECTURER");
+//        u.setIsActive(true);
 
         if (!rs.hasErrors() && !customError) {
-            if (userService.addOrUpdateUser(user)) return "redirect:/";
+            if (userService.addOrUpdateUser(user)) {
+                return "redirect:/";
+            }
         }
 
+        if (user.getUsername() != null && userService.getUserByUsername(user.getUsername()) != null)
+            model.addAttribute("isUsernameExisting", true);
+        else model.addAttribute("isUsernameExisting", false);
         if (user.getAvatarFile() == null || user.getAvatarFile().isEmpty())
             model.addAttribute("isAvatarFileEmpty", true);
         else model.addAttribute("isAvatarFileEmpty", false);
         if (user.getBgImageFile() == null || user.getBgImageFile().isEmpty())
             model.addAttribute("isBgImageFileEmpty", true);
         else model.addAttribute("isBgImageFileEmpty", false);
-        if (user.getAcademicYear() == null || user.getAcademicYear().isEmpty())
+        if (user.getAcademicYear() == null || user.getAcademicYear().trim().isEmpty())
             model.addAttribute("isAcademicYearEmpty", true);
-        else model.addAttribute("isAcademicYearEmpty", true);
-        if (user.getPhone() == null || user.getPhone().isEmpty()) model.addAttribute("isPhoneEmpty", true);
-        else model.addAttribute("isPhoneEmpty", true);
+        else model.addAttribute("isAcademicYearEmpty", false);
+        if (user.getPhone() == null || user.getPhone().trim().isEmpty()) model.addAttribute("isPhoneEmpty", true);
+        else model.addAttribute("isPhoneEmpty", false);
+
+//        model.addAttribute("user", u);
         return "addUser";
     }
 }

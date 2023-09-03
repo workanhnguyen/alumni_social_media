@@ -81,7 +81,6 @@ public class Users implements Serializable {
     @Size(max = 20)
     @Column(name = "phone")
     private String phone;
-
     @Column(name = "academic_year")
     private String academicYear;
 
