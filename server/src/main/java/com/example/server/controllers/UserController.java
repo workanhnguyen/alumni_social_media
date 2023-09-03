@@ -53,6 +53,10 @@ public class UserController {
             model.addAttribute("users", userService.getUsers(params));
             model.addAttribute("active", params.get("active"));
             return "listUser";
+        } else if (params.get("username") != null) {
+            model.addAttribute("users", userService.getUsers(params));
+            model.addAttribute("usernamePlaceholder", params.get("username"));
+            return "listUser";
         } else {
             model.addAttribute("user", new Users());
             return "userDetail";

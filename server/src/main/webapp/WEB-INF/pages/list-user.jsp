@@ -9,6 +9,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
+<c:url value="/users" var="searchByUsername" />
+
 <div class="container">
     <h1 class="text-center mt-3 mb-3">DANH SÁCH NGƯỜI DÙNG</h1>
 
@@ -18,7 +20,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#openMoreAction">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-end align-items-center" id="openMoreAction">
+            <div class="collapse navbar-collapse justify-content-around align-items-center ml-md-3" id="openMoreAction">
                 <ul class="navbar-nav">
                     <li class="d-flex align-items-center w-md-100">
                         <p class="mb-0" style="margin-right: 12px;">Bộ lọc</p>
@@ -41,6 +43,10 @@
                            href="<c:url value="/users?active=false" />">Bị khóa</a>
                     </li>
                 </ul>
+                <form class="d-flex form-inline my-2 my-lg-0" action="${searchByUsername}">
+                    <input class="form-control me-2" name="username" type="search" placeholder="${usernamePlaceholder == null || usernamePlaceholder == '' ? 'Nhập tên đăng nhập...' : usernamePlaceholder}" aria-label="Search">
+                    <button class="btn btn-success" type="submit"}>Tìm</button>
+                </form>
             </div>
         </div>
     </nav>

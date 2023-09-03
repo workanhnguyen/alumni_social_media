@@ -98,6 +98,10 @@ public class UserRepositoryImp implements UserRepository {
             if (isActive != null && !isActive.isEmpty()) {
                 predicates.add(b.equal(root.get("isActive"), Boolean.parseBoolean(isActive)));
             }
+            String username = params.get("username");
+            if (username != null && !username.isEmpty()) {
+                predicates.add(b.like(root.get("username"), username));
+            }
 
             q.where(predicates.toArray(Predicate[]::new));
         }
