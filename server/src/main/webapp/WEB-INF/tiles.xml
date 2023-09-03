@@ -4,27 +4,26 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
-    <definition name="baseLayout"
-                template="/WEB-INF/layouts/base.jsp">
-        <put-attribute name="title" value="" />
-        <put-attribute name="header"
-                       value="/WEB-INF/components/header.jsp" />
-        <put-attribute name="content" value="" />
-        <put-attribute name="footer"
-                       value="/WEB-INF/components/footer.jsp" />
+    <definition name="baseLayout" template="/WEB-INF/layouts/base.jsp">
+        <put-attribute name="title" value=""/>
+        <put-attribute name="header" value="/WEB-INF/components/header.jsp"/>
+        <put-attribute name="content" value=""/>
+        <put-attribute name="footer" value="/WEB-INF/components/footer.jsp"/>
     </definition>
     <definition name="listUser" extends="baseLayout">
-        <put-attribute name="title" value="Danh sách người dùng" />
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/list-user.jsp" />
+        <put-attribute name="title" value="Danh sách người dùng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/list-user.jsp"/>
     </definition>
     <definition name="userDetail" extends="baseLayout">
-        <put-attribute name="title" value="Chi tiết người dùng" />
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/user-detail.jsp" />
+        <put-attribute name="title" value="Chi tiết người dùng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/user-detail.jsp"/>
+    </definition>
+    <definition name="addUser" extends="baseLayout">
+        <put-attribute name="title" value="Thêm người dùng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/add-user.jsp"/>
     </definition>
     <definition name="login" extends="baseLayout">
-        <put-attribute name="title" value="Đăng nhập" />
-        <put-attribute name="content" value="/WEB-INF/pages/login.jsp" />
+        <put-attribute name="title" value="Đăng nhập"/>
+        <put-attribute name="content" value="/WEB-INF/pages/login.jsp"/>
     </definition>
 </tiles-definitions>

@@ -116,6 +116,11 @@ public class UserServiceImp implements UserService {
 
     @Override
     public Boolean addOrUpdateUser(Users u) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
+
+        u.setCreatedAt(currentDate);
+
         if (u.getAvatarFile() != null && !u.getAvatarFile().isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(u.getAvatarFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));

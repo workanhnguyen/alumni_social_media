@@ -95,9 +95,9 @@
                     </c:choose>
                 </td>
                 <td>
-                    <c:url value="/api/users/${u.id}/" var="apiDel"/>
+                    <c:url value="/api/users/${u.id}/" var="apiLock"/>
                     <a href="<c:url value="/users/${u.id}" />" class="btn btn-success">Cập nhật</a>
-                    <button class="btn btn-danger" onclick="deleteUser('${apiDel}', '${authToken}')">Khóa người dùng</button>
+                    <button class="btn ${u.isActive == false ? 'btn-secondary' : 'btn-danger' }" ${u.isActive == false ? 'disabled' : ''} onclick="deleteUser('${apiLock}', '${authToken}')">${u.isActive == false ? "Đã khóa" : "Khóa" }</button>
                 </td>
 <%--                <sec:authorize access="hasRole('ROLE_ADMIN')">--%>
 <%--                    <td>--%>

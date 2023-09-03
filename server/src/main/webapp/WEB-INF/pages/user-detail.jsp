@@ -9,15 +9,16 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<c:url value="/users/${u.id}" var="addNewUser"/>
+<c:url value="/users/${u.id}" var="updatedUser"/>
 <div class="container-fluid">
     <h1 class="text-center mt-3 mb-3">CHI TIẾT NGƯỜI DÙNG</h1>
 
-    <form:form method="post" action="${addNewUser}" modelAttribute="user" enctype="multipart/form-data">
+    <form:form method="post" action="${updateUser}" modelAttribute="user" enctype="multipart/form-data">
         <form:errors path="*" element="div" cssClass="alert alert-danger"/>
         <form:hidden path="id"/>
         <form:hidden path="password"/>
         <form:hidden path="avatar"/>
+        <form:hidden path="bgImage"/>
         <p class="d-none" id="major-flag">${user.majorId.id}</p>
 
         <div class="form-floating mb-3 mt-3">
@@ -106,6 +107,14 @@
             <label for="avatar">Ảnh đại diện</label>
             <c:if test="${user.avatar != null}">
                 <img src="${user.avatar}" width="120"/>
+            </c:if>
+        </div>
+        <div class="form-floating mb-3 mt-3">
+            <form:input type="file" class="form-control"
+                        path="bgImageFile" id="bgImage"/>
+            <label for="bgImage">Ảnh bìa</label>
+            <c:if test="${user.bgImage != null}">
+                <img src="${user.bgImage}" width="120"/>
             </c:if>
         </div>
         <div class="form-floating mb-3 mt-3">

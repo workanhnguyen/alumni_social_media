@@ -1,5 +1,5 @@
 function deleteUser (path, authToken) {
-    if (confirm("Bạn có chắc chắn xóa người dùng này không?") === true) {
+    if (confirm("Bạn có chắc chắn khóa người dùng này không?") === true) {
         fetch(path, {
             method: "delete",
             headers: {
@@ -10,7 +10,7 @@ function deleteUser (path, authToken) {
             if (res.status === 204) {
                 location.reload();
             } else if (res.status === 401)
-                alert("Bạn không có quyền xóa người dùng này");
+                alert("Bạn không có quyền khóa người dùng này");
         }).catch(error => {
             console.log(error);
             alert("Xóa thất bại!")
