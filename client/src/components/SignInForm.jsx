@@ -34,6 +34,16 @@ export default function SignInForm({ role }) {
 
   const navigate = useNavigate();
 
+  const isContainsEmptyFields = (data) => {
+    return data.role === ROLE_ALUMNI &&
+    (data.phone === null ||
+      data.phone === "" ||
+      data.academicYear === null ||
+      data.academicYear === "" ||
+      data.bgImage === null ||
+      data.majorId === null)
+  };
+
   const handleLogin = async (body) => {
     setShowProgress(true);
 
@@ -51,28 +61,25 @@ export default function SignInForm({ role }) {
           payload: data,
         });
 
-        console.log(data.phone === "");
-
-        if (
-          data.phone === null ||
-          data.phone === "" ||
-          data.academicYear === null ||
-          data.academicYear === "" ||
-          data.bgImage === null ||
-          data.majorId === null
-        )
+        if (!isContainsEmptyFields(data))
           navigate(ALUMNI_ADD_INFO);
         else navigate(ROOT_PAGE, { replace: true });
 
-        if (response.data && data === false) navigate(INFO_PAGE);
-        else if (response.data && data) navigate(DASHBOARD);
+        // if (response.data && data === false) navigate(INFO_PAGE);
+        // else if (response.data && data) navigate(DASHBOARD);
       }
     } catch (e) {
-      setShowProgress(false);
 
-      if (e.response.status === 400 || e.response.status === 500)
-        setAlertMessage("Tên tài khoản hoặc mật khẩu không chính xác!");
-      else setAlertMessage("Đăng nhập thất bại, vui lòng thử lại sau!");
+      switch (e.response.status) {
+        case 401:
+          setAlertMessage("Tên tài khoản hoặc mật khẩu không chính xác!");
+          break;
+        case 423:
+          setAlertMessage("Tài khoản đang bị khóa, vui lòng liên hệ quản trị viên!");
+          break;
+        default:
+          setAlertMessage("Lỗi bất định, vui lòng thử lại sau!");
+      }
     } finally {
       setShowProgress(false);
     }
