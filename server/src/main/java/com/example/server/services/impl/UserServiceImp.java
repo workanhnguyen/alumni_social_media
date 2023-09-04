@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.server.dtos.UserDto;
 import com.example.server.pojos.Users;
+import com.example.server.repositories.MajorRepository;
 import com.example.server.repositories.UserRepository;
 import com.example.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class UserServiceImp implements UserService {
 
     @Autowired
     private UserRepository userRepo;
+    @Autowired
+    private MajorRepository majorRepo;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
@@ -190,10 +193,10 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserDto updateAvatarUser(MultipartFile avatar, Users u) {
-        if (!avatar.isEmpty()) {
+    public UserDto updateAvatarUser( MultipartFile updateAvatar, Users u) {
+        if (!updateAvatar.isEmpty()) {
             try {
-                Map res = this.cloudinary.uploader().upload(avatar.getBytes(),
+                Map res = this.cloudinary.uploader().upload(updateAvatar.getBytes(),
                         ObjectUtils.asMap("resource_type", "auto"));
                 u.setAvatar(res.get("secure_url").toString());
             } catch (IOException ex) {
@@ -208,5 +211,41 @@ public class UserServiceImp implements UserService {
         }
         
         return null;
+    }
+    
+    @Override
+    public UserDto updateBgUser( MultipartFile updateBg, Users u) {
+        if (!updateBg.isEmpty()) {
+            try {
+                Map res = this.cloudinary.uploader().upload(updateBg.getBytes(),
+                        ObjectUtils.asMap("resource_type", "auto"));
+                u.setBgImage(res.get("secure_url").toString());        
+            } catch (IOException ex) {
+                Logger.getLogger(UserServiceImp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        Boolean rs = this.userRepo.addOrUpdateUser(u);
+        
+        if (rs) {
+            UserDto userDto = userToUserDto(u);
+            return userDto;
+        }
+        
+        return null;
+    }
+
+    @Override
+    public UserDto updateInfo(Map<String, String> params, Users u) {
+        u.setPhone(params.get("phone"));
+        u.setAcademicYear(params.get("academicYear"));
+        u.setMajorId(this.majorRepo.getMajorById(Long.parseLong(params.get("majorId"))));
+        Boolean rs = this.userRepo.addOrUpdateUser(u);
+        
+        if (rs) {
+            UserDto userDto = userToUserDto(u);
+            return userDto;
+        }
+        
+        return null;    
     }
 }

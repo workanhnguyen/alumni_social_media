@@ -230,7 +230,13 @@ public class PostServiceImp implements PostService {
         return postDto;
     }
     
-     public Long countCommentsByPostId(Long postId) {
+    @Override
+    public Long countCommentsByPostId(Long postId) {
         return this.postRepo.countCommentsByPostId(postId);
+    }
+
+    @Override
+    public Long countReactionsByPostId(Long postId) {
+        return this.postRepo.countReactionsByPostId(postId);
     }
 }

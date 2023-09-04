@@ -248,4 +248,20 @@ public class ApiPostController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
+    
+    @GetMapping(path = "/{id}/count_reaction/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<Long> countReactionOfPost(@PathVariable("id") Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+            
+            Long reactionCount = postService.countReactionsByPostId(postId);
+            return new ResponseEntity<>(reactionCount, HttpStatus.OK);
+           
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }
