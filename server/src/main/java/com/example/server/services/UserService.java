@@ -21,8 +21,8 @@ public interface UserService extends UserDetailsService {
     List<Users> getUsers(Map<String, String> params);
     Users getUserById(Long userId);
     Boolean addOrUpdateUser(Users u);
-    UserDto updateAvatarUser(MultipartFile avatar, Users u);
-    
+    UserDto updateAvatarUser( MultipartFile updateAvatar, Users u);
+    UserDto updateBgUser( MultipartFile updateBg, Users u);
     UserDto userToUserDto(Users user);
-    
+    UserDto updateInfo( Map<String, String> params, Users u);
 }

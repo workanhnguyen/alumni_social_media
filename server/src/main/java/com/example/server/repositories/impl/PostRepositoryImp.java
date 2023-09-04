@@ -129,5 +129,12 @@ public class PostRepositoryImp implements PostRepository {
         .setParameter("postId", postId)
         .getSingleResult();
     }
+    
+    @Override
+    public Long countReactionsByPostId(Long postId) {
+        return entityManager.createQuery("SELECT COUNT(r) FROM Reactions r WHERE r.postId.id = :postId " , Long.class)
+        .setParameter("postId", postId)
+        .getSingleResult();
+    }
   
 }

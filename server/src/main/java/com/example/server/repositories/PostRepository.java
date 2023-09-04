@@ -37,5 +37,7 @@ public interface PostRepository {
     List<Posts> findPostsByUserId(Users userId);
     
     Long countCommentsByPostId(Long postId);
+    
+    Long countReactionsByPostId(Long postId);
   
 }

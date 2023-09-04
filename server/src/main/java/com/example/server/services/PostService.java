@@ -42,5 +42,7 @@ public interface PostService {
 //
     List<PostDto> getAllPosts(int currentPage);
     
-    Long countCommentsByPostId(Long postId) ;
+    Long countCommentsByPostId(Long postId);
+    
+    Long countReactionsByPostId(Long postId);
 }
