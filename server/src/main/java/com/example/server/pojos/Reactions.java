@@ -44,7 +44,7 @@ public class Reactions implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -66,20 +66,20 @@ public class Reactions implements Serializable {
     public Reactions() {
     }
 
-    public Reactions(Integer id) {
+    public Reactions(Long id) {
         this.id = id;
     }
 
-    public Reactions(Integer id, String reactionType) {
+    public Reactions(Long id, String reactionType) {
         this.id = id;
         this.reactionType = reactionType;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
