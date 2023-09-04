@@ -15,39 +15,37 @@
     <h1 class="text-center mt-3 mb-3">DANH SÁCH NGƯỜI DÙNG</h1>
 
     <nav class="navbar navbar-expand-md navbar-light">
-        <div class="container-fluid">
-            <a href="<c:url value="/users/new" />" class="btn btn-success">+ Thêm người dùng</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#openMoreAction">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-around align-items-center ml-md-3" id="openMoreAction">
-                <ul class="navbar-nav">
-                    <li class="d-flex align-items-center w-md-100">
-                        <p class="mb-0" style="margin-right: 12px;">Bộ lọc</p>
-                    </li>
-                    <li>
-                        <a class="btn px-4 py-2 text-decoration-none ${role == null && active == null ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
-                           href="<c:url value="/" />">Tất cả</a></li>
-                    <li>
-                        <a class="btn px-4 py-2 text-decoration-none ${role == 'ROLE_ALUMNI' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
-                           href="<c:url value="/users?role=ROLE_ALUMNI" />">Cựu sinh viên</a></li>
-                    <li>
-                        <a class="btn px-4 py-2 text-decoration-none ${role == 'ROLE_LECTURER' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
-                           href="<c:url value="/users?role=ROLE_LECTURER" />">Giảng viên</a>
-                    </li>
-                    <li>
-                        <a class="btn px-4 py-2 text-decoration-none ${active == 'true' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
-                           href="<c:url value="/users?active=true" />">Đang sử dụng</a></li>
-                    <li>
-                        <a class="btn px-4 py-2 text-decoration-none ${active == 'false' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
-                           href="<c:url value="/users?active=false" />">Bị khóa</a>
-                    </li>
-                </ul>
-                <form class="d-flex form-inline my-2 my-lg-0" action="${searchByUsername}">
-                    <input class="form-control me-2" name="username" type="search" placeholder="${usernamePlaceholder == null || usernamePlaceholder == '' ? 'Nhập tên đăng nhập...' : usernamePlaceholder}" aria-label="Search">
-                    <button class="btn btn-success" type="submit"}>Tìm</button>
-                </form>
-            </div>
+        <a href="<c:url value="/users/new" />" class="btn btn-success">+ Thêm người dùng</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#openMoreAction">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-around align-items-center ml-md-3" id="openMoreAction">
+            <ul class="navbar-nav">
+                <li class="d-flex align-items-center w-md-100">
+                    <p class="mb-0" style="margin-right: 12px;">Bộ lọc</p>
+                </li>
+                <li>
+                    <a class="btn px-4 py-2 text-decoration-none ${role == null && active == null ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
+                       href="<c:url value="/" />">Tất cả</a></li>
+                <li>
+                    <a class="btn px-4 py-2 text-decoration-none ${role == 'ROLE_ALUMNI' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
+                       href="<c:url value="/users?role=ROLE_ALUMNI" />">Cựu sinh viên</a></li>
+                <li>
+                    <a class="btn px-4 py-2 text-decoration-none ${role == 'ROLE_LECTURER' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
+                       href="<c:url value="/users?role=ROLE_LECTURER" />">Giảng viên</a>
+                </li>
+                <li>
+                    <a class="btn px-4 py-2 text-decoration-none ${active == 'true' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
+                       href="<c:url value="/users?active=true" />">Đang sử dụng</a></li>
+                <li>
+                    <a class="btn px-4 py-2 text-decoration-none ${active == 'false' ? 'bg-primary text-white' : 'border border-primary bg-white text-black'}"
+                       href="<c:url value="/users?active=false" />">Bị khóa</a>
+                </li>
+            </ul>
+            <form class="d-flex form-inline my-2 my-lg-0" action="${searchByUsername}">
+                <input class="form-control me-2" name="username" type="search" placeholder="${usernamePlaceholder == null || usernamePlaceholder == '' ? 'Nhập tên đăng nhập...' : usernamePlaceholder}" aria-label="Search">
+                <button class="btn btn-success" type="submit"}>Tìm</button>
+            </form>
         </div>
     </nav>
     <table class="table">
