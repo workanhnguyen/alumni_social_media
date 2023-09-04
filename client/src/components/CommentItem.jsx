@@ -163,7 +163,7 @@ const CommentItem = ({
           <Avatar
             src={data?.user?.avatar || data?.userId?.avatar}
             alt="avatar"
-            sx={{ width: 32, height: 32 }}
+            sx={{ width: 32, height: 32, border: 0.5, borderColor: "lightgray" }}
           />
 
           <div className="w-full flex ml-2">
