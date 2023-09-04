@@ -7,6 +7,7 @@ package com.example.server.repositories;
 import com.example.server.pojos.Posts;
 import com.example.server.pojos.Users;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -33,6 +34,7 @@ public interface PostRepository {
 //    Post findPostByIdAndUserId(Long id, Long userId);
 
     List<Posts> findAllPosts(int currentPage);
+    List<Posts> getPosts(Map<String, String> params);
 
     List<Posts> findPostsByUserId(Users userId);
     

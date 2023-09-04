@@ -30,6 +30,7 @@ public class UserController {
     @Autowired
     private MajorService majorService;
 
+
     // Index
     @RequestMapping("/")
     public String index(Model model, Principal loggedInUser, @RequestParam Map<String, String> params) {

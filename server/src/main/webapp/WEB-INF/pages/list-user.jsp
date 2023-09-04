@@ -50,9 +50,6 @@
             </div>
         </div>
     </nav>
-    <div class="input-group mb-3 d-flex justify-content-between">
-
-    </div>
     <table class="table">
         <thead>
         <tr>
