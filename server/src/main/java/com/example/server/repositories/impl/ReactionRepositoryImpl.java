@@ -1,5 +1,6 @@
 package com.example.server.repositories.impl;
 
+import com.example.server.dtos.ReactionDto;
 import com.example.server.pojos.Groups;
 import com.example.server.pojos.Majors;
 import com.example.server.pojos.Posts;
@@ -57,6 +58,22 @@ public class ReactionRepositoryImpl implements ReactionRepository {
         List<Reactions> res = q.getResultList();
 
         return res;
+    }
+
+    @Override
+    public Reactions findReactionByUserIdAndPostId(Long userId, Long postId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        String queryString = "FROM Reactions r WHERE r.postId.id = :postId AND r.userId.id = :userId";
+
+        Query q = s.createQuery(queryString);
+        q.setParameter("postId", postId);
+        q.setParameter("userId", userId);
+        try {
+            Reactions re = (Reactions) q.getSingleResult();
+            return re;
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
 

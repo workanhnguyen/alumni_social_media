@@ -85,7 +85,13 @@ public class ReactionServiceImpl implements ReactionService {
         });
         return reDtos;
     }
-    
-    
-    
+
+    @Override
+    public ReactionDto findReactionByUserIdAndPostId(Long userId, Long postId) {
+        Reactions re = reRepo.findReactionByUserIdAndPostId(userId, postId);
+
+        if (re != null)
+            return reactionDto(re);
+        return null;
+    }
 }

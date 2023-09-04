@@ -15,4 +15,5 @@ public interface ReactionService {
     Boolean deleteReaction(Long id);
     ReactionDto reactionDto(Reactions re);
     List<ReactionDto> listReaction (PostDto p);
+    ReactionDto findReactionByUserIdAndPostId (Long userId, Long postId);
 }
