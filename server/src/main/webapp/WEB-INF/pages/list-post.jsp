@@ -42,7 +42,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Ngày tạo</th>
                 <th scope="col">Người tạo</th>
-                <th scope="col">Nội dung</th>
+                <th scope="col">Vai trò</th>
                 <th scope="col">Trạng thái bình luận</th>
                 <th scope="col">Hành động</th>
             </tr>
@@ -52,13 +52,23 @@
                 <tr class="align-middle">
                     <th scope="row" id="postId">${p.id}</th>
                     <td>${p.createdAt}</td>
-                    <td>${p.content}</td>
                     <td>${p.user.lastName} ${p.user.firstName}</td>
+                    <c:choose>
+                        <c:when test="${p.user.role == 'ROLE_ALUMNI'}">
+                            <td>Cựu sinh viên</td>
+                        </c:when>
+                        <c:when test="${p.user.role == 'ROLE_LECTURER'}">
+                            <td>Giảng viên</td>
+                        </c:when>
+                        <c:otherwise>
+                            <td>Quản trị viên</td>
+                        </c:otherwise>
+                    </c:choose>
                     <td>
                         ${p.isLocked == true ? 'Bị khóa' : 'Đang mở'}
                     </td>
                     <td>
-                        <button class="btn btn-success">Xem chi tiết</button>
+                        <a href="<c:url value="/posts/${p.id}" /> " class="btn btn-success">Xem chi tiết</a>
                         <button class="btn btn-danger">Xóa</button>
                     </td>
                 </tr>

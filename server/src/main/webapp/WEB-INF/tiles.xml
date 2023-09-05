@@ -30,4 +30,8 @@
         <put-attribute name="title" value="Danh sách bài đăng" />
         <put-attribute name="content" value="/WEB-INF/pages/list-post.jsp" />
     </definition>
+    <definition name="postDetail" extends="baseLayout">
+        <put-attribute name="title" value="Chi tiết bài đăng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/post-detail.jsp"/>
+    </definition>
 </tiles-definitions>
