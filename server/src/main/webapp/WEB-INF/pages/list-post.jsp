@@ -68,11 +68,13 @@
                         ${p.isLocked == true ? 'Bị khóa' : 'Đang mở'}
                     </td>
                     <td>
+                        <c:url value="/api/posts/${p.id}/" var="apiDelete"/>
                         <a href="<c:url value="/posts/${p.id}" /> " class="btn btn-success">Xem chi tiết</a>
-                        <button class="btn btn-danger">Xóa</button>
+                        <button class="btn btn-danger" onclick="deletePost('${apiDelete}', '${authToken}')">Xóa</button>
                     </td>
                 </tr>
             </c:forEach>
         </tbody>
     </table>
 </div>
+<script src="<c:url value="/js/listPost.js" />"></script>

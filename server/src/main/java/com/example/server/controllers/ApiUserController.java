@@ -125,9 +125,9 @@ public class ApiUserController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
             if (this.userService.changePassword( params, currentUser)) {
-                return new ResponseEntity<>( true,HttpStatus.OK);
+                return new ResponseEntity<>( "SUCCESSFUL",HttpStatus.OK);
             } else {
-                return new ResponseEntity<>( false,HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>( "WRONG_PASSWORD",HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

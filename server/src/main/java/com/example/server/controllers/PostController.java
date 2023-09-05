@@ -1,5 +1,6 @@
 package com.example.server.controllers;
 
+import com.example.server.components.JwtService;
 import com.example.server.dtos.PostDto;
 import com.example.server.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.Map;
 
 @Controller
@@ -23,9 +25,13 @@ public class PostController {
     private PostService postService;
     @Autowired
     private Environment env;
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping("/posts")
-    public String list(Model model, @RequestParam Map<String, String> params, RedirectAttributes redirectAttributes) {
+    public String list(Model model, @RequestParam Map<String, String> params, Principal loggedInUser, RedirectAttributes redirectAttributes) {
+        String dynamicToken = jwtService.generateTokenLogin(loggedInUser.getName());
+        model.addAttribute("authToken", dynamicToken);
 
         if (!params.containsKey("page")) {
             // If not present, add the default value of "page=1" to the parameters

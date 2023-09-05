@@ -6,6 +6,7 @@ const endpoints = {
     "current-user": `${SERVER_CONTEXT}/api/users/current_user/`,
     "update-user": `${SERVER_CONTEXT}/api/users`,
     "get-user-by-username": `${SERVER_CONTEXT}/api/users`,
+    "change-password": `${SERVER_CONTEXT}/api/users/change_password/`,
 };
 
 export const registerUser = (body) => ApiConfig.post(endpoints['register'], body);
@@ -13,3 +14,4 @@ export const getCurrentUser = () => authApi().get(endpoints['current-user']);
 export const getUserByUsername = (username) => authApi().get(`${endpoints['get-user-by-username']}/${username}/`);
 export const loginUser = (body) => ApiConfig.post(endpoints['login'], body);
 export const updateUser = (id, body) => authApi().put(`${endpoints['update-user']}/${id}`, body);
+export const changePassword = (body) => authApi().patch(`${endpoints['change-password']}`, body);

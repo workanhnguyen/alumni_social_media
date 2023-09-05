@@ -87,12 +87,10 @@ public class UserServiceImp implements UserService {
     public boolean changePassword( Map<String, String> params, Users u) {       
         LocalDateTime currentTime = LocalDateTime.now();
         Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
-        if( passwordEncoder.matches(params.get("password"), u.getPassword()))
-        {
+        if(passwordEncoder.matches(params.get("password"), u.getPassword())) {
             u.setPassword(this.passwordEncoder.encode(params.get("newPassword")));
             u.setUpdatedAt(currentDate);
-           
-            return  this.userRepo.addOrUpdateUser(u);
+            return this.userRepo.addOrUpdateUser(u);
         }
         return false;
     }
