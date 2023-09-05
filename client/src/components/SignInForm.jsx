@@ -61,7 +61,7 @@ export default function SignInForm({ role }) {
           payload: data,
         });
 
-        if (!isContainsEmptyFields(data))
+        if (isContainsEmptyFields(data))
           navigate(ALUMNI_ADD_INFO);
         else navigate(ROOT_PAGE, { replace: true });
 

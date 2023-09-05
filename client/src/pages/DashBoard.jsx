@@ -11,6 +11,7 @@ import { FETCH_ALL, POST_NORMAL, POST_PER_PAGE } from "../constants/common";
 
 const DashBoard = () => {
   const {
+    user,
     posts,
     postDispatch,
     postCount,
@@ -18,7 +19,6 @@ const DashBoard = () => {
     pageIndex,
     setPageIndex,
   } = useStateContext();
-
   const [isPostsLoading, setIsPostsLoading] = useState(false);
 
   useEffect(() => {

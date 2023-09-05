@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, memo } from "react";
 
 import {
   Avatar,
@@ -24,11 +24,10 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 import { useStateContext } from "../../contexts/ContextProvider";
-import { departmentData, majorData } from "../../data";
-import { LOGOUT, PHONE_REGEX } from "../../constants/common";
+import { LOGOUT, PHONE_REGEX, UPDATE } from "../../constants/common";
 import { useNavigate } from "react-router-dom";
 import { ROLE_PAGE } from "../../routes";
-import { updateUser } from "../../apis/UserApi";
+import { updateCoverImageUser, updateInfoUser } from "../../apis/UserApi";
 import { getAllDepartments } from "../../apis/DepartmentApi";
 import { getMajorsByDepartmentId } from "../../apis/MajorApi";
 
@@ -38,12 +37,13 @@ const AlumniAddInfoPage = () => {
   const { user, userDispatch } = useStateContext();
 
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [majorId, setMajorId] = useState("");
+  const [year, setYear] = useState("");
+
   const [coverImage, setCoverImage] = useState(null);
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState("");
   const [majors, setMajors] = useState([]);
-  const [majorId, setMajorId] = useState("");
-  const [year, setYear] = useState("");
 
   const [pnAlert, setPnAlert] = useState(false);
   const [cIAlert, setCIAlert] = useState(false);
@@ -108,30 +108,49 @@ const AlumniAddInfoPage = () => {
     window.location.reload();
   };
 
-  const update = async (id, body) => {
-    try {
-      let res = await updateUser(id, body);
-      console.log(res);
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-  };
-
   const handleUpdateUserInfo = (e) => {
     e.preventDefault();
     setAlertMessage("");
+
+    const infoData = {
+      phone: phoneNumber,
+      academicYear: year,
+      majorId: majorId,
+    };
+
+    const processInfo = async () => {
+      try {
+        let infoRes = await updateInfoUser(infoData);
+        if (infoRes.status === 200) {
+          userDispatch({
+            type: UPDATE,
+            payload: {
+              phone: infoRes.data.phone,
+              academicYear: infoRes.data.academicYear,
+              majorId: infoRes.data.majorId,
+            },
+          });
+
+          const coverImgData = new FormData();
+          coverImgData.append("coverImage", coverImage);
+          let coverImgRes = await updateCoverImageUser(coverImgData);
+
+          if (coverImgRes.status === 200) {
+            userDispatch({
+              type: UPDATE,
+              payload: {
+                bgImage: coverImgRes.data.bgImage,
+              },
+            });
+          }
+        }
+      } catch (e) {}
+    };
+
     let message = validate();
 
     if (message === "") {
-      const userData = new FormData();
-      userData.append("phone", phoneNumber);
-      // userData.append("majorId", majorId);
-      // userData.append("academicYear", year);
-      // userData.append("bgImage", coverImage);
-
-      update(user?.id, userData);
+      processInfo();
     } else setAlertMessage(message);
   };
 
@@ -354,4 +373,4 @@ const AlumniAddInfoPage = () => {
   );
 };
 
-export default AlumniAddInfoPage;
+export default memo(AlumniAddInfoPage);

@@ -27,7 +27,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class ApiUserController {
     @Autowired
     private JwtService jwtService;
-    
     @Autowired
     private UserService userService;
     @Autowired
@@ -52,7 +51,7 @@ public class ApiUserController {
         }
     }
     
-    @PostMapping(path = "/current_user/avatar", 
+    @PostMapping(path = "/current_user/avatar/",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
@@ -62,24 +61,24 @@ public class ApiUserController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
             UserDto userDto = userService.updateAvatarUser( updateAvatar, currentUser);
-            if (userDto != null )
+            if (userDto != null)
                 return new ResponseEntity<>(userDto, HttpStatus.OK);
             return new ResponseEntity(false,HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
     
-    @PostMapping(path = "/current_user/bg", 
+    @PostMapping(path = "/current_user/cover_image/",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<?> updateBgUser(@RequestPart MultipartFile updateBg) {
+    public ResponseEntity<?> updateBgUser(@RequestPart(value = "coverImage") MultipartFile updateBg) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
             UserDto userDto = userService.updateBgUser(updateBg, currentUser);
-            if (userDto != null )
+            if (userDto != null)
                 return new ResponseEntity<>(userDto, HttpStatus.OK);
             return new ResponseEntity(false,HttpStatus.BAD_REQUEST);
         }
@@ -95,7 +94,7 @@ public class ApiUserController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
             UserDto userDto = userService.updateInfo(params, currentUser);
-            if (userDto != null )
+            if (userDto != null)
                 return new ResponseEntity<>(userDto, HttpStatus.OK);
             return new ResponseEntity(false,HttpStatus.BAD_REQUEST);
         }
