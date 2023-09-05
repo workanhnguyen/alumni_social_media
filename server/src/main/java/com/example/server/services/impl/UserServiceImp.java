@@ -253,4 +253,9 @@ public class UserServiceImp implements UserService {
         
         return null;    
     }
+
+    @Override
+    public Long countUser() {
+        return this.userRepo.countUsers();
+    }
 }

@@ -13,7 +13,16 @@
 
 <div class="container">
     <h1 class="text-center mt-3 mb-3">DANH SÁCH NGƯỜI DÙNG</h1>
-
+    <c:if test="${counter > 1}">
+        <ul class="pagination">
+            <c:forEach begin="1" end="${counter}" var="i">
+                <c:url value="/users" var="pageUrl">
+                    <c:param name="page" value="${i}"></c:param>
+                </c:url>
+                <li class="page-item"><a class="page-link ${pageIndex == i ? 'bg-primary text-white' : ''}" href="${pageUrl}">${i}</a></li>
+            </c:forEach>
+        </ul>
+    </c:if>
     <nav class="navbar navbar-expand-md navbar-light">
         <a href="<c:url value="/users/new" />" class="btn btn-success">+ Thêm người dùng</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#openMoreAction">

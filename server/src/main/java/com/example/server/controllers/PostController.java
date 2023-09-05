@@ -2,27 +2,47 @@ package com.example.server.controllers;
 
 import com.example.server.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
 @Controller
 @ControllerAdvice
+@PropertySource("classpath:configs.properties")
 public class PostController {
     @Autowired
     private PostService postService;
+    @Autowired
+    private Environment env;
 
     @GetMapping("/posts")
-    public String list(Model model, @RequestParam Map<String, String> params) {
+    public String list(Model model, @RequestParam Map<String, String> params, RedirectAttributes redirectAttributes) {
+
+        if (!params.containsKey("page")) {
+            // If not present, add the default value of "page=1" to the parameters
+            params.put("page", "1");
+
+            // Redirect to the same URL with the "page" parameter added
+            redirectAttributes.addAttribute("page", "1");
+            return "redirect:/posts";
+        }
+
+        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        Long count = this.postService.countPost();
+
+        model.addAttribute("counter", Math.ceil(count * 1.0/pageSize));
+        model.addAttribute("posts", postService.getPosts(params));
+        model.addAttribute("pageIndex", params.get("page"));
+
         if (params.get("username") != null) {
-            model.addAttribute("posts", postService.getPosts(params));
             model.addAttribute("usernamePlaceholder", params.get("username"));
-        } else {
-            model.addAttribute("posts", postService.getPosts(params));
         }
         return "listPost";
     }

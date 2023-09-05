@@ -5,9 +5,12 @@ import com.example.server.repositories.UserRepository;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -29,6 +32,10 @@ public class UserRepositoryImp implements UserRepository {
     private LocalSessionFactoryBean factory;
     @Autowired
     private BCryptPasswordEncoder passEncoder;
+    @PersistenceContext
+    private EntityManager entityManager;
+    @Autowired
+    private Environment env;
 
     @Override
     public Users addUser(Users user) {
@@ -109,6 +116,17 @@ public class UserRepositoryImp implements UserRepository {
         q.orderBy(b.desc(root.get("id")));
         Query query = s.createQuery(q);
 
+        if (params != null) {
+            String page = params.get("page");
+            if (page != null && !page.isEmpty()) {
+                int p = Integer.parseInt(page);
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+
+                query.setMaxResults(pageSize);
+                query.setFirstResult((p - 1) * pageSize);
+            }
+        }
+
         return query.getResultList();
     }
 
@@ -149,5 +167,11 @@ public class UserRepositoryImp implements UserRepository {
         }
 
         return false;
+    }
+
+    @Override
+    public Long countUsers() {
+        return entityManager.createQuery("SELECT COUNT(u) FROM Users u ", Long.class)
+                .getSingleResult();
     }
 }

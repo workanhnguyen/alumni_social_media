@@ -130,7 +130,7 @@ public class PostRepositoryImp implements PostRepository {
 
         Query query = s.createQuery(q);
 
-        String page = params.get("pageIndex");
+        String page = params.get("page");
         if (page != null && !page.isEmpty()) {
 
             int p = Integer.parseInt(page);

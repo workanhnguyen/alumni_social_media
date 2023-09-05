@@ -6,11 +6,13 @@ import com.example.server.services.DepartmentService;
 import com.example.server.services.MajorService;
 import com.example.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -29,21 +31,41 @@ public class UserController {
     private DepartmentService departmentService;
     @Autowired
     private MajorService majorService;
-
+    @Autowired
+    private Environment env;
 
     // Index
     @RequestMapping("/")
     public String index(Model model, Principal loggedInUser, @RequestParam Map<String, String> params) {
-        String dynamicToken = jwtService.generateTokenLogin(loggedInUser.getName());
-        model.addAttribute("users", userService.getUsers(params));
-        model.addAttribute("authToken", dynamicToken);
+//        String dynamicToken = jwtService.generateTokenLogin(loggedInUser.getName());
+//        model.addAttribute("users", userService.getUsers(params));
+//        model.addAttribute("authToken", dynamicToken);
 
-        return loggedInUser != null ? "listUser" : "login";
+        return loggedInUser != null ? "redirect:/users" : "login";
     }
 
     // Load user by conditions
     @GetMapping("/users")
-    public String list(Model model, @RequestParam Map<String, String> params) {
+    public String list(Model model, Principal loggedInUser, @RequestParam Map<String, String> params, RedirectAttributes redirectAttributes) {
+        String dynamicToken = jwtService.generateTokenLogin(loggedInUser.getName());
+        model.addAttribute("authToken", dynamicToken);
+
+        if (params.isEmpty()) {
+            // If not present, add the default value of "page=1" to the parameters
+            params.put("page", "1");
+
+            // Redirect to the same URL with the "page" parameter added
+            redirectAttributes.addAttribute("page", "1");
+            return "redirect:/users";
+        }
+
+        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        Long count = this.userService.countUser();
+
+        model.addAttribute("counter", Math.ceil(count * 1.0/pageSize));
+        model.addAttribute("users", userService.getUsers(params));
+        model.addAttribute("pageIndex", params.get("page"));
+
         if (params.get("role") != null) {
             model.addAttribute("users", userService.getUsers(params));
             model.addAttribute("role", params.get("role"));
@@ -56,10 +78,12 @@ public class UserController {
             model.addAttribute("users", userService.getUsers(params));
             model.addAttribute("usernamePlaceholder", params.get("username"));
             return "listUser";
-        } else {
-            model.addAttribute("user", new Users());
-            return "userDetail";
         }
+//        else {
+//            model.addAttribute("user", new Users());
+//            return "userDetail";
+//        }
+        return "listUser";
     }
 
     // Load user details

@@ -12,6 +12,16 @@
 <c:url value="/posts" var="searchPostByUsername"/>
 <div class="container">
     <h1 class="text-center mt-3 mb-3">DANH SÁCH BÀI ĐĂNG</h1>
+    <c:if test="${counter > 1}">
+        <ul class="pagination">
+            <c:forEach begin="1" end="${counter}" var="i">
+                <c:url value="/posts" var="pageUrl">
+                    <c:param name="page" value="${i}"></c:param>
+                </c:url>
+                <li class="page-item"><a class="page-link ${pageIndex == i ? 'bg-primary text-white' : ''}" href="${pageUrl}">${i}</a></li>
+            </c:forEach>
+        </ul>
+    </c:if>
     <nav class="navbar navbar-expand-md navbar-light">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#openMoreAction">
             <span class="navbar-toggler-icon"></span>
@@ -32,6 +42,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Ngày tạo</th>
                 <th scope="col">Người tạo</th>
+                <th scope="col">Nội dung</th>
                 <th scope="col">Trạng thái bình luận</th>
                 <th scope="col">Hành động</th>
             </tr>
@@ -41,7 +52,7 @@
                 <tr class="align-middle">
                     <th scope="row" id="postId">${p.id}</th>
                     <td>${p.createdAt}</td>
-
+                    <td>${p.content}</td>
                     <td>${p.user.lastName} ${p.user.firstName}</td>
                     <td>
                         ${p.isLocked == true ? 'Bị khóa' : 'Đang mở'}

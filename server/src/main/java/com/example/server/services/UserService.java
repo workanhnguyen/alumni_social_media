@@ -25,4 +25,5 @@ public interface UserService extends UserDetailsService {
     UserDto updateBgUser( MultipartFile updateBg, Users u);
     UserDto userToUserDto(Users user);
     UserDto updateInfo( Map<String, String> params, Users u);
+    Long countUser();
 }
