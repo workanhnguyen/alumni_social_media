@@ -66,7 +66,7 @@ const PersonalPage = () => {
         <div className="max-lg:w-full lg:w-235 flex max-lg:flex-col max-lg:items-center max-sm:px-4 gap-x-3">
           <div className="lg:sticky lg:top-20 w-full h-fit flex flex-col my-3 items-center rounded-md gap-y-3">
             <UserDetailInfo userInfo={currentUser} />
-            <UserImageList images={images} />
+            {/* <UserImageList images={images} /> */}
           </div>
           {/* Posts */}
           <div className="w-full h-full flex flex-col max-lg:items-center mb-5">

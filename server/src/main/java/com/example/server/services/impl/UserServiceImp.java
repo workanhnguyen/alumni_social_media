@@ -194,9 +194,9 @@ public class UserServiceImp implements UserService {
                     u.getUsername(), u.getPassword(), authorities);
         }
     }
-
+    
     @Override
-    public UserDto updateAvatarUser( MultipartFile updateAvatar, Users u) {
+    public UserDto updateAvatarUser(MultipartFile updateAvatar, Users u) {
         if (!updateAvatar.isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(updateAvatar.getBytes(),

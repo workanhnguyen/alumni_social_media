@@ -48,12 +48,7 @@ const DashBoard = () => {
 
     handleFetchAllPosts();
     handleGetCountAllPosts();
-  }, [postCount, pageIndex]);
-
-  // if (isPostsLoading)
-  // return <div>
-  //   <SkeletonLoading />
-  // </div>
+  }, []);
 
   return (
     <>
