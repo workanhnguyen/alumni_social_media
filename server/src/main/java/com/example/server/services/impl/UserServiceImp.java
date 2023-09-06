@@ -3,6 +3,7 @@ package com.example.server.services.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.server.dtos.UserDto;
+import static com.example.server.pojos.Reactions_.updatedAt;
 import com.example.server.pojos.Users;
 import com.example.server.repositories.MajorRepository;
 import com.example.server.repositories.UserRepository;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import static java.time.LocalDateTime.now;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.logging.Level;
@@ -46,15 +49,17 @@ public class UserServiceImp implements UserService {
         u.setFirstName(params.get("firstName"));
         u.setLastName(params.get("lastName"));
         u.setUsername(params.get("username"));
-        u.setIsActive(false);
+        
         u.setCreatedAt(currentDate);
         u.setRole(params.get("role"));
         String role = params.get("role");
         if ("ROLE_ALUMNI".equals(role)) {
             u.setStudentId(params.get("studentId")); 
             u.setPassword(this.passwordEncoder.encode(params.get("password")));
+            u.setIsActive(false);
         } else {
             u.setPassword(this.passwordEncoder.encode("ou@123"));
+            u.setIsActive(true);
         }
         if (!avatar.isEmpty()) {
             try {
@@ -247,5 +252,18 @@ public class UserServiceImp implements UserService {
         }
         
         return null;    
+    }
+
+    @Override
+    public Boolean checkTimeUser(Users u) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
+        Date createdAtValue = u.getCreatedAt(); 
+        long timeDifferenceMillis = currentDate.getTime() - createdAtValue.getTime();
+        long daysDifference = timeDifferenceMillis / (24 * 60 * 60 * 1000); // 1 ngày = 24 giờ * 60 phút * 60 giây * 1000 mili giây
+        boolean isGreaterThanOneDay = daysDifference > 1;
+        if (u.getUpdatedAt() != null || !isGreaterThanOneDay)
+            return true;
+        return false;
     }
 }

@@ -109,7 +109,13 @@ public class ApiUserController {
             String token = this.jwtService.generateTokenLogin(user.getUsername());
             Users u = userService.getUserByUsername(user.getUsername());
             if (u.getIsActive())
-                return new ResponseEntity<>(token, HttpStatus.OK);
+                if("ROLE_LECTURER".equals(u.getRole()) )
+                    if( this.userService.checkTimeUser(u)) 
+                        return new ResponseEntity<>(token, HttpStatus.OK);
+                    else 
+                        return new ResponseEntity<>("account is locked", HttpStatus.LOCKED);
+                else
+                    return new ResponseEntity<>(token, HttpStatus.OK);
             else
                 return new ResponseEntity<>("account is locked", HttpStatus.LOCKED);
         }
