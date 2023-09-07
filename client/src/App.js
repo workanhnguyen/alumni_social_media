@@ -7,6 +7,7 @@ import {
   AlumniAddInfoPage,
   AlumniLoginPage,
   AlumniRegisterPage,
+  ChatRoomPage,
   ChooseRolePage,
   DashBoard,
   GroupPage,
@@ -29,6 +30,7 @@ import {
   ROOT_PAGE,
   INFO_PAGE,
   ROLE_PAGE,
+  CHAT_ROOM_PAGE,
 } from "./routes";
 import { useStateContext } from "./contexts/ContextProvider";
 import { ALREADY_LOGIN, NO_ACTIVE } from "./constants/common";
@@ -80,6 +82,7 @@ const App = () => {
             <Route path={LETTERS} element={<LetterPage />} />
             <Route path={CURRENT_USER} element={<PersonalPage />} />
             <Route path={POST_DETAIL} element={<PostDetailPage />} />
+            <Route path={CHAT_ROOM_PAGE} element={<ChatRoomPage />} />
           </>
         )}
 

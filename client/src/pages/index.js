@@ -8,3 +8,4 @@ export { default as GroupPage } from './GroupPage';
 export { default as LetterPage } from './LetterPage';
 export { default as PersonalPage } from './PersonalPage';
 export { default as InfoPage } from './InfoPage';
+export { default as ChatRoomPage } from './ChatRoomPage';
