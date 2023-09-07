@@ -32,5 +32,7 @@ public class PostDto {
     private Boolean isLocked;
     private UserDto user;
     private List<ImageDto> images;
+    private List<CommentDto> comments;
+    private Long quantityOfReaction; 
     
 }

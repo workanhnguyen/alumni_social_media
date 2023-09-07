@@ -108,10 +108,8 @@ public class StatServiceImpl implements StatService {
     public List<Map<String, Object>> statPostsByMonth(Long year) {
         List<Object[]> result = statRepository.statPostsByMonth(year);
 
-        // Tạo danh sách kết quả JSON
         List<Map<String, Object>> jsonResult = new ArrayList<>();
 
-        // Tạo một bản đồ cho mỗi tháng từ 1 đến 12
         for (Integer month = 1; month <= 12; month++) {
             Map<String, Object> monthData = new HashMap<>();
             monthData.put("month", month);
@@ -122,6 +120,90 @@ public class StatServiceImpl implements StatService {
                 Long postCount = ((Number) row[1]).longValue();
                 if (createdMonth == month) {
                     monthData.put("quantityOfPost", postCount);
+                    break;
+                }
+            }
+
+            jsonResult.add(monthData);
+        }
+
+        return jsonResult;
+    }
+
+    @Override
+    public List<Map<String, Object>> statPostsByQuater(Long year, Long quaTer) {
+        List<Object[]> result = statRepository.statPostsByMonth(year);
+        int startMonth;
+        int endMonth;
+        List<Map<String, Object>> jsonResult = new ArrayList<>();
+        if (quaTer == 1) {
+            startMonth = 1;
+            endMonth = 3;
+        } else if (quaTer == 2) {
+            startMonth = 4;
+            endMonth = 6;
+        } else if (quaTer == 3) {
+            startMonth = 7;
+            endMonth = 9;
+        } else {
+            startMonth = 10;
+            endMonth = 12;
+        }
+            
+        
+        for (Integer month = startMonth; month <= endMonth; month++) {
+            Map<String, Object> monthData = new HashMap<>();
+            monthData.put("month", month);
+            monthData.put("quantityOfPost", 0); 
+
+            for (Object[] row : result) {
+                Integer createdMonth = ((Number) row[0]).intValue();
+                Long postCount = ((Number) row[1]).longValue();
+                if (createdMonth == month) {
+                    monthData.put("quantityOfPost", postCount);
+                    break;
+                }
+            }
+
+            jsonResult.add(monthData);
+        }
+
+        return jsonResult;
+    }
+
+    @Override
+    public List<Map<String, Object>> statUsersByQuater(Long year, Long quaTer) {
+        List<Object[]> result = statRepository.statUsersByMonth(year);
+
+        List<Map<String, Object>> jsonResult = new ArrayList<>();
+        
+        int startMonth;
+        int endMonth;
+        
+        if (quaTer == 1) {
+            startMonth = 1;
+            endMonth = 3;
+        } else if (quaTer == 2) {
+            startMonth = 4;
+            endMonth = 6;
+        } else if (quaTer == 3) {
+            startMonth = 7;
+            endMonth = 9;
+        } else {
+            startMonth = 10;
+            endMonth = 12;
+        }
+
+        for (Integer month = startMonth; month <= endMonth; month++) {
+            Map<String, Object> monthData = new HashMap<>();
+            monthData.put("month", month);
+            monthData.put("quantityOfUser", 0); 
+
+            for (Object[] row : result) {
+                Integer createdMonth = ((Number) row[0]).intValue();
+                Long userCount = ((Number) row[1]).longValue();
+                if (createdMonth == month) {
+                    monthData.put("quantityOfUser", userCount);
                     break;
                 }
             }

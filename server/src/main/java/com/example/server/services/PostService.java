@@ -30,7 +30,6 @@ public interface PostService {
 
     Boolean unlockPost(Long id, Users user);
 //
-//    Posts findPostById(Long id);
     
     PostDto findPostById(Long id);
 //

@@ -10,4 +10,6 @@ public interface StatService {
     List<Map<String, Object>> statPostsByYear(Long startYear, Long endYear);
     List<Map<String, Object>> statUsersByMonth(Long year);
     List<Map<String, Object>> statPostsByMonth(Long year);
+    List<Map<String, Object>> statPostsByQuater(Long year, Long quaTer);
+    List<Map<String, Object>> statUsersByQuater(Long year, Long quaTer);
 }

@@ -5,16 +5,20 @@
 package com.example.server.services.impl;
 
 import com.cloudinary.utils.ObjectUtils;
+import com.example.server.dtos.CommentDto;
 import com.example.server.dtos.ImageDto;
 import com.example.server.dtos.PostDto;
+import com.example.server.dtos.ReactionDto;
 import com.example.server.dtos.UserDto;
 import com.example.server.pojos.Images;
 import com.example.server.pojos.Posts;
 import com.example.server.pojos.Users;
 import com.example.server.repositories.ImageRepository;
 import com.example.server.repositories.PostRepository;
+import com.example.server.services.CommentService;
 import com.example.server.services.ImageService;
 import com.example.server.services.PostService;
+import com.example.server.services.ReactionService;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -44,6 +48,12 @@ public class PostServiceImp implements PostService {
     
     @Autowired
     private ImageService imageService;
+    
+    @Autowired
+    private CommentService cmtService;
+    
+    @Autowired
+    private ReactionService reactionService;
     
     @Autowired
     private ImageRepository imageRepo;
@@ -191,6 +201,8 @@ public class PostServiceImp implements PostService {
         Posts p = this.postRepo.findPostById(id);
         List<Images> imagesList = imageRepo.findByPostId(p);
         List<ImageDto> imagesDto = new ArrayList<>();
+        List<CommentDto> commentsDto = this.cmtService.getCmtByPosts(1, p);
+        Long quantityOfReaction = this.countReactionsByPostId(id);
         
         imagesList.forEach(i -> {
             ImageDto imgDto = ImageDto.builder()
@@ -200,6 +212,7 @@ public class PostServiceImp implements PostService {
                     .build();
             imagesDto.add(imgDto);
         });
+        
         
         UserDto userDto = UserDto.builder()
                 .id(p.getUserId().getId())
@@ -226,6 +239,8 @@ public class PostServiceImp implements PostService {
                 .isLocked(p.getIsLocked())
                 .user(userDto)
                 .images(imagesDto)
+                .comments(commentsDto)
+                .quantityOfReaction(quantityOfReaction)
                 .build();
         
         return postDto;
@@ -240,4 +255,5 @@ public class PostServiceImp implements PostService {
     public Long countReactionsByPostId(Long postId) {
         return this.postRepo.countReactionsByPostId(postId);
     }
+
 }

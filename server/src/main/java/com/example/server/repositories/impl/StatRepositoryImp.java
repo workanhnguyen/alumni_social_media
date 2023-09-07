@@ -103,4 +103,5 @@ public class StatRepositoryImp implements StatRepository{
         List<Object[]> result = query.list();
         return result;
     }
+
 }

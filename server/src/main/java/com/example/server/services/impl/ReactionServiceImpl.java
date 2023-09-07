@@ -86,6 +86,18 @@ public class ReactionServiceImpl implements ReactionService {
         return reDtos;
     }
     
+    @Override
+    public List<ReactionDto> listReaction2(Posts p) {
+        
+        List<Reactions> res = reRepo.findAllPost(this.postRepo.findPostById(p.getId()));
+        List<ReactionDto> reDtos = new ArrayList<>();
+         
+        res.forEach(r -> {
+            ReactionDto reDto = this.reactionDto(r);
+            reDtos.add(reDto);
+        });
+        return reDtos;
+    }
     
     
 }

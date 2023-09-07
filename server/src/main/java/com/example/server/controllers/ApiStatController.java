@@ -75,4 +75,28 @@ public class ApiStatController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+    
+    @GetMapping("/posts/{year}/month/{quater}")
+    @CrossOrigin
+    public ResponseEntity<List<Map<String, Object>>> statPostsByQuater( @PathVariable("year") Long year,
+            @PathVariable("quater") Long quater) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
+            List<Map<String, Object>> jsonResult = statService.statPostsByQuater(year,quater);
+            return ResponseEntity.ok(jsonResult);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+    
+    @GetMapping("/users/{year}/month/{quater}")
+    @CrossOrigin
+    public ResponseEntity<List<Map<String, Object>>> statUsersByQuater( @PathVariable("year") Long year,
+            @PathVariable("quater") Long quater) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
+            List<Map<String, Object>> jsonResult = statService.statUsersByQuater(year,quater);
+            return ResponseEntity.ok(jsonResult);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
 }
