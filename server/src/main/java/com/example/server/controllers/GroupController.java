@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -56,5 +57,11 @@ public class GroupController {
         model.addAttribute("authToken", dynamicToken);
         model.addAttribute("users", userService.getUsers(new HashMap<>()));
         return "addGroup";
+    }
+
+    @GetMapping("/groups/{id}")
+    public String detail (@PathVariable("id") Long groupId, Model model) {
+        model.addAttribute("group", groupService.findGroupById(groupId));
+        return "groupDetail";
     }
 }
