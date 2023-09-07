@@ -4,18 +4,20 @@
  */
 package com.example.server.repositories.impl;
 
+import com.example.server.pojos.Posts;
 import com.example.server.repositories.*;
 import com.example.server.pojos.Groups;
 import com.example.server.pojos.Users;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
@@ -28,11 +30,11 @@ import org.springframework.stereotype.Repository;
 public class GroupRepositoryImp implements GroupRepository{
     @Autowired
     private LocalSessionFactoryBean factory;
-    
     @PersistenceContext
     private EntityManager entityManager;
-    
-    
+    @Autowired
+    private Environment env;
+
     @Override
     public Groups addGroup(Groups gr) {
         Session s = this.factory.getObject().getCurrentSession();
@@ -85,4 +87,45 @@ public class GroupRepositoryImp implements GroupRepository{
         }
         return new HashSet<>(); 
        }
+
+    @Override
+    public List<Groups> getGroups(Map<String, String> params) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Groups> q = b.createQuery(Groups.class);
+        Root<Groups> root = q.from(Groups.class);
+        q.select(root);
+
+        if (params != null) {
+            List<Predicate> predicates = new ArrayList<>();
+
+            String groupName = params.get("name");
+            if (groupName != null && !groupName.isEmpty()) {
+                predicates.add(b.like(root.get("groupName"), groupName));
+            }
+
+            q.where(predicates.toArray(Predicate[]::new));
+            q.orderBy(b.desc(root.get("createdAt")));
+        }
+
+        Query query = s.createQuery(q);
+
+        String page = params.get("page");
+        if (page != null && !page.isEmpty()) {
+
+            int p = Integer.parseInt(page);
+            int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+
+            query.setFirstResult((p - 1) * pageSize);
+            query.setMaxResults(pageSize);
+        }
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Long countGroup() {
+        return entityManager.createQuery("SELECT COUNT(g) FROM Groups g ", Long.class)
+                .getSingleResult();
+    }
 }

@@ -33,7 +33,7 @@ public class PostController {
         String dynamicToken = jwtService.generateTokenLogin(loggedInUser.getName());
         model.addAttribute("authToken", dynamicToken);
 
-        if (!params.containsKey("page")) {
+        if (params.isEmpty()) {
             // If not present, add the default value of "page=1" to the parameters
             params.put("page", "1");
 

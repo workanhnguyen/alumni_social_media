@@ -10,6 +10,7 @@
 <c:url value="/" var="listUser" />
 <c:url value="/posts" var="listPost" />
 <c:url value="/statistic" var="statistic" />
+<c:url value="/groups" var="listGroup" />
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href=${listUser}>OU MEDIA</a>
@@ -26,6 +27,9 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="${listPost}">Bài đăng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="${listGroup}">Nhóm</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="${statistic}">Thống kê</a>
