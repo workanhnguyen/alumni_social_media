@@ -44,7 +44,7 @@ const Group = () => {
         <div className="flex-1 my-6 mt-20">
           <Container maxWidth="sm">
             {user.groupsSet.length > 0 && user.groupsSet.map((group, index) => (
-              <div className="w-full flex p-4 mb-2 items-center bg-white rounded-md drop-shadow-sm">
+              <div key={index} className="w-full flex p-4 mb-2 items-center bg-white rounded-md drop-shadow-sm">
                 <Avatar {...stringAvatar(group.groupName)} />
                 <div className="flex flex-col justify-center ml-2">
                   <p className="font-semibold">{group.groupName}</p>
