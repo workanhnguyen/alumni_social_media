@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import cookie from "react-cookies";
+import {
+  createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
+} from "firebase/auth";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -19,6 +23,11 @@ import { getCurrentUser, loginUser } from "../apis/UserApi";
 import { ALUMNI_ADD_INFO, DASHBOARD, INFO_PAGE, ROOT_PAGE } from "../routes";
 import { useStateContext } from "../contexts/ContextProvider";
 import { LOGIN, TOKEN, USER } from "../constants/common";
+import { auth } from "../configs/FirebaseConfig";
+import {
+  FIREBASE_EMAIL_SUFFIX,
+  FIREBASE_PASSWORD_SUFFIX,
+} from "../constants/firsebase";
 
 const defaultTheme = createTheme();
 
@@ -35,13 +44,15 @@ export default function SignInForm({ role }) {
   const navigate = useNavigate();
 
   const isContainsEmptyFields = (data) => {
-    return data.role === ROLE_ALUMNI &&
-    (data.phone === null ||
-      data.phone === "" ||
-      data.academicYear === null ||
-      data.academicYear === "" ||
-      data.bgImage === null ||
-      data.majorId === null)
+    return (
+      data.role === ROLE_ALUMNI &&
+      (data.phone === null ||
+        data.phone === "" ||
+        data.academicYear === null ||
+        data.academicYear === "" ||
+        data.bgImage === null ||
+        data.majorId === null)
+    );
   };
 
   const handleLogin = async (body) => {
@@ -56,26 +67,34 @@ export default function SignInForm({ role }) {
         let { data } = await getCurrentUser();
         cookie.save(USER, data);
 
+        const methods = await fetchSignInMethodsForEmail(auth, `${body.username}${FIREBASE_EMAIL_SUFFIX}`);
+        if (methods.length === 0) {
+          createUserWithEmailAndPassword(
+            auth,
+            `${body.username}${FIREBASE_EMAIL_SUFFIX}`,
+            `${body.password}${FIREBASE_PASSWORD_SUFFIX}`
+          ).then((res) => 
+            console.log(res)
+          );
+        }
+
         userDispatch({
           type: LOGIN,
           payload: data,
         });
 
-        if (isContainsEmptyFields(data))
-          navigate(ALUMNI_ADD_INFO);
+        if (isContainsEmptyFields(data)) navigate(ALUMNI_ADD_INFO);
         else navigate(ROOT_PAGE, { replace: true });
-
-        // if (response.data && data === false) navigate(INFO_PAGE);
-        // else if (response.data && data) navigate(DASHBOARD);
       }
     } catch (e) {
-
       switch (e.response.status) {
         case 401:
           setAlertMessage("Tên tài khoản hoặc mật khẩu không chính xác!");
           break;
         case 423:
-          setAlertMessage("Tài khoản đang bị khóa, vui lòng liên hệ quản trị viên!");
+          setAlertMessage(
+            "Tài khoản đang bị khóa, vui lòng liên hệ quản trị viên!"
+          );
           break;
         default:
           setAlertMessage("Lỗi bất định, vui lòng thử lại sau!");

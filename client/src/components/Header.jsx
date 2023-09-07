@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { auth } from '../configs/FirebaseConfig';
+import { signInAnonymously } from "firebase/auth";
 import cookie from "react-cookies";
 
 import {
@@ -21,6 +23,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
+import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 
 import { logo1, logo2 } from "../assets";
 import { GROUP, HOME, LETTER } from "../constants/page";
