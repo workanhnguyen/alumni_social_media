@@ -46,4 +46,5 @@ public interface PostService {
     Long countCommentsByPostId(Long postId);
     
     Long countReactionsByPostId(Long postId);
+    
 }

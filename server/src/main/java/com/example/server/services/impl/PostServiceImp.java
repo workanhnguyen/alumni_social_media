@@ -92,7 +92,7 @@ public class PostServiceImp implements PostService {
     @Override
     public Boolean deletePost(Long id, Users u) {
         Posts p = postRepo.findPostById(id);
-        if (p != null && Objects.equals(u.getId(), p.getUserId().getId())) {
+        if (p != null && (Objects.equals(u.getId(), p.getUserId().getId()) || "ROLE_ADMIN".equals(u.getRole()))) {
             postRepo.deletePost(p);
             return true;
         }
@@ -110,6 +110,7 @@ public class PostServiceImp implements PostService {
         return false;
        
     }
+    
 
     @Override
     public Boolean unlockPost(Long id, Users u) {

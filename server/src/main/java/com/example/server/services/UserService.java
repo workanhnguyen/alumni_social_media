@@ -26,4 +26,5 @@ public interface UserService extends UserDetailsService {
     UserDto userToUserDto(Users user);
     UserDto updateInfo( Map<String, String> params, Users u);
     Long countUser();
+    Boolean checkTimeUser(Users u);
 }
