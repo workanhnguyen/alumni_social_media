@@ -2,6 +2,7 @@ package com.example.server.services.impl;
 
 import com.example.server.dtos.PostDto;
 import com.example.server.dtos.ReactionDto;
+import com.example.server.dtos.ReactionDto2;
 import com.example.server.dtos.UserDto;
 import com.example.server.pojos.Groups;
 import com.example.server.pojos.Majors;
@@ -67,6 +68,17 @@ public class ReactionServiceImpl implements ReactionService {
             .build();
         return reDto;
     }
+    
+     public ReactionDto2 reactionDto2(Reactions re) {
+        ReactionDto2 reDto2 = ReactionDto2.builder()
+            .id(re.getId())
+            .reactionType(re.getReactionType())
+            .userId(re.getUserId().getId())
+            .postId(re.getPostId().getId())
+            .build();
+        return reDto2;
+    }
+    
 
     @Override
     public Boolean deleteReaction(Long id) {
@@ -87,14 +99,14 @@ public class ReactionServiceImpl implements ReactionService {
     }
     
     @Override
-    public List<ReactionDto> listReaction2(Posts p) {
+    public List<ReactionDto2> listReaction2(Posts p) {
         
-        List<Reactions> res = reRepo.findAllPost(this.postRepo.findPostById(p.getId()));
-        List<ReactionDto> reDtos = new ArrayList<>();
+        List<Reactions> res = reRepo.findAllPost(p);
+        List<ReactionDto2> reDtos = new ArrayList<>();
          
         res.forEach(r -> {
-            ReactionDto reDto = this.reactionDto(r);
-            reDtos.add(reDto);
+            ReactionDto2 reDto2 = this.reactionDto2(r);
+            reDtos.add(reDto2);
         });
         return reDtos;
     }

@@ -9,6 +9,7 @@ import com.example.server.dtos.CommentDto;
 import com.example.server.dtos.ImageDto;
 import com.example.server.dtos.PostDto;
 import com.example.server.dtos.ReactionDto;
+import com.example.server.dtos.ReactionDto2;
 import com.example.server.dtos.UserDto;
 import com.example.server.pojos.Images;
 import com.example.server.pojos.Posts;
@@ -203,6 +204,7 @@ public class PostServiceImp implements PostService {
         List<ImageDto> imagesDto = new ArrayList<>();
         List<CommentDto> commentsDto = this.cmtService.getCmtByPosts(1, p);
         Long quantityOfReaction = this.countReactionsByPostId(id);
+        List<ReactionDto2> reactionsDto2 = this.reactionService.listReaction2(p);
         
         imagesList.forEach(i -> {
             ImageDto imgDto = ImageDto.builder()
@@ -240,6 +242,7 @@ public class PostServiceImp implements PostService {
                 .user(userDto)
                 .images(imagesDto)
                 .comments(commentsDto)
+                .reactions(reactionsDto2)
                 .quantityOfReaction(quantityOfReaction)
                 .build();
         

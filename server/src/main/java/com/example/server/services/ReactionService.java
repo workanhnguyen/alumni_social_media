@@ -2,6 +2,7 @@ package com.example.server.services;
 
 import com.example.server.dtos.PostDto;
 import com.example.server.dtos.ReactionDto;
+import com.example.server.dtos.ReactionDto2;
 import com.example.server.pojos.Majors;
 import com.example.server.pojos.Posts;
 import com.example.server.pojos.Reactions;
@@ -15,5 +16,5 @@ public interface ReactionService {
     Boolean deleteReaction(Long id);
     ReactionDto reactionDto(Reactions re);
     List<ReactionDto> listReaction (PostDto p);
-    List<ReactionDto> listReaction2 (Posts p);
+    List<ReactionDto2> listReaction2 (Posts p);
 }

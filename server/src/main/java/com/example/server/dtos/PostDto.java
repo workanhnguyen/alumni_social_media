@@ -34,5 +34,5 @@ public class PostDto {
     private List<ImageDto> images;
     private List<CommentDto> comments;
     private Long quantityOfReaction; 
-    
+    private List<ReactionDto2> reactions;
 }
