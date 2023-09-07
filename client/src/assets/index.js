@@ -8,6 +8,7 @@ import actionHeart from "./action-heart.svg";
 import actionLike from "./action-like.svg";
 import placeholderImage from "./placeholder-image.jpg";
 import emptyPlaceholder1 from './empty-placeholder-1.svg';
+import messengerIcon from './messenger-icon.svg';
 
 export {
   logoLong,
@@ -19,5 +20,6 @@ export {
   actionHeart,
   actionLike,
   placeholderImage,
-  emptyPlaceholder1
+  emptyPlaceholder1,
+  messengerIcon
 };

@@ -45,24 +45,24 @@ public class ApiReactionController {
             ReactionDto re = reactionService.addReaction(params, currentUser, postDto);
             return new ResponseEntity<>(re, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
     
     @DeleteMapping(path = "/{id}/", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<String> deleteReaction( @PathVariable("id") Long reId) {
+    public ResponseEntity<?> deleteReaction( @PathVariable("id") Long reId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
             Boolean rs = reactionService.deleteReaction(reId);
             if (rs) {
-                return new ResponseEntity<>("TRUE", HttpStatus.OK);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             } else {
-                return ResponseEntity.badRequest().body("FALSE");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
     
     @GetMapping(path = "/posts/{id}/", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -74,9 +74,22 @@ public class ApiReactionController {
             Users currentUser = userService.getUserByUsername(userDetails.getUsername());
             PostDto postDto = postService.findPostById(postId);
             List<ReactionDto> res = reactionService.listReaction(postDto);
-            return new ResponseEntity<>(res, HttpStatus.CREATED);
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-    
+
+    @GetMapping(path = "/reaction-on-post/{id}/")
+    @CrossOrigin
+    public ResponseEntity<?> findReactionByUserIdAndPostId(@PathVariable("id") Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+
+            ReactionDto re = reactionService.findReactionByUserIdAndPostId(currentUser.getId(), postId);
+            return new ResponseEntity<>(re, HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
 }

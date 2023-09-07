@@ -35,4 +35,5 @@ public class PostDto {
     private List<CommentDto> comments;
     private Long quantityOfReaction; 
     
+
 }

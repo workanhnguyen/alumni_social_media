@@ -17,4 +17,5 @@ public interface UserRepository {
     Users getUserById(Long userId);
     Boolean addOrUpdateUser(Users u);
     Boolean deleteUserById(Long userId);
+    Long countUsers();
 }

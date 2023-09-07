@@ -1,6 +1,6 @@
 import cookie from "react-cookies";
 
-import { LOGIN, LOGOUT, TOKEN, USER } from "../constants/common";
+import { LOGIN, LOGOUT, TOKEN, UPDATE, USER } from "../constants/common";
 
 const UserReducer = (currentState, action) => {
     switch (action.type) {
@@ -10,6 +10,8 @@ const UserReducer = (currentState, action) => {
             cookie.remove(TOKEN);
             cookie.remove(USER);
             return null;
+        case UPDATE:
+            return { ...currentState, ...action.payload };
         default:
             return currentState;
     }

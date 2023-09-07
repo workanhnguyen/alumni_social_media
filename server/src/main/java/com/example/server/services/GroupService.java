@@ -8,6 +8,8 @@ package com.example.server.services;
 import com.example.server.dtos.GroupDto;
 import com.example.server.pojos.Groups;
 import com.example.server.pojos.Users;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,4 +32,6 @@ public interface GroupService {
     Boolean removeUserFromGroup(Groups gr, Users user);
     
     GroupDto getGroupMembers(Long groupId);
+    List<GroupDto> getGroups(Map<String, String> params);
+    Long countGroup();
 }

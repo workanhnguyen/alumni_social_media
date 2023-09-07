@@ -49,7 +49,7 @@ public class UserServiceImp implements UserService {
         u.setFirstName(params.get("firstName"));
         u.setLastName(params.get("lastName"));
         u.setUsername(params.get("username"));
-        
+
         u.setCreatedAt(currentDate);
         u.setRole(params.get("role"));
         String role = params.get("role");
@@ -92,12 +92,10 @@ public class UserServiceImp implements UserService {
     public boolean changePassword( Map<String, String> params, Users u) {       
         LocalDateTime currentTime = LocalDateTime.now();
         Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
-        if( passwordEncoder.matches(params.get("password"), u.getPassword()))
-        {
+        if(passwordEncoder.matches(params.get("password"), u.getPassword())) {
             u.setPassword(this.passwordEncoder.encode(params.get("newPassword")));
             u.setUpdatedAt(currentDate);
-           
-            return  this.userRepo.addOrUpdateUser(u);
+            return this.userRepo.addOrUpdateUser(u);
         }
         return false;
     }
@@ -124,6 +122,11 @@ public class UserServiceImp implements UserService {
 
     @Override
     public Boolean addOrUpdateUser(Users u) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
+
+        u.setCreatedAt(currentDate);
+
         if (u.getAvatarFile() != null && !u.getAvatarFile().isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(u.getAvatarFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
@@ -198,7 +201,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserDto updateAvatarUser( MultipartFile updateAvatar, Users u) {
+    public UserDto updateAvatarUser(MultipartFile updateAvatar, Users u) {
         if (!updateAvatar.isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(updateAvatar.getBytes(),
@@ -255,10 +258,15 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public Long countUser() {
+        return this.userRepo.countUsers();
+    }
+
+    @Override
     public Boolean checkTimeUser(Users u) {
         LocalDateTime currentTime = LocalDateTime.now();
         Date currentDate = Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant());
-        Date createdAtValue = u.getCreatedAt(); 
+        Date createdAtValue = u.getCreatedAt();
         long timeDifferenceMillis = currentDate.getTime() - createdAtValue.getTime();
         long daysDifference = timeDifferenceMillis / (24 * 60 * 60 * 1000); // 1 ngày = 24 giờ * 60 phút * 60 giây * 1000 mili giây
         boolean isGreaterThanOneDay = daysDifference > 1;

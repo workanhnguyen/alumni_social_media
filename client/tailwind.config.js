@@ -20,6 +20,7 @@ module.exports = {
       colors: {
         'half-transparent': 'rgb((0, 0, 0) / 0.5)',
         'primary': '#1b73e8',
+        'blue': '#0084ff',
         'gray': '#EFF2F5',
         'gray-2': '#dee1e3',
         'gray-3': '#f7f8fa',
@@ -39,6 +40,9 @@ module.exports = {
       },
       margin: {
         '18': '4.5rem'
+      },
+      borderWidth: {
+        '0.5': '0.5px',
       }
     },
   },

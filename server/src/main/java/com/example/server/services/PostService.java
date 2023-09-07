@@ -38,6 +38,7 @@ public interface PostService {
 //    List<PostDto> getAllMyPostsAndSharePosts(Long currentUserId, String orderDir);
 //
     List<PostDto> findPostsByUserId(Users u);
+    List<PostDto> getPosts(Map<String, String> params);
 //
     List<PostDto> getAllPosts(int currentPage);
     

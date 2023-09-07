@@ -15,10 +15,7 @@ import com.example.server.services.UserService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,6 +82,7 @@ public class GroupServiceImp implements GroupService {
             
             GroupDto grDto = GroupDto.builder()
                     .id(group.getId())
+                    .groupName(group.getGroupName())
                     .createdAt(group.getCreatedAt())
                     .updatedAt(group.getUpdatedAt())
                     .creatorId(userService.userToUserDto(group.getCreatorId()))
@@ -98,7 +96,36 @@ public class GroupServiceImp implements GroupService {
             return null; 
         }
     }
-    
-  
-    
+
+    @Override
+    public List<GroupDto> getGroups(Map<String, String> params) {
+        List<Groups> groups = grRepo.getGroups(params);
+
+        if (!groups.isEmpty()) {
+            List<GroupDto> groupDtos = new ArrayList<>();
+
+            groups.forEach(g -> {
+                GroupDto grDto = GroupDto.builder()
+                        .id(g.getId())
+                        .groupName(g.getGroupName())
+                        .createdAt(g.getCreatedAt())
+                        .updatedAt(g.getUpdatedAt())
+                        .creatorId(userService.userToUserDto(g.getCreatorId()))
+                        .usersSet(g.getUsersSet()
+                                .stream()
+                                .map(userService::userToUserDto) // Sử dụng mapper để chuyển đổi User thành UserDto
+                                .collect(Collectors.toSet()))
+                        .build();
+                groupDtos.add(grDto);
+            });
+
+            return groupDtos;
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public Long countGroup() {
+        return grRepo.countGroup();
+    }
 }
