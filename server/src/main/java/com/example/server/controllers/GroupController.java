@@ -1,7 +1,9 @@
 package com.example.server.controllers;
 
 import com.example.server.components.JwtService;
+import com.example.server.pojos.Groups;
 import com.example.server.services.GroupService;
+import com.example.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -19,6 +22,8 @@ import java.util.Map;
 public class GroupController {
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private UserService userService;
     @Autowired
     private Environment env;
     @Autowired
@@ -43,5 +48,13 @@ public class GroupController {
         model.addAttribute("pageIndex", params.get("page"));
 
         return "listGroup";
+    }
+
+    @GetMapping("/groups/new")
+    public String emptyGroup(Model model, Principal loggedInUser) {
+        String dynamicToken = jwtService.generateTokenLogin(loggedInUser.getName());
+        model.addAttribute("authToken", dynamicToken);
+        model.addAttribute("users", userService.getUsers(new HashMap<>()));
+        return "addGroup";
     }
 }

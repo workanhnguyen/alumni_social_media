@@ -11,6 +11,9 @@
 
 <div class="container">
     <h1 class="text-center mt-3 mb-3">DANH SÁCH NHÓM</h1>
+    <nav class="navbar navbar-expand-md navbar-light">
+        <a href="<c:url value="/groups/new" />" class="btn btn-success">+ Thêm nhóm</a>
+    </nav>
     <c:if test="${counter > 1}">
         <ul class="pagination">
             <c:forEach begin="1" end="${counter}" var="i">
@@ -41,10 +44,11 @@
                 <td>
                     <c:url value="/api/groups/${g.id}/" var="apiDelete"/>
                     <a href="<c:url value="/groups/${g.id}"/>" class="btn btn-success">Xem chi tiết</a>
-                    <button class="btn btn-danger" onclick="deletePost('${apiDelete}', '${authToken}')">Xóa</button>
+                    <button class="btn btn-danger" onclick="deleteGroup('${apiDelete}', '${authToken}')">Xóa</button>
                 </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
 </div>
+<script src="<c:url value="/js/listGroup.js" />"></script>

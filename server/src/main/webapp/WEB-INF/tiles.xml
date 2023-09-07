@@ -42,4 +42,8 @@
         <put-attribute name="title" value="Danh sách nhóm" />
         <put-attribute name="content" value="/WEB-INF/pages/list-group.jsp" />
     </definition>
+    <definition name="addGroup" extends="baseLayout">
+        <put-attribute name="title" value="Thêm nhóm" />
+        <put-attribute name="content" value="/WEB-INF/pages/add-group.jsp" />
+    </definition>
 </tiles-definitions>
