@@ -4,6 +4,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
+import { ROLE_ALUMNI } from "../constants/role";
 
 const UserDetailInfo = ({ userInfo }) => {
   return (
@@ -11,22 +12,28 @@ const UserDetailInfo = ({ userInfo }) => {
       <div className="flex justify-between items-center mb-4">
         <p className="text-xl font-bold">Giới thiệu</p>
       </div>
-      <div className="w-full flex items-center text-dark-gray mb-4">
+      <div className={`w-full flex items-center text-dark-gray ${userInfo?.role === ROLE_ALUMNI && 'mb-4'}`}>
         <SchoolIcon />
         <span className="ml-2">Trường Đại học Mở TP.HCM</span>
       </div>
-      <div className="w-full flex items-center text-dark-gray mb-4">
-        <SpaceDashboardIcon />
-        <span className="ml-2">Khoa {userInfo?.majorId?.departmentId?.name}</span>
-      </div>
-      <div className="w-full flex items-center text-dark-gray mb-4">
-        <BookmarkIcon />
-        <span className="ml-2">Ngành {userInfo?.majorId?.name}</span>
-      </div>
-      <div className="w-full flex items-center text-dark-gray">
-        <AccessTimeFilledIcon />
-        <span className="ml-2">Khóa 2020</span>
-      </div>
+      {userInfo?.role === ROLE_ALUMNI && (
+        <>
+          <div className="w-full flex items-center text-dark-gray mb-4">
+            <SpaceDashboardIcon />
+            <span className="ml-2">
+              Khoa {userInfo?.majorId?.departmentId?.name}
+            </span>
+          </div>
+          <div className="w-full flex items-center text-dark-gray mb-4">
+            <BookmarkIcon />
+            <span className="ml-2">Ngành {userInfo?.majorId?.name}</span>
+          </div>
+          <div className="w-full flex items-center text-dark-gray">
+            <AccessTimeFilledIcon />
+            <span className="ml-2">Khóa 2020</span>
+          </div>
+        </>
+      )}
     </div>
   );
 };

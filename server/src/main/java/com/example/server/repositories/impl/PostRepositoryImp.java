@@ -7,13 +7,19 @@ package com.example.server.repositories.impl;
 import com.example.server.pojos.Posts;
 import com.example.server.pojos.Users;
 import com.example.server.repositories.PostRepository;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
@@ -23,10 +29,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Transactional
+@PropertySource("classpath:configs.properties")
 public class PostRepositoryImp implements PostRepository {
     @Autowired
     private LocalSessionFactoryBean factory;
-    
+    @Autowired
+    private Environment env;
     @PersistenceContext
     private EntityManager entityManager;
     
@@ -88,17 +96,55 @@ public class PostRepositoryImp implements PostRepository {
     @Override
     public List<Posts> findAllPosts(int currentPage) {
         Session s = this.factory.getObject().getCurrentSession();
-        int pageSize = 10;
-        int startPosition = (currentPage - 1) * pageSize;
+//        int pageSize = 10;
+        int startPosition = (currentPage - 1) * Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
         Query q = s.createQuery("FROM Posts p ORDER BY p.createdAt desc");
         q.setFirstResult(startPosition);
-        q.setMaxResults(pageSize);
+        q.setMaxResults(Integer.parseInt(this.env.getProperty("PAGE_SIZE")));
 
         List<Posts> posts = q.getResultList();
     
         return posts;
     }
-//
+
+    @Override
+    public List<Posts> getPosts(Map<String, String> params) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Posts> q = b.createQuery(Posts.class);
+        Root<Posts> root = q.from(Posts.class);
+        q.select(root);
+
+        if (params != null) {
+            List<Predicate> predicates = new ArrayList<>();
+
+            String username = params.get("username");
+            if (username != null && !username.isEmpty()) {
+                Join<Posts, Users> userJoin = root.join("userId");
+                predicates.add(b.like(userJoin.get("username"), username));
+            }
+
+            q.where(predicates.toArray(Predicate[]::new));
+            q.orderBy(b.desc(root.get("createdAt")));
+        }
+
+        Query query = s.createQuery(q);
+
+        String page = params.get("page");
+        if (page != null && !page.isEmpty()) {
+
+            int p = Integer.parseInt(page);
+            int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+
+            query.setFirstResult((p - 1) * pageSize);
+            query.setMaxResults(pageSize);
+        }
+
+        return query.getResultList();
+    }
+
+
+    //
     @Override
     public List<Posts> findPostsByUserId(Users u) {
         Session s = this.factory.getObject().getCurrentSession();

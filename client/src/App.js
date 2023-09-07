@@ -7,6 +7,7 @@ import {
   AlumniAddInfoPage,
   AlumniLoginPage,
   AlumniRegisterPage,
+  ChatRoomPage,
   ChooseRolePage,
   DashBoard,
   GroupPage,
@@ -29,9 +30,11 @@ import {
   ROOT_PAGE,
   INFO_PAGE,
   ROLE_PAGE,
+  CHAT_ROOM_PAGE,
 } from "./routes";
 import { useStateContext } from "./contexts/ContextProvider";
 import { ALREADY_LOGIN, NO_ACTIVE } from "./constants/common";
+import { ROLE_ALUMNI } from "./constants/role";
 
 const App = () => {
   const { token, user } = useStateContext();
@@ -39,79 +42,67 @@ const App = () => {
     user === false || user === "false" ? user : null
   );
 
+  const isContainsEmptyFields = (data) => {
+    return (
+      data &&
+      data.role === ROLE_ALUMNI &&
+      (data.phone === null ||
+        data.phone === "" ||
+        data.academicYear === null ||
+        data.academicYear === "" ||
+        data.bgImage === null ||
+        data.majorId === null)
+    );
+  };
+
   const isActivated = user !== null && booleanUser !== false;
-  const isFullUserInfo = isActivated && user?.phone !== null && user?.phone !== '' && user?.academicYear !== null && user?.academicYear !== '' && user?.bgImage !== null && user?.majorId !== null;
+  const isFullUserInfo =
+    isActivated &&
+    user?.phone !== null &&
+    user?.phone !== "" &&
+    user?.academicYear !== null &&
+    user?.academicYear !== "" &&
+    user?.bgImage !== null &&
+    user?.majorId !== null;
   return (
     <BrowserRouter>
       <Routes>
-        {/* Not authen || not active */}
-        {(!token || booleanUser === false) && (
-          <Route path={ROLE_PAGE} element={<ChooseRolePage />} />
-        )}
-
-        {/* Public routes */}
-        <Route path={INFO_PAGE} element={<InfoPage type={NO_ACTIVE} />} />
-
-        {/* Authenticated and activated routes */}
-        {isActivated && (
+        {/* Not authentication route */}
+        {!token ? (
           <>
-          {isFullUserInfo ? (
-            <>
-              <Route path={ROOT_PAGE} element={<DashBoard />} />
-              <Route path={GROUPS} element={<GroupPage />} />
-              <Route path={LETTERS} element={<LetterPage />} />
-              <Route path={CURRENT_USER} element={<PersonalPage />} />
-              <Route path={POST_DETAIL} element={<PostDetailPage />} />
-            </>
-          ) : (
-            <Route path={ALUMNI_ADD_INFO} element={<AlumniAddInfoPage />} />
-          )}
-            
+            <Route path={ROLE_PAGE} element={<ChooseRolePage />} />
+            <Route path={ALUMNI_LOGIN} element={<AlumniLoginPage />} />
+            <Route path={LECTURER_LOGIN} element={<LecturerLoginPage />} />
+            <Route path={ALUMNI_REGISTER} element={<AlumniRegisterPage />} />
+          </>
+        ) : (
+          <>
+            <Route path={ROOT_PAGE} element={<DashBoard />} />
+            <Route path={GROUPS} element={<GroupPage />} />
+            <Route path={LETTERS} element={<LetterPage />} />
+            <Route path={CURRENT_USER} element={<PersonalPage />} />
+            <Route path={POST_DETAIL} element={<PostDetailPage />} />
+            <Route path={CHAT_ROOM_PAGE} element={<ChatRoomPage />} />
           </>
         )}
 
-        {/* Unauthenticated and unactived routes */}
-        {(!user || booleanUser === false) && (
-          <>
-            <Route
-              path={ALUMNI_LOGIN}
-              element={
-                isActivated ? (
-                  <InfoPage type={ALREADY_LOGIN} />
-                ) : (
-                  <AlumniLoginPage />
-                )
-              }
-            />
-            <Route
-              path={LECTURER_LOGIN}
-              element={
-                isActivated ? (
-                  <InfoPage type={ALREADY_LOGIN} />
-                ) : (
-                  <LecturerLoginPage />
-                )
-              }
-            />
-            <Route
-              path={ALUMNI_REGISTER}
-              element={
-                isActivated ? (
-                  <InfoPage type={ALREADY_LOGIN} />
-                ) : (
-                  <AlumniRegisterPage />
-                )
-              }
-            />
-          </>
+        {/* If user with alumni role is not full info */}
+        {isContainsEmptyFields(user) && (
+          <Route path={ALUMNI_ADD_INFO} element={<AlumniAddInfoPage />} />
         )}
 
-        {/* Redirect unknown paths */}
+        {/* Redirect if path is a unknown path */}
         <Route
           path="*"
           element={
             <Navigate
-              to={!token ? ROLE_PAGE : booleanUser === false ? ROLE_PAGE : isFullUserInfo ? ROOT_PAGE : ALUMNI_ADD_INFO}
+              to={
+                !token
+                  ? ROLE_PAGE
+                  : isContainsEmptyFields(user)
+                  ? ALUMNI_ADD_INFO
+                  : ROOT_PAGE
+              }
             />
           }
         />

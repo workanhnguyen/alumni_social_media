@@ -18,9 +18,21 @@ export const UPDATE = "UPDATE";
 export const DELETE = "DELETE";
 export const FETCH_ALL = "FETCH_ALL";
 export const FETCH_BY_USER = "FETCH_BY_USER";
+
 export const LOCK_COMMENT = "LOCK_COMMENT";
 export const UNLOCK_COMMENT = "UNLOCK_COMMENT";
+export const ADD_COMMENT = "ADD_COMMENT";
+export const ADD_RESPONSE_COMMENT = "ADD_RESPONSE_COMMENT";
+export const UPDATE_COMMENT = "UPDATE_COMMENT";
+export const UPDATE_RESPONSE_COMMENT = "UPDATE_RESPONSE_COMMENT";
+export const DELETE_COMMENT = "DELETE_COMMENT";
+export const DELETE_RESPONSE_COMMENT = "DELETE_RESPONSE_COMMENT";
+
 export const POST_PER_PAGE = 10;
 export const TRUE = "TRUE";
 export const FALSE = "FALSE";
 export const COMMENT_PER_PAGE = 10;
+
+export const ACTION_HAHA = "ACTION_HAHA";
+export const ACTION_LIKE = "ACTION_LIKE";
+export const ACTION_HEART = "ACTION_HEART";

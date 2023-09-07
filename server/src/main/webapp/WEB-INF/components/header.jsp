@@ -8,6 +8,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:url value="/" var="listUser" />
+<c:url value="/posts" var="listPost" />
+<c:url value="/statistic" var="statistic" />
+<c:url value="/groups" var="listGroup" />
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href=${listUser}>OU MEDIA</a>
@@ -21,6 +24,15 @@
           <c:when test="${pageContext.request.userPrincipal.name != null}">
             <li class="nav-item">
               <a class="nav-link" href="${listUser}">Người dùng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="${listPost}">Bài đăng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="${listGroup}">Nhóm</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="${statistic}">Thống kê</a>
             </li>
           </c:when>
         </c:choose>

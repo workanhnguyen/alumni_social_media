@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ReactionDto2 {
+    
     private Long id;
    
     private String reactionType;

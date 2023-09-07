@@ -17,4 +17,5 @@ public interface ReactionService {
     ReactionDto reactionDto(Reactions re);
     List<ReactionDto> listReaction (PostDto p);
     List<ReactionDto2> listReaction2 (Posts p);
+    ReactionDto findReactionByUserIdAndPostId (Long userId, Long postId);
 }

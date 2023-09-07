@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 
 import {
   Button,
@@ -36,31 +36,51 @@ import {
   unlockPost,
 } from "../apis/PostApi";
 import { useNavigate } from "react-router-dom";
+import { addReactionToPost, deleteReactionFromPost, getReactionOnPost, getReactionsByPostId } from "../apis/ReactionApi";
 
 const Post = ({ data, className, type }) => {
+
   const { user, postDispatch, setPostCount, comments } = useStateContext();
 
   const [commentQuantity, setCommentQuantity] = useState(0);
+  const [reactions, setReactions] = useState([]);
+
   const [showEditPostForm, setShowEditPostForm] = useState(false);
   const [openDeletePostDialog, setOpenDeletePostDialog] = useState(false);
   const [showDeleteProgress, setShowDeleteProgress] = useState(false);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const process = async () => {
-      try {
-        let res = await getCommentQuantityByPostId(data?.id);
+  // Get comment quantities of post
+  // useEffect(() => {
+  //   const process = async () => {
+  //     try {
+  //       let res = await getCommentQuantityByPostId(data?.id);
 
-        if (res.status === 200) {
-          setCommentQuantity(res.data);
-        }
-      } catch (e) {
-        return;
-      }
-    };
-    process();
-  }, [comments]);
+  //       if (res.status === 200) {
+  //         setCommentQuantity(res.data);
+  //       }
+  //     } catch (e) {
+  //       return;
+  //     }
+  //   };
+  //   process();
+  // }, [comments]);
+
+  // Get reactions of post
+  // useEffect(() => {
+  //   const listReactions = async () => {
+  //     try {
+  //       let res = await getReactionsByPostId(data?.id);
+        
+  //       if (res.status === 200) {
+  //         setReactions(res.data);
+  //       }
+  //     } catch (e) {}
+  //   };
+
+  //   listReactions();
+  // }, []);
 
   const handleShowEditPostForm = () => {
     setShowEditPostForm(true);
@@ -122,6 +142,10 @@ const Post = ({ data, className, type }) => {
     setCommentQuantity(newCommentQuantity);
   };
 
+  const handleReactionsChange = (reactions) => {
+    setReactions(reactions);
+  };
+  
   return (
     <>
       <div
@@ -199,13 +223,13 @@ const Post = ({ data, className, type }) => {
         )}
         {/* Post reaction quantity */}
         <PostReactionQuantity
+        reactions={reactions}
           postId={data?.id}
-          commentQuantity={commentQuantity}
         />
         <Divider variant="middle" />
         {/* Post action section: like, comment, share */}
         <div className="my-1">
-          <PostActionSection postId={data?.id} />
+          <PostActionSection postId={data?.id} reactions={reactions} onReactionsChange={handleReactionsChange} />
         </div>
         <Divider variant="middle" />
         {/* Comment section */}
@@ -216,6 +240,7 @@ const Post = ({ data, className, type }) => {
             </div>
           ) : (
             <CommentSection
+            listComments={data?.comments}
               isPostOwner={data?.user?.id === user.id}
               postId={data?.id}
               type={type}
@@ -270,4 +295,4 @@ const Post = ({ data, className, type }) => {
   );
 };
 
-export default Post;
+export default memo(Post);

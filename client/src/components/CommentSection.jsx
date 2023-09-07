@@ -5,17 +5,24 @@ import { Avatar, Divider, Pagination } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 
 import { blankAvatar } from "../assets";
-import { CommentItem } from "../components";
+import { CommentItem, DataLoading } from "../components";
 import { addNewComment, getCommentsByPostId } from "../apis/CommentApi";
-import { POST_DETAIL, COMMENT_PER_PAGE, CREATE } from "../constants/common";
+import { POST_DETAIL, COMMENT_PER_PAGE, CREATE, ADD_COMMENT } from "../constants/common";
 import { Link } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import { getCommentQuantityByPostId } from "../apis/PostApi";
 
-const CommentSection = ({ isPostOwner, postId, type, onCommentQuantityChange }) => {
+const CommentSection = ({
+  listComments,
+  isPostOwner,
+  postId,
+  type,
+  onCommentQuantityChange,
+}) => {
   const {
     comments,
     commentDispatch,
+    postDispatch,
     commentCount,
     setCommentCount,
     commentIndex,
@@ -27,29 +34,33 @@ const CommentSection = ({ isPostOwner, postId, type, onCommentQuantityChange }) 
   const [deletedCommentId, setDeletedCommentId] = useState(null);
   const [commentContent, setCommentContent] = useState("");
   const [isSendingComment, setIsSendingComment] = useState(false);
+  const [isCommentLoading, setIsCommentLoading] = useState(false);
 
-  useEffect(() => {
-    const handleLoadComment = async () => {
-      try {
-        const commentPageData = new FormData();
-        commentPageData.append("page", commentIndex);
+  // useEffect(() => {
+  //   const handleLoadComment = async () => {
+  //     setIsCommentLoading(true);
+  //     try {
+  //       const commentPageData = new FormData();
+  //       commentPageData.append("page", commentIndex);
 
-        let commentRes = await getCommentsByPostId(postId, commentPageData);
-        let countRes = await getCommentQuantityByPostId(postId);
+  //       let commentRes = await getCommentsByPostId(postId, commentPageData);
+  //       let countRes = await getCommentQuantityByPostId(postId);
 
-        if (commentRes.status === 200) {
-          setCommentList(commentRes.data);
-        }
-        if (countRes.status === 200) {
-          setCommentCount(countRes.data);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    };
+  //       if (commentRes.status === 200) {
+  //         setCommentList(commentRes.data);
+  //       }
+  //       if (countRes.status === 200) {
+  //         setCommentCount(countRes.data);
+  //       }
+  //     } catch (e) {
+  //       console.log(e);
+  //     } finally {
+  //       setIsCommentLoading(false);
+  //     }
+  //   };
 
-    handleLoadComment();
-  }, [updatedComment, deletedCommentId, postId, commentIndex, comments]);
+  //   handleLoadComment();
+  // }, [updatedComment, deletedCommentId, postId, commentIndex, comments]);
 
   const handleCommentContentChange = (e) => {
     setCommentContent(e.target.value);
@@ -67,9 +78,10 @@ const CommentSection = ({ isPostOwner, postId, type, onCommentQuantityChange }) 
         let res = await addNewComment(postId, commentData);
 
         if (res.status === 201) {
-          setCommentList((prev) => [res.data, ...prev]);
-          commentDispatch({ type: CREATE, payload: res.data });
-          onCommentQuantityChange((prev) => prev + 1);
+          // setCommentList((prev) => [res.data, ...prev]);
+          // commentDispatch({ type: CREATE, payload: res.data });
+          postDispatch({ type: ADD_COMMENT, payload: { postId: postId, newComment: res.data }});
+          // onCommentQuantityChange((prev) => prev + 1);
         }
       } catch (e) {
         console.log(e);
@@ -98,80 +110,53 @@ const CommentSection = ({ isPostOwner, postId, type, onCommentQuantityChange }) 
     );
   };
 
-  return (
-    <div className="w-full flex flex-col px-4">
-      <div className="flex items-center">
-        <Avatar src={blankAvatar} alt="avatar" sx={{ width: 32, height: 32 }} />
-        <div className="relative flex-1 flex items-center ml-1 rounded-3xl cursor-pointer hover:bg-gray-2 overflow-hidden">
-          <input
-            value={commentContent}
-            onChange={handleCommentContentChange}
-            className="w-full px-3 pr-10 py-2 border-none outline-none bg-gray"
-            placeholder="Viết bình luận..."
-          />
-          <span
-            onClick={handleSendComment}
-            className={`absolute right-3 ${
-              commentContent === "" ? "hidden" : "flex flex-col justify-center"
-            } text-primary`}
-          >
-            {isSendingComment ? (
-              <CircularProgress size={"24px"} />
-            ) : (
-              <SendIcon fontSize="small" />
-            )}
-          </span>
-        </div>
+  if (isCommentLoading)
+    return (
+      <div className="w-full my-2 flex justify-center">
+        <DataLoading />
       </div>
-      {type === POST_DETAIL ? (
-        <div className="mt-6">
-          {commentList.map((comment, index) => (
-            <div key={index}>
-              <CommentItem
-              isPostOwner={isPostOwner}
-                data={comment}
-                onCommentDelete={onCommentDelete}
-                onCommentUpdate={onCommentUpdate}
-                onCommentQuantityChange={onCommentQuantityChange}
-              />
-              {comment.listComments && comment.listComments.length > 0 && (
-                <div>
-                  {comment.listComments.map((responseComment, resIndex) => (
-                    <div className="ml-10">
-                      <CommentItem
-                      isPostOwner={isPostOwner}
-                      showRes={false}
-                        key={resIndex}
-                        data={responseComment}
-                        onCommentDelete={onCommentDelete}
-                        onCommentUpdate={onCommentUpdate}
-                        onCommentQuantityChange={onCommentQuantityChange}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-          {commentList.length !== 0 && (
-            <div className="w-full flex justify-center mb-3">
-            <Pagination
-              color="primary"
-              count={Math.ceil(commentCount / COMMENT_PER_PAGE)}
-              onChange={(event, page) => setCommentIndex(page)}
-              page={commentIndex}
+    );
+  else
+    return (
+      <div className="w-full flex flex-col px-4">
+        <div className="flex items-center">
+          <Avatar
+            src={blankAvatar}
+            alt="avatar"
+            sx={{ width: 32, height: 32 }}
+          />
+          <div className="relative flex-1 flex items-center ml-1 rounded-3xl cursor-pointer hover:bg-gray-2 overflow-hidden">
+            <input
+              value={commentContent}
+              onChange={handleCommentContentChange}
+              className="w-full px-3 pr-10 py-2 border-none outline-none bg-gray"
+              placeholder="Viết bình luận..."
             />
+            <span
+              onClick={handleSendComment}
+              className={`absolute right-3 ${
+                commentContent === ""
+                  ? "hidden"
+                  : "flex flex-col justify-center"
+              } text-primary`}
+            >
+              {isSendingComment ? (
+                <CircularProgress size={"24px"} />
+              ) : (
+                <SendIcon fontSize="small" />
+              )}
+            </span>
           </div>
-          )}
         </div>
-      ) : (
-        <>
+        {type === POST_DETAIL ? (
           <div className="mt-6">
-            {commentList.slice(0, 2).map((comment, index) => (
+          
+            {listComments.length > 0 && listComments.map((comment, index) => (
               <div key={index}>
                 <CommentItem
-                isPostOwner={isPostOwner}
-                  data={comment}
+                  isPostOwner={isPostOwner}
+                  postId={postId}
+                  comment={comment}
                   onCommentDelete={onCommentDelete}
                   onCommentUpdate={onCommentUpdate}
                   onCommentQuantityChange={onCommentQuantityChange}
@@ -181,9 +166,11 @@ const CommentSection = ({ isPostOwner, postId, type, onCommentQuantityChange }) 
                     {comment.listComments.map((responseComment, resIndex) => (
                       <div className="ml-10" key={resIndex}>
                         <CommentItem
-                        isPostOwner={isPostOwner}
-                        showRes={false}
-                          data={responseComment}
+                          isPostOwner={isPostOwner}
+                          showRes={false}
+                          
+                          comment={responseComment}
+                          postId={postId}
                           onCommentDelete={onCommentDelete}
                           onCommentUpdate={onCommentUpdate}
                           onCommentQuantityChange={onCommentQuantityChange}
@@ -194,22 +181,65 @@ const CommentSection = ({ isPostOwner, postId, type, onCommentQuantityChange }) 
                 )}
               </div>
             ))}
+            {listComments.length > 0 && (
+              <div className="w-full flex justify-center mb-3">
+                <Pagination
+                  color="primary"
+                  count={Math.ceil(commentCount / COMMENT_PER_PAGE)}
+                  onChange={(event, page) => setCommentIndex(page)}
+                  page={commentIndex}
+                />
+              </div>
+            )}
           </div>
-          {commentList.length > 2 && (
-            <>
-              <Divider variant="middle" />
-              <Link
-                to={`/posts/${postId}`}
-                className="w-full flex justify-center my-2 text-primary hover:underline cursor-pointer"
-              >
-                Xem thêm bình luận
-              </Link>
-            </>
-          )}
-        </>
-      )}
-    </div>
-  );
+        ) : (
+          <>
+            <div className="mt-6">
+              {listComments.slice(0, 2).map((comment, index) => (
+                <div key={index}>
+                  <CommentItem
+                    isPostOwner={isPostOwner}
+                    comment={comment}
+                    postId={postId}
+                    onCommentDelete={onCommentDelete}
+                    onCommentUpdate={onCommentUpdate}
+                    onCommentQuantityChange={onCommentQuantityChange}
+                  />
+                  {comment.listComments && comment.listComments.length > 0 && (
+                    <div>
+                      {comment.listComments.map((responseComment, resIndex) => (
+                        <div className="ml-10" key={resIndex}>
+                          <CommentItem
+                            isPostOwner={isPostOwner}
+                            showRes={false}
+                            comment={responseComment}
+                            postId={postId}
+                            onCommentDelete={onCommentDelete}
+                            onCommentUpdate={onCommentUpdate}
+                            onCommentQuantityChange={onCommentQuantityChange}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            {listComments.length > 2 && (
+              <>
+                <Divider variant="middle" />
+                <Link
+                  to={`/posts/${postId}`}
+                  className="w-full flex justify-center my-2 text-primary hover:underline cursor-pointer"
+                >
+                  Xem thêm bình luận
+                </Link>
+              </>
+            )}
+          </>
+        )}
+      </div>
+    );
 };
 
 export default CommentSection;

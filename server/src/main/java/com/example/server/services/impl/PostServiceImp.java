@@ -177,6 +177,19 @@ public class PostServiceImp implements PostService {
     }
 
     @Override
+    public List<PostDto> getPosts(Map<String, String> params) {
+        List<Posts> posts = postRepo.getPosts(params);
+        List<PostDto> postDtos = new ArrayList<>();
+
+        posts.forEach(p -> {
+            PostDto postDto = this.findPostById(p.getId());
+            postDtos.add(postDto);
+        });
+
+        return postDtos;
+    }
+
+    @Override
     public List<PostDto> getAllPosts(int currentPage) {
         List<Posts> posts = postRepo.findAllPosts(currentPage);
         List<PostDto> listPostDto = new ArrayList<>();

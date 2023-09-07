@@ -69,15 +69,7 @@ public class ReactionServiceImpl implements ReactionService {
         return reDto;
     }
     
-     public ReactionDto2 reactionDto2(Reactions re) {
-        ReactionDto2 reDto2 = ReactionDto2.builder()
-            .id(re.getId())
-            .reactionType(re.getReactionType())
-            .userId(re.getUserId().getId())
-            .postId(re.getPostId().getId())
-            .build();
-        return reDto2;
-    }
+  
     
 
     @Override
@@ -97,6 +89,7 @@ public class ReactionServiceImpl implements ReactionService {
         });
         return reDtos;
     }
+
     
     @Override
     public List<ReactionDto2> listReaction2(Posts p) {
@@ -112,4 +105,26 @@ public class ReactionServiceImpl implements ReactionService {
     }
     
     
+
+
+    @Override
+    public ReactionDto findReactionByUserIdAndPostId(Long userId, Long postId) {
+        Reactions re = reRepo.findReactionByUserIdAndPostId(userId, postId);
+
+        if (re != null)
+            return reactionDto(re);
+        return null;
+    }
+
+      public ReactionDto2 reactionDto2(Reactions re) {
+        ReactionDto2 reDto2 = ReactionDto2.builder()
+                .id(re.getId())
+                .reactionType(re.getReactionType())
+                .userId(re.getUserId().getId())
+                .postId(re.getPostId().getId())
+                .build();
+       
+        return reDto2;
+    }
 }
+

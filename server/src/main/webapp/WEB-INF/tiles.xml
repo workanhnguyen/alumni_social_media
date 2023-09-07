@@ -4,27 +4,50 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
-    <definition name="baseLayout"
-                template="/WEB-INF/layouts/base.jsp">
-        <put-attribute name="title" value="" />
-        <put-attribute name="header"
-                       value="/WEB-INF/components/header.jsp" />
-        <put-attribute name="content" value="" />
-        <put-attribute name="footer"
-                       value="/WEB-INF/components/footer.jsp" />
+    <definition name="baseLayout" template="/WEB-INF/layouts/base.jsp">
+        <put-attribute name="title" value=""/>
+        <put-attribute name="header" value="/WEB-INF/components/header.jsp"/>
+        <put-attribute name="content" value=""/>
+        <put-attribute name="footer" value="/WEB-INF/components/footer.jsp"/>
     </definition>
     <definition name="listUser" extends="baseLayout">
-        <put-attribute name="title" value="Danh sách người dùng" />
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/list-user.jsp" />
+        <put-attribute name="title" value="Danh sách người dùng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/list-user.jsp"/>
     </definition>
     <definition name="userDetail" extends="baseLayout">
-        <put-attribute name="title" value="Chi tiết người dùng" />
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/user-detail.jsp" />
+        <put-attribute name="title" value="Chi tiết người dùng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/user-detail.jsp"/>
+    </definition>
+    <definition name="addUser" extends="baseLayout">
+        <put-attribute name="title" value="Thêm người dùng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/add-user.jsp"/>
     </definition>
     <definition name="login" extends="baseLayout">
-        <put-attribute name="title" value="Đăng nhập" />
-        <put-attribute name="content" value="/WEB-INF/pages/login.jsp" />
+        <put-attribute name="title" value="Đăng nhập"/>
+        <put-attribute name="content" value="/WEB-INF/pages/login.jsp"/>
+    </definition>
+    <definition name="listPost" extends="baseLayout">
+        <put-attribute name="title" value="Danh sách bài đăng" />
+        <put-attribute name="content" value="/WEB-INF/pages/list-post.jsp" />
+    </definition>
+    <definition name="postDetail" extends="baseLayout">
+        <put-attribute name="title" value="Chi tiết bài đăng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/post-detail.jsp"/>
+    </definition>
+    <definition name="statistic" extends="baseLayout">
+        <put-attribute name="title" value="Thống kê" />
+        <put-attribute name="content" value="/WEB-INF/pages/statistic.jsp" />
+    </definition>
+    <definition name="listGroup" extends="baseLayout">
+        <put-attribute name="title" value="Danh sách nhóm" />
+        <put-attribute name="content" value="/WEB-INF/pages/list-group.jsp" />
+    </definition>
+    <definition name="addGroup" extends="baseLayout">
+        <put-attribute name="title" value="Thêm nhóm" />
+        <put-attribute name="content" value="/WEB-INF/pages/add-group.jsp" />
+    </definition>
+    <definition name="groupDetail" extends="baseLayout">
+        <put-attribute name="title" value="Chi tiết nhóm" />
+        <put-attribute name="content" value="/WEB-INF/pages/group-detail.jsp" />
     </definition>
 </tiles-definitions>
