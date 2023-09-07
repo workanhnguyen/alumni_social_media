@@ -25,7 +25,7 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 
-import { logo1, logo2 } from "../assets";
+import { logo1, logo2, messengerIcon } from "../assets";
 import { GROUP, HOME, LETTER } from "../constants/page";
 import { useStateContext } from "../contexts/ContextProvider";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
@@ -167,6 +167,15 @@ const Header = () => {
               onClick={() => handleIconClick(LETTER)}
             >
               <EmailIcon fontSize="large" />
+            </Link>
+            <Link
+              to="/letters"
+              className={`max-md:px-3 px-8 py-1 max-sm:mx-2 mx-4 rounded-lg cursor-pointer ${
+                pageContent === LETTER ? "text-primary" : "text-dark-gray"
+              } hover:bg-gray`}
+              onClick={() => handleIconClick(LETTER)}
+            >
+              <img style={{ marginTop: '2px' }} src={messengerIcon} alt="icon" />
             </Link>
           </div>
           {/* Avatar */}
