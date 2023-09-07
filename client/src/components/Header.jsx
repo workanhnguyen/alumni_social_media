@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from '../configs/FirebaseConfig';
-import { signInAnonymously } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import cookie from "react-cookies";
 
 import {
@@ -34,6 +33,7 @@ import { ROLE_PAGE } from "../routes";
 import { ROLE_LECTURER } from "../constants/role";
 import { LoadingButton } from "../components";
 import { changePassword } from "../apis/UserApi";
+import { auth } from '../configs/FirebaseConfig';
 
 const Header = () => {
   const { pageContent, setPageContent, user, userDispatch } = useStateContext();
@@ -91,8 +91,11 @@ const Header = () => {
     popupState.close();
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     userDispatch({ type: LOGOUT });
+
+    const res = await signOut(auth);
+    console.log(res);
 
     navigate(ROLE_PAGE, { replace: true });
     window.location.reload();
@@ -167,12 +170,6 @@ const Header = () => {
               onClick={() => handleIconClick(LETTER)}
             >
               <EmailIcon fontSize="large" />
-            </Link>
-            <Link
-              to="/chattings"
-              className={`max-md:px-3 px-8 py-1 max-sm:mx-2 mx-4 rounded-lg cursor-pointer hover:bg-gray`}
-            >
-              <img style={{ marginTop: '2px' }} src={messengerIcon} alt="icon" />
             </Link>
           </div>
           {/* Avatar */}
