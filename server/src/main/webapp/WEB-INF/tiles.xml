@@ -34,4 +34,8 @@
         <put-attribute name="title" value="Chi tiết bài đăng"/>
         <put-attribute name="content" value="/WEB-INF/pages/post-detail.jsp"/>
     </definition>
+    <definition name="statistic" extends="baseLayout">
+        <put-attribute name="title" value="Thống kê" />
+        <put-attribute name="content" value="/WEB-INF/pages/statistic.jsp" />
+    </definition>
 </tiles-definitions>
