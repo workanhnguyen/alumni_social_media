@@ -191,7 +191,65 @@ function statistic(authToken) {
                     });
                 })
         } else if (filterDOM.value === 'quater') {
-            console.log('quater');
+            const yearForQuaterDOM = document.getElementById("year-for-quater");
+            const selectedQuaterDOM = document.getElementById("quater");
+
+            let barColors = ["red", "green", "blue", "orange", "brown", "red", "green", "blue", "orange", "brown", "red", "green"];
+
+            fetch(`/server/api/stats/users/${yearForQuaterDOM.value}/month/${selectedQuaterDOM.value}`, {
+                method: "get", headers: {
+                    "Authorization": authToken, "Content-Type": "application/json"
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    let userChartTitle = [];
+                    let userChartValue = [];
+
+                    for (var i = 0; i < data.length; i++) {
+                        userChartTitle[i] = data[i].month;
+                        userChartValue[i] = data[i].quantityOfUser
+                    }
+                    new Chart("userChart", {
+                        type: "bar", data: {
+                            labels: userChartTitle, datasets: [{
+                                backgroundColor: barColors, data: userChartValue
+                            }]
+                        }, options: {
+                            legend: {display: false}, title: {
+                                display: true,
+                                text: `Số lượng người dùng đăng ký trong quý ${selectedQuaterDOM.value} năm ${yearForQuaterDOM.value}`
+                            }
+                        }
+                    });
+                })
+            fetch(`/server/api/stats/posts/${yearForQuaterDOM.value}/month/${selectedQuaterDOM.value}`, {
+                method: "get", headers: {
+                    "Authorization": authToken, "Content-Type": "application/json"
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    let postChartTitle = [];
+                    let postChartValue = [];
+
+                    for (var i = 0; i < data.length; i++) {
+                        postChartTitle[i] = data[i].month;
+                        postChartValue[i] = data[i].quantityOfPost
+                    }
+                    new Chart("postChart", {
+                        type: "bar", data: {
+                            labels: postChartTitle, datasets: [{
+                                backgroundColor: barColors, data: postChartValue
+                            }]
+                        }, options: {
+                            legend: {display: false}, title: {
+                                display: true,
+                                text: `Số lượng bài đăng trong quý ${selectedQuaterDOM.value} năm ${yearForQuaterDOM.value}`
+                            }
+                        }
+                    });
+                })
         }
 }
 
