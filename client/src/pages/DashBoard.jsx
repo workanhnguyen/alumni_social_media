@@ -41,8 +41,6 @@ const DashBoard = () => {
         let res = await countAllPosts();
         setPostCount(res.data);
       } catch (e) {
-        console.log(e);
-        return;
       }
     };
 

@@ -39,6 +39,8 @@ import { useNavigate } from "react-router-dom";
 import { addReactionToPost, deleteReactionFromPost, getReactionOnPost, getReactionsByPostId } from "../apis/ReactionApi";
 
 const Post = ({ data, className, type }) => {
+  if (data.id === 24)
+    console.log(data);
   const { user, postDispatch, setPostCount, comments } = useStateContext();
 
   const [commentQuantity, setCommentQuantity] = useState(0);
@@ -240,6 +242,7 @@ const Post = ({ data, className, type }) => {
             </div>
           ) : (
             <CommentSection
+            listComments={data?.comments}
               isPostOwner={data?.user?.id === user.id}
               postId={data?.id}
               type={type}

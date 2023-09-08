@@ -28,21 +28,22 @@ import {
   deleteComment,
   updateComment,
 } from "../apis/CommentApi";
-import { CREATE } from "../constants/common";
+import { ADD_RESPONSE_COMMENT, CREATE, DELETE_COMMENT, UPDATE_COMMENT } from "../constants/common";
 import LoadingButton from "./LoadingButton";
 
 moment.locale("vi");
 
 const CommentItem = ({
   isPostOwner,
-  data,
+  comment,
+  postId,
   onCommentDelete,
   onCommentUpdate,
   onCommentQuantityChange,
   showRes = true,
 }) => {
-  const { user, commentDispatch } = useStateContext();
-  const [commentContent, setCommentContent] = useState(data.content);
+  const { user, commentDispatch, postDispatch } = useStateContext();
+  const [commentContent, setCommentContent] = useState(comment?.content);
   const [responseCommentContent, setResponseCommentContent] = useState("");
 
   const [isSendingComment, setIsSendingComment] = useState(false);
@@ -67,12 +68,12 @@ const CommentItem = ({
   };
 
   const handleShowEditCommentField = () => {
-    setCommentContent(data.content);
+    setCommentContent(comment.content);
     setShowEditInput(true);
   };
 
   const handleHideEditCommentField = () => {
-    setCommentContent(data.content);
+    setCommentContent(comment.content);
     setShowEditInput(false);
   };
 
@@ -93,10 +94,10 @@ const CommentItem = ({
       };
 
       try {
-        let res = await updateComment(data.id, editCommentData);
+        let res = await updateComment(comment.id, editCommentData);
 
         if (res.status === 201) {
-          onCommentUpdate(res.data);
+          postDispatch({ type: UPDATE_COMMENT, payload: { postId: postId, updatedComment: res.data }});
           handleHideEditCommentField();
         }
       } catch (e) {
@@ -113,11 +114,10 @@ const CommentItem = ({
     const process = async () => {
       setShowDeleteCommentProgress(true);
       try {
-        let res = await deleteComment(data.id);
+        let res = await deleteComment(comment.id);
 
         if (res.status === 204) {
-          onCommentDelete(data.id);
-          onCommentQuantityChange((prev) => prev - 1);
+          postDispatch({ type: DELETE_COMMENT, payload: { postId: postId, deletedCommentId: comment.id }});
         }
       } catch (e) {
         console.log(e);
@@ -138,11 +138,11 @@ const CommentItem = ({
         content: responseCommentContent,
       };
       try {
-        let res = await addResponseComment(data?.id, responseCommentData);
+        let res = await addResponseComment(comment?.id, responseCommentData);
 
         if (res.status === 201) {
-          commentDispatch({ type: CREATE, payload: res.data });
-
+          // commentDispatch({ type: CREATE, payload: res.data });
+          postDispatch({ type: ADD_RESPONSE_COMMENT, payload: { postId: postId, parentCommentId: comment.id, newResponseComment: res.data }});
           setResponseCommentContent("");
           handleHideResponseComment();
         }
@@ -161,7 +161,7 @@ const CommentItem = ({
       <div className="w-full flex flex-col mb-3">
         <div className="flex">
           <Avatar
-            src={data?.user?.avatar || data?.userId?.avatar}
+            src={comment?.user?.avatar || comment?.userId?.avatar}
             alt="avatar"
             sx={{ width: 32, height: 32, border: 0.5, borderColor: "lightgray" }}
           />
@@ -171,15 +171,15 @@ const CommentItem = ({
               <div className="flex text-sm break-all">
                 <div className="flex-1 p-2 bg-gray rounded-md">
                   <p className="font-semibold">{`${
-                    data?.user?.lastName || data.userId?.lastName
-                  } ${data?.user?.firstName || data?.userId?.firstName}`}</p>
+                    comment?.user?.lastName || comment?.userId?.lastName
+                  } ${comment?.user?.firstName || comment?.userId?.firstName}`}</p>
                   {showEditInput ? (
                     <div className="relative flex-1 flex items-center cursor-pointer overflow-hidden">
                       <input
                         value={commentContent}
                         onChange={handleCommentContentChange}
                         className="w-full pr-3 py-2 border-none outline-none bg-gray"
-                        placeholder={data?.content}
+                        placeholder={comment?.content}
                       />
                       <div className="flex items-center">
                         <span
@@ -208,14 +208,14 @@ const CommentItem = ({
                       </div>
                     </div>
                   ) : (
-                    <p>{data?.content}</p>
+                    <p>{comment?.content}</p>
                   )}
                 </div>
 
                 {/* Comment actions */}
                 {(!showEditInput &&
-                  (user.id === data?.user?.id ||
-                    user.id === data?.userId?.id) || isPostOwner) && (
+                  (user.id === comment?.user?.id ||
+                    user.id === comment?.userId?.id) || isPostOwner) && (
                     <PopupState variant="popover" popupId="demo-popup-menu">
                       {(popupState) => (
                         <>
@@ -237,8 +237,8 @@ const CommentItem = ({
                             elevation={2}
                             {...bindMenu(popupState)}
                           >
-                            {(user.id === data?.user?.id ||
-                              user.id === data?.userId?.id) && (
+                            {(user.id === comment?.user?.id ||
+                              user.id === comment?.userId?.id) && (
                               <MenuItem onClick={popupState.close}>
                                 <div
                                   className="flex items-center"
@@ -251,8 +251,8 @@ const CommentItem = ({
                                 </div>
                               </MenuItem>
                             )}
-                            {((user.id === data?.user?.id ||
-                              user.id === data?.userId?.id) ||
+                            {((user.id === comment?.user?.id ||
+                              user.id === comment?.userId?.id) ||
                               isPostOwner) && (
                                 <MenuItem
                                   onClick={() =>
@@ -314,15 +314,15 @@ const CommentItem = ({
                   </span>
                 )}
                 <span className="text-xs">
-                  {moment(data?.createdAt).fromNow()}
+                  {moment(comment?.createdAt).fromNow()}
                 </span>
               </div>
 
-              {data?.comments?.length !== 0 &&
-                data?.comments?.map((comment, index) => (
+              {comment?.comments?.length !== 0 &&
+                comment?.comments?.map((comment, index) => (
                   <div className="w-fit flex mt-3" key={index}>
                     <Avatar
-                      src={data?.user?.avatar}
+                      src={comment?.user?.avatar}
                       alt="avatar"
                       sx={{ width: 32, height: 32 }}
                     />
@@ -354,7 +354,7 @@ const CommentItem = ({
           <div className="w-full flex items-center mt-2 cursor-pointer overflow-hidden">
             <div className="absolute left-14">
               <Avatar
-                src={data?.user?.avatar}
+                src={comment?.user?.avatar}
                 alt="avatar"
                 sx={{ width: 24, height: 24 }}
               />
@@ -365,8 +365,8 @@ const CommentItem = ({
                 onChange={handleResponseCommentContentChange}
                 className="w-full px-3 py-2 pr-16 text-sm border-none outline-none bg-gray"
                 placeholder={`Phản hồi ${
-                  data?.userId?.lastName || data?.user?.lastName
-                } ${data?.userId?.firstName || data?.user?.firstName}`}
+                  comment?.userId?.lastName || comment?.user?.lastName
+                } ${comment?.userId?.firstName || comment?.user?.firstName}`}
               />
             </div>
             <div className="absolute right-5 flex items-center">

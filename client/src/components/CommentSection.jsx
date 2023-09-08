@@ -7,12 +7,13 @@ import { CircularProgress } from "@mui/material";
 import { blankAvatar } from "../assets";
 import { CommentItem, DataLoading } from "../components";
 import { addNewComment, getCommentsByPostId } from "../apis/CommentApi";
-import { POST_DETAIL, COMMENT_PER_PAGE, CREATE } from "../constants/common";
+import { POST_DETAIL, COMMENT_PER_PAGE, CREATE, ADD_COMMENT } from "../constants/common";
 import { Link } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import { getCommentQuantityByPostId } from "../apis/PostApi";
 
 const CommentSection = ({
+  listComments,
   isPostOwner,
   postId,
   type,
@@ -21,6 +22,7 @@ const CommentSection = ({
   const {
     comments,
     commentDispatch,
+    postDispatch,
     commentCount,
     setCommentCount,
     commentIndex,
@@ -34,31 +36,31 @@ const CommentSection = ({
   const [isSendingComment, setIsSendingComment] = useState(false);
   const [isCommentLoading, setIsCommentLoading] = useState(false);
 
-  useEffect(() => {
-    const handleLoadComment = async () => {
-      setIsCommentLoading(true);
-      try {
-        const commentPageData = new FormData();
-        commentPageData.append("page", commentIndex);
+  // useEffect(() => {
+  //   const handleLoadComment = async () => {
+  //     setIsCommentLoading(true);
+  //     try {
+  //       const commentPageData = new FormData();
+  //       commentPageData.append("page", commentIndex);
 
-        let commentRes = await getCommentsByPostId(postId, commentPageData);
-        let countRes = await getCommentQuantityByPostId(postId);
+  //       let commentRes = await getCommentsByPostId(postId, commentPageData);
+  //       let countRes = await getCommentQuantityByPostId(postId);
 
-        if (commentRes.status === 200) {
-          setCommentList(commentRes.data);
-        }
-        if (countRes.status === 200) {
-          setCommentCount(countRes.data);
-        }
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setIsCommentLoading(false);
-      }
-    };
+  //       if (commentRes.status === 200) {
+  //         setCommentList(commentRes.data);
+  //       }
+  //       if (countRes.status === 200) {
+  //         setCommentCount(countRes.data);
+  //       }
+  //     } catch (e) {
+  //       console.log(e);
+  //     } finally {
+  //       setIsCommentLoading(false);
+  //     }
+  //   };
 
-    handleLoadComment();
-  }, [updatedComment, deletedCommentId, postId, commentIndex, comments]);
+  //   handleLoadComment();
+  // }, [updatedComment, deletedCommentId, postId, commentIndex, comments]);
 
   const handleCommentContentChange = (e) => {
     setCommentContent(e.target.value);
@@ -76,9 +78,10 @@ const CommentSection = ({
         let res = await addNewComment(postId, commentData);
 
         if (res.status === 201) {
-          setCommentList((prev) => [res.data, ...prev]);
-          commentDispatch({ type: CREATE, payload: res.data });
-          onCommentQuantityChange((prev) => prev + 1);
+          // setCommentList((prev) => [res.data, ...prev]);
+          // commentDispatch({ type: CREATE, payload: res.data });
+          postDispatch({ type: ADD_COMMENT, payload: { postId: postId, newComment: res.data }});
+          // onCommentQuantityChange((prev) => prev + 1);
         }
       } catch (e) {
         console.log(e);
@@ -147,11 +150,13 @@ const CommentSection = ({
         </div>
         {type === POST_DETAIL ? (
           <div className="mt-6">
-            {commentList.map((comment, index) => (
+          
+            {listComments.length > 0 && listComments.map((comment, index) => (
               <div key={index}>
                 <CommentItem
                   isPostOwner={isPostOwner}
-                  data={comment}
+                  postId={postId}
+                  comment={comment}
                   onCommentDelete={onCommentDelete}
                   onCommentUpdate={onCommentUpdate}
                   onCommentQuantityChange={onCommentQuantityChange}
@@ -164,7 +169,8 @@ const CommentSection = ({
                           isPostOwner={isPostOwner}
                           showRes={false}
                           key={resIndex}
-                          data={responseComment}
+                          comment={responseComment}
+                          postId={postId}
                           onCommentDelete={onCommentDelete}
                           onCommentUpdate={onCommentUpdate}
                           onCommentQuantityChange={onCommentQuantityChange}
@@ -175,7 +181,7 @@ const CommentSection = ({
                 )}
               </div>
             ))}
-            {commentList.length !== 0 && (
+            {listComments.length > 0 && (
               <div className="w-full flex justify-center mb-3">
                 <Pagination
                   color="primary"
@@ -189,11 +195,12 @@ const CommentSection = ({
         ) : (
           <>
             <div className="mt-6">
-              {commentList.slice(0, 2).map((comment, index) => (
+              {listComments.slice(0, 2).map((comment, index) => (
                 <div key={index}>
                   <CommentItem
                     isPostOwner={isPostOwner}
-                    data={comment}
+                    comment={comment}
+                    postId={postId}
                     onCommentDelete={onCommentDelete}
                     onCommentUpdate={onCommentUpdate}
                     onCommentQuantityChange={onCommentQuantityChange}
@@ -205,7 +212,8 @@ const CommentSection = ({
                           <CommentItem
                             isPostOwner={isPostOwner}
                             showRes={false}
-                            data={responseComment}
+                            comment={responseComment}
+                            postId={postId}
                             onCommentDelete={onCommentDelete}
                             onCommentUpdate={onCommentUpdate}
                             onCommentQuantityChange={onCommentQuantityChange}
@@ -217,7 +225,7 @@ const CommentSection = ({
                 </div>
               ))}
             </div>
-            {commentList.length > 2 && (
+            {listComments.length > 2 && (
               <>
                 <Divider variant="middle" />
                 <Link
