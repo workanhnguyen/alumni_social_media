@@ -9,17 +9,20 @@ import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 
 import { actionHaha, actionHeart, actionLike } from "../assets";
 import { Link } from "react-router-dom";
-import { ACTION_HAHA, ACTION_HEART, ACTION_LIKE } from "../constants/common";
+import { ACTION_HAHA, ACTION_HEART, ACTION_LIKE, ADD_REACTION, REMOVE_REACTION } from "../constants/common";
 import {
   addReactionToPost,
   deleteReactionFromPost,
   getReactionOnPost,
 } from "../apis/ReactionApi";
+import { useStateContext } from "../contexts/ContextProvider";
 
 const PostActionSection = ({ postId, reactions, onReactionsChange }) => {
-  const [reactionOnPost, setReactionOnPost] = useState({});
-  const [currentReaction, setCurrentReaction] = useState("");
+  const { user, postDispatch } = useStateContext();
 
+  const [reactionOnPost, setReactionOnPost] = useState(reactions.find(reaction => reaction.userId === user.id) || {});
+  const [currentReaction, setCurrentReaction] = useState("");
+console.log(reactionOnPost)
   // Get current reaction of post
   // useEffect(() => {
   //   const process = async () => {
@@ -44,11 +47,12 @@ const PostActionSection = ({ postId, reactions, onReactionsChange }) => {
           let addReactionRes = await addReactionToPost(postId, reactionData);
           console.log(addReactionRes);
           if (addReactionRes.status === 201) {
-            onReactionsChange(prev => [addReactionRes.data, ...prev]);
-            let getReactionRes = await getReactionOnPost(postId);
+            postDispatch({ type: ADD_REACTION, payload: { postId: postId, newReaction: addReactionRes.data } });
+            // onReactionsChange(prev => [addReactionRes.data, ...prev]);
+            // let getReactionRes = await getReactionOnPost(postId);
             
-            if (getReactionRes.status === 200)
-              setReactionOnPost(getReactionRes.data);
+            // if (getReactionRes.status === 200)
+              setReactionOnPost(addReactionRes.data);
           }
         } catch (e) {}
       };
@@ -57,17 +61,20 @@ const PostActionSection = ({ postId, reactions, onReactionsChange }) => {
     } else {
       const deleteReaction = async () => {
         try {
-          let findReactionRes = await getReactionOnPost(postId);
+          // let findReactionRes = await getReactionOnPost(postId);
           
-          if (findReactionRes.status === 200) {
-            let res = await deleteReactionFromPost(findReactionRes.data.id);
-            console.log(res);
+          // if (findReactionRes.status === 200) {
+            let res = await deleteReactionFromPost(reactionOnPost?.id);
+            // console.log(res);
             if (res.status === 204) {
+              // console.log(reactionOnPost);
+              postDispatch({ type: REMOVE_REACTION, payload: { postId: postId, removedReactionId: reactionOnPost.id }})
               setReactionOnPost({});
-              setCurrentReaction("");
-              onReactionsChange(prev => prev.filter(reaction => reaction.id !== findReactionRes.data.id));
+              // console.log(res);
+              // setCurrentReaction("");
+              // onReactionsChange(prev => prev.filter(reaction => reaction.id !== findReactionRes.data.id));
             }
-          }
+          // }
         } catch (e) {
           return;
         }

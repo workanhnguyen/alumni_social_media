@@ -28,6 +28,9 @@ export const UPDATE_RESPONSE_COMMENT = "UPDATE_RESPONSE_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
 export const DELETE_RESPONSE_COMMENT = "DELETE_RESPONSE_COMMENT";
 
+export const ADD_REACTION = "ADD_REACTION";
+export const REMOVE_REACTION = "REMOVE_REACTION";
+
 export const POST_PER_PAGE = 10;
 export const TRUE = "TRUE";
 export const FALSE = "FALSE";

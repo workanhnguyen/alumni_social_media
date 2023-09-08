@@ -223,13 +223,13 @@ const Post = ({ data, className, type }) => {
         )}
         {/* Post reaction quantity */}
         <PostReactionQuantity
-        reactions={reactions}
+        reactions={data?.reactions}
           postId={data?.id}
         />
         <Divider variant="middle" />
         {/* Post action section: like, comment, share */}
         <div className="my-1">
-          <PostActionSection postId={data?.id} reactions={reactions} onReactionsChange={handleReactionsChange} />
+          <PostActionSection postId={data?.id} reactions={data?.reactions} onReactionsChange={handleReactionsChange} />
         </div>
         <Divider variant="middle" />
         {/* Comment section */}

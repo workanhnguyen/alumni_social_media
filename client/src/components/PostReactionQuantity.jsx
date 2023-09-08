@@ -60,9 +60,9 @@ const PostReactionQuantity = ({ reactions, postId }) => {
     else if (isLoggingUser &&  reactions.length > 1)
       return `Bạn và ${reactions.length - 1} người khác`
     else if (!isLoggingUser && reactions.length === 1)
-      return `${reactions[0].userId.lastName} ${reactions[0].userId.firstName}`;
+      return `1 người thích bài viết này`;
     else if (!isLoggingUser && reactions.length > 1)
-    return `${reactions[0].userId.lastName} ${reactions[0].userId.firstName} và ${reactions.length - 1} người khác`;
+    return `${reactions.length} người thích bài viết này`;
     else
       return "Chưa có người thích bài viết này"
   };

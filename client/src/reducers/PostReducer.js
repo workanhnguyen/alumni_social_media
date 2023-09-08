@@ -1,5 +1,6 @@
 import {
   ADD_COMMENT,
+  ADD_REACTION,
   ADD_RESPONSE_COMMENT,
   CREATE,
   DELETE,
@@ -7,6 +8,7 @@ import {
   FETCH_ALL,
   FETCH_BY_USER,
   LOCK_COMMENT,
+  REMOVE_REACTION,
   UNLOCK_COMMENT,
   UPDATE,
   UPDATE_COMMENT,
@@ -94,6 +96,34 @@ const PostReducer = (currentState, action) => {
                       }
                 )
                 .filter(Boolean),
+            }
+          : post
+      );
+    case ADD_REACTION:
+      return currentState.map((post) =>
+        post.id === action.payload.postId
+          ? {
+              ...post,
+              reactions: [
+                {
+                  id: action.payload.newReaction.id,
+                  reactionType: action.payload.newReaction.reactionType,
+                  postId: action.payload.newReaction.postId.id,
+                  userId: action.payload.newReaction.userId.id,
+                },
+                ...post.reactions,
+              ],
+            }
+          : post
+      );
+    case REMOVE_REACTION:
+      return currentState.map((post) =>
+        post.id === action.payload.postId
+          ? {
+              ...post,
+              reactions: post.reactions.filter(
+                (reaction) => reaction.id !== action.payload.removedReactionId
+              ),
             }
           : post
       );
