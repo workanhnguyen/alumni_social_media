@@ -6,7 +6,7 @@ import {
   onSnapshot,
   query,
   where,
-  orderBy
+  orderBy,
 } from "firebase/firestore";
 import moment from "moment";
 import "moment/locale/vi";
@@ -71,17 +71,23 @@ const ChatRoomPage = () => {
   const messagesRef = collection(database, "messages");
 
   useEffect(() => {
-    const queryMessages = query(messagesRef, where("room", "==", room), orderBy("createdAt"));
+    const queryMessages = query(
+      messagesRef,
+      where("room", "==", room),
+      orderBy("createdAt")
+    );
     const unsubcribe = onSnapshot(queryMessages, (snapshot) => {
       let messages = [];
       snapshot.forEach((doc) => {
-        messages.push({...doc.data(), id: doc.id});
+        messages.push({ ...doc.data(), id: doc.id });
       });
 
       setMessages(messages);
     });
 
-    setCurrentGroup(user?.groupsSet.find((group) => group.id === parseInt(room)))
+    setCurrentGroup(
+      user?.groupsSet.find((group) => group.id === parseInt(room))
+    );
 
     return () => unsubcribe();
   }, [room]);
@@ -89,7 +95,7 @@ const ChatRoomPage = () => {
   useEffect(() => {
     // Scroll to the last message when messages change or on initial load
     if (lastMessageRef.current) {
-        lastMessageRef.current.scrollTop = lastMessageRef.current.scrollHeight;
+      lastMessageRef.current.scrollTop = lastMessageRef.current.scrollHeight;
     }
   }, [messages]);
 
@@ -117,10 +123,10 @@ const ChatRoomPage = () => {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-        e.preventDefault();
-        handleSendMessage();
-      }
-  }
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
   return (
     <DefaultLayout>
@@ -136,7 +142,7 @@ const ChatRoomPage = () => {
                 {user.groupsSet.length > 0 &&
                   user.groupsSet.map((group, index) => (
                     <Link
-                    to={`/chattings/${group.id}`}
+                      to={`/chattings/${group.id}`}
                       key={index}
                       className="w-full flex max-md:justify-center px-4 py-2 mb-3 rounded-md hover:bg-white"
                     >
@@ -169,14 +175,58 @@ const ChatRoomPage = () => {
                 </div>
               </div>
               {/* Messages content */}
-              <div ref={lastMessageRef} className="w-full h-128 mb-5 p-4 overflow-auto">
-                  {messages.map((message, index) => (
-                      <div key={index} className={`my-1 flex ${user.id === message.user.id ? 'justify-end' : 'flex-row-reverse justify-end'} rounded-md`}>
-                        <p className={`px-4 py-2 break-all ${user.id === message.user.id ? 'mr-1 bg-blue text-white' : 'ml-1 bg-gray-4 text-black'}  rounded-md`}>{message.text}</p>
-                        <Avatar src={message.user.avatar} sx={{ width: 24, height: 24 }} />
+              <div
+                ref={lastMessageRef}
+                className="w-full h-128 mb-5 p-4 overflow-auto"
+              >
+                {messages.map((message, index) => (
+                  <div className="flex flex-col mt-2 mb-5">
+                    <div
+                      key={index}
+                      className={`my-1 flex ${
+                        user.id === message.user.id
+                          ? "justify-end"
+                          : "flex-row-reverse justify-end"
+                      } rounded-md`}
+                    >
+                      <div className="flex flex-col gap-y-1">
+                        <p
+                          className={`flex font-semibold -mt-5 ${
+                            user.id === message.user.id
+                              ? "justify-end mr-1"
+                              : "ml-1"
+                          } text-xs`}
+                        >
+                          {message.user.lastName} {message.user.firstName}
+                        </p>
+                        <p
+                          className={`px-4 py-2 break-all ${
+                            user.id === message.user.id
+                              ? "mr-1 bg-blue text-white"
+                              : "ml-1 bg-gray-4 text-black"
+                          }  rounded-md`}
+                        >
+                          {message.text}
+                        </p>
+                        <p
+                          className={`flex ${
+                            user.id === message.user.id
+                              ? "justify-end mr-1"
+                              : "ml-1"
+                          } text-xs`}
+                        >
+                          Đã gửi {moment(message.createdAt?.toDate()).fromNow()}
+                        </p>
                       </div>
-                  ))}
-                </div>
+
+                      <Avatar
+                        src={message.user.avatar}
+                        sx={{ width: 24, height: 24 }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
               {/* Input message */}
               <div className="w-auto flex items-center rounded-3xl cursor-pointer hover:bg-gray-2 overflow-hidden">
                 <input
