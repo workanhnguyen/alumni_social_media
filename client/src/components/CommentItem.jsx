@@ -352,7 +352,7 @@ const CommentItem = ({
           <div className="w-full flex items-center mt-2 cursor-pointer overflow-hidden">
             <div className="absolute left-14">
               <Avatar
-                src={comment?.user?.avatar}
+                src={user?.avatar}
                 alt="avatar"
                 sx={{ width: 24, height: 24 }}
               />

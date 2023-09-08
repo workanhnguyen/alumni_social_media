@@ -18,6 +18,7 @@ import { getCommentQuantityByPostId } from "../apis/PostApi";
 
 const CommentSection = ({ listComments, isPostOwner, postId, type }) => {
   const {
+    user,
     posts,
     postDispatch,
     commentCount,
@@ -95,7 +96,7 @@ const CommentSection = ({ listComments, isPostOwner, postId, type }) => {
   return (
     <div className="w-full flex flex-col px-4">
       <div className="flex items-center">
-        <Avatar src={blankAvatar} alt="avatar" sx={{ width: 32, height: 32 }} />
+        <Avatar src={user?.avatar} alt="avatar" sx={{ width: 32, height: 32 }} />
         <div className="relative flex-1 flex items-center ml-1 rounded-3xl cursor-pointer hover:bg-gray-2 overflow-hidden">
           <input
             value={commentContent}
