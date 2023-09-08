@@ -10,8 +10,9 @@ import { countAllPosts, getAllPosts } from "../apis/PostApi";
 import { FETCH_ALL, POST_NORMAL, POST_PER_PAGE } from "../constants/common";
 
 const DashBoard = () => {
-  const { posts, postDispatch, postCount, pageIndex, setPageIndex } = useStateContext();
+  const { posts, postDispatch, postCount, setPostCount, pageIndex, setPageIndex } = useStateContext();
   const [isPostsLoading, setIsPostsLoading] = useState(false);
+  console.log(postCount, pageIndex);
 
   useEffect(() => {
     const handleFetchAllPosts = async () => {
@@ -28,18 +29,18 @@ const DashBoard = () => {
       }
     };
 
-    // const handleGetCountAllPosts = async () => {
-    //   try {
-    //     let res = await countAllPosts();
-    //     setPostCount(res.data);
-    //   } catch (e) {
-    //   }
-    // };
-
     handleFetchAllPosts();
 
-    // return () => handleFetchAllPosts();
-    // handleGetCountAllPosts();
+  }, [pageIndex]);
+
+  useEffect(() => {
+    const process = async () => {
+      let res = await countAllPosts();
+
+      if (res.status === 200)
+        setPostCount(res.data);
+    };
+    process();
   }, []);
 
   return (
@@ -76,7 +77,7 @@ const DashBoard = () => {
               )}
             </div>
             {/* Pagination */}
-            {postCount !== 0 && (
+            {posts && (
               <div className="w-full flex justify-center mt-24 mb-3">
                 <Pagination
                   color="primary"
