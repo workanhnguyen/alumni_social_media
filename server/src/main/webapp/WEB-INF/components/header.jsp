@@ -11,6 +11,7 @@
 <c:url value="/posts" var="listPost" />
 <c:url value="/statistic" var="statistic" />
 <c:url value="/groups" var="listGroup" />
+<c:url value="/letters" var="listLetter" />
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href=${listUser}>OU MEDIA</a>
@@ -29,6 +30,9 @@
               <a class="nav-link" href="${listPost}">Bài đăng</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="${listLetter}">Thư mời</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="${listGroup}">Nhóm</a>
             </li>
             <li class="nav-item">
@@ -41,6 +45,9 @@
         <c:when test="${pageContext.request.userPrincipal.name != null}">
           <div class="d-flex justify-content-center align-items-center bg-primary rounded" style="width: fit-content">
             <p class="text-white p-2 m-0">Xin chào ${pageContext.request.userPrincipal.name}</p>
+          </div>
+          <div class="d-flex justify-content-center align-items-center bg-danger rounded" style="width: fit-content; margin-left: 6px">
+            <a href="<c:url value="/logout" />" class="text-white p-2 m-0" style="text-decoration: none">Đăng xuất</a>
           </div>
         </c:when>
       </c:choose>

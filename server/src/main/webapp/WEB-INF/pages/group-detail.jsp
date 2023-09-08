@@ -12,20 +12,26 @@
 <div class="container-fluid">
     <h1 class="text-center mt-3 mb-3">CHI TIẾT NHÓM</h1>
     <div class="form-floating mb-3 mt-3">
-        <input type="text" class="form-control" id="group-id" value="${group.id}" readonly/>
+        <input type="text" class="form-control" id="group-id" value="${group.id}" disabled/>
         <label for="group-id">ID</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <input type="text" class="form-control" id="created-at" value="${group.createdAt}" readonly/>
+        <input type="text" class="form-control" id="created-at" value="${group.createdAt}" disabled/>
         <label for="created-at">Ngày tạo</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <input type="text" class="form-control" id="creator" value="${group.creatorId.lastName} ${group.creatorId.firstName}" readonly/>
+        <input type="text" class="form-control" id="creator" value="${group.creatorId.lastName} ${group.creatorId.firstName}" disabled/>
         <label for="creator">Người tạo</label>
     </div>
-    <div class="form-floating mb-3 mt-3">
-        <input type="text" class="form-control" id="group-name" value="${group.groupName}" readonly/>
-        <label for="creator">Tên nhóm</label>
+    <div class="d-flex align-items-center">
+        <div class="flex-fill form-floating mb-3 mt-3">
+            <input type="text" class="form-control" id="group-name" value="${group.groupName}"/>
+            <label for="group-name">Tên nhóm</label>
+        </div>
+        <div style="margin-left: 6px">
+            <c:url value="/api/groups/${group.id}/" var="apiUpdate" />
+            <button class="py-3 btn btn-primary text-white" onclick="changeGroupName('${apiUpdate}', '${authToken}')">Đổi tên</button>
+        </div>
     </div>
     <div>
         <h5>Danh sách thành viên:</h5>
@@ -80,7 +86,6 @@
             </tbody>
         </table>
     </div>
-
-
     <a href="<c:url value="/groups" />" class="w-100 btn btn-success">Trở lại</a>
 </div>
+<script src="<c:url value="/js/groupDetail.js" />"></script>

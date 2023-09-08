@@ -60,7 +60,9 @@ public class GroupController {
     }
 
     @GetMapping("/groups/{id}")
-    public String detail (@PathVariable("id") Long groupId, Model model) {
+    public String detail (@PathVariable("id") Long groupId, Model model, Principal loggedInUser) {
+        String dynamicToken = jwtService.generateTokenLogin(loggedInUser.getName());
+        model.addAttribute("authToken", dynamicToken);
         model.addAttribute("group", groupService.findGroupById(groupId));
         return "groupDetail";
     }

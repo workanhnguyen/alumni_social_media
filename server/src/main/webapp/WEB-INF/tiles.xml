@@ -50,4 +50,16 @@
         <put-attribute name="title" value="Chi tiết nhóm" />
         <put-attribute name="content" value="/WEB-INF/pages/group-detail.jsp" />
     </definition>
+    <definition name="listLetter" extends="baseLayout">
+        <put-attribute name="title" value="Danh sách thư mời" />
+        <put-attribute name="content" value="/WEB-INF/pages/list-letter.jsp" />
+    </definition>
+    <definition name="addLetter" extends="baseLayout">
+        <put-attribute name="title" value="Thêm thư mời" />
+        <put-attribute name="content" value="/WEB-INF/pages/add-letter.jsp" />
+    </definition>
+    <definition name="letterDetail" extends="baseLayout">
+        <put-attribute name="title" value="Chi tiết thư mời" />
+        <put-attribute name="content" value="/WEB-INF/pages/letter-detail.jsp" />
+    </definition>
 </tiles-definitions>
