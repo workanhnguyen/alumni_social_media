@@ -164,11 +164,11 @@ const CommentSection = ({
                 {comment.listComments && comment.listComments.length > 0 && (
                   <div>
                     {comment.listComments.map((responseComment, resIndex) => (
-                      <div className="ml-10">
+                      <div className="ml-10" key={resIndex}>
                         <CommentItem
                           isPostOwner={isPostOwner}
                           showRes={false}
-                          key={resIndex}
+                          
                           comment={responseComment}
                           postId={postId}
                           onCommentDelete={onCommentDelete}

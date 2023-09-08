@@ -64,7 +64,14 @@ const PostReducer = (currentState, action) => {
               comments: post.comments.map((comment) =>
                 comment.id === action.payload.updatedComment.id
                   ? action.payload.updatedComment
-                  : comment
+                  : {
+                      ...comment,
+                      listComments: comment.listComments.map((childComment) =>
+                        childComment.id === action.payload.updatedComment.id
+                          ? action.payload.updatedComment
+                          : childComment
+                      ),
+                    }
               ),
             }
           : post
@@ -74,16 +81,19 @@ const PostReducer = (currentState, action) => {
         post.id === action.payload.postId
           ? {
               ...post,
-              comments: post.comments.map(
-                (comment) =>
-                  comment.id === action.payload.deletedCommentId ? null : {
-                    ...comment,
-                    listComments: comment.listComments.filter(
-                      childComment =>
-                        childComment.id !== action.payload.deletedCommentId
-                    )
-                  }
-              ).filter(Boolean)
+              comments: post.comments
+                .map((comment) =>
+                  comment.id === action.payload.deletedCommentId
+                    ? null
+                    : {
+                        ...comment,
+                        listComments: comment.listComments.filter(
+                          (childComment) =>
+                            childComment.id !== action.payload.deletedCommentId
+                        ),
+                      }
+                )
+                .filter(Boolean),
             }
           : post
       );
