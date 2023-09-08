@@ -93,6 +93,13 @@ const CommentSection = ({ listComments, isPostOwner, postId, type }) => {
     process();
   };
 
+  const handleEnterSendComment = (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        handleSendComment();
+      }
+  };
+
   return (
     <div className="w-full flex flex-col px-4">
       <div className="flex items-center">
@@ -101,6 +108,7 @@ const CommentSection = ({ listComments, isPostOwner, postId, type }) => {
           <input
             value={commentContent}
             onChange={handleCommentContentChange}
+            onKeyPress={handleEnterSendComment}
             className="w-full px-3 pr-10 py-2 border-none outline-none bg-gray"
             placeholder="Viết bình luận..."
           />

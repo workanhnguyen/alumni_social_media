@@ -154,6 +154,20 @@ const CommentItem = ({
     process();
   };
 
+  const handleEnterSendResponseComment = (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        handleSendResponseComment();
+      }
+  };
+
+  const handleEnterUpdatedComment = (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        handleUpdateComment();
+      }
+  };
+
   return (
     <>
       <div className="w-full flex flex-col mb-3">
@@ -176,6 +190,7 @@ const CommentItem = ({
                       <input
                         value={commentContent}
                         onChange={handleCommentContentChange}
+                        onKeyPress={handleEnterUpdatedComment}
                         className="w-full pr-3 py-2 border-none outline-none bg-gray"
                         placeholder={comment?.content}
                       />
@@ -361,6 +376,7 @@ const CommentItem = ({
               <input
                 value={responseCommentContent}
                 onChange={handleResponseCommentContentChange}
+                onKeyPress={handleEnterSendResponseComment}
                 className="w-full px-3 py-2 pr-16 text-sm border-none outline-none bg-gray"
                 placeholder={`Phản hồi ${
                   comment?.userId?.lastName || comment?.user?.lastName
