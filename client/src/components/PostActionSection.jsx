@@ -21,17 +21,17 @@ const PostActionSection = ({ postId, reactions, onReactionsChange }) => {
   const [currentReaction, setCurrentReaction] = useState("");
 
   // Get current reaction of post
-  useEffect(() => {
-    const process = async () => {
-      try {
-        let res = await getReactionOnPost(postId);
+  // useEffect(() => {
+  //   const process = async () => {
+  //     try {
+  //       let res = await getReactionOnPost(postId);
 
-        if (res.status === 200) setReactionOnPost(res.data);
-      } catch (e) {}
-    };
+  //       if (res.status === 200) setReactionOnPost(res.data);
+  //     } catch (e) {}
+  //   };
 
-    process();
-  }, [postId]);
+  //   process();
+  // }, [postId]);
 
   const handleReactionChange = (reactionType, popupState) => {
     setCurrentReaction(reactionType);

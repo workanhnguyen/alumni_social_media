@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import moment from "moment";
 import "moment/locale/vi";
 
@@ -80,4 +80,4 @@ const Group = () => {
   );
 };
 
-export default Group;
+export default memo(Group);

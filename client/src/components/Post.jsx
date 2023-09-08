@@ -225,7 +225,6 @@ const Post = ({ data, className, type }) => {
         <PostReactionQuantity
         reactions={reactions}
           postId={data?.id}
-          commentQuantity={commentQuantity}
         />
         <Divider variant="middle" />
         {/* Post action section: like, comment, share */}

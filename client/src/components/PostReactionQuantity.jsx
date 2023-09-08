@@ -17,7 +17,7 @@ const PostReactionQuantity = ({ reactions, postId }) => {
       if (currentPost.id === postId) {
         sum += currentPost.comments.length;
     
-        // If you want to count responses within comments as well
+        // count responses within comments as well
         currentPost.comments.forEach((comment) => {
           sum += comment.listComments.length;
         });
@@ -26,10 +26,7 @@ const PostReactionQuantity = ({ reactions, postId }) => {
     }, 0);
     setCommentQuantity(quantityCommentOfPost)
   }, [posts]);
-
-  if (postId === 24)
-    console.log(commentQuantity);
-
+  
   const handleUniqueReactions = (reactions) => {
     const uniqueIconArray = reactions.reduce((accumulator, reaction) => {
       if (!accumulator[reaction.reactionType]) {
