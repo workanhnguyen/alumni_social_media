@@ -64,26 +64,30 @@ export default function SignInForm({ role }) {
       if (response.status === 200) {
         cookie.save(TOKEN, response.data);
 
-        let { data } = await getCurrentUser();
-        cookie.save(USER, data);
+        let userRes = await getCurrentUser();
 
-        const methods = await fetchSignInMethodsForEmail(auth, `${body.username}${FIREBASE_EMAIL_SUFFIX}`);
-        if (methods.length === 0) {
-          createUserWithEmailAndPassword(
+        if (userRes.status === 200) {
+          cookie.save(USER, userRes.data);
+
+          const methods = await fetchSignInMethodsForEmail(
             auth,
-            `${body.username}${FIREBASE_EMAIL_SUFFIX}`,
-            `${body.password}${FIREBASE_PASSWORD_SUFFIX}`
-          ).then((res) => 
-            console.log(res)
+            `${userRes.data.username}${FIREBASE_EMAIL_SUFFIX}`
           );
+          if (methods.length === 0) {
+            createUserWithEmailAndPassword(
+              auth,
+              `${userRes.data.username}${FIREBASE_EMAIL_SUFFIX}`,
+              userRes.data.email
+            ).then((res) => console.log(res));
+          }
         }
 
         userDispatch({
           type: LOGIN,
-          payload: data,
+          payload: userRes.data,
         });
 
-        if (isContainsEmptyFields(data)) navigate(ALUMNI_ADD_INFO);
+        if (isContainsEmptyFields(userRes.data)) navigate(ALUMNI_ADD_INFO);
         else navigate(ROOT_PAGE, { replace: true });
       }
     } catch (e) {
