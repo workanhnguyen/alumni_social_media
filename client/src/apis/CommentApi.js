@@ -8,7 +8,7 @@ const endpoints = {
     "delete-comment": `${SERVER_CONTEXT}/api/comments`,
 };
 
-export const getCommentsByPostId = (id, pageIndex) => authApi().get(`${endpoints['get-comment-by-post-id']}/${id}/`, pageIndex);
+export const getCommentsByPostId = (id, pageIndex) => authApi().get(`${endpoints['get-comment-by-post-id']}/${id}?page=${pageIndex}`);
 export const addNewComment = (postId, body) => authApi().post(`${endpoints['new-comment']}/${postId}/`, body);
 export const addResponseComment = (parentCommentId, body) => authApi().post(`${endpoints['new-response-comment']}/${parentCommentId}/comments/`, body);
 export const updateComment = (id, body) => authApi().put(`${endpoints['update-comment']}/${id}/`, body);

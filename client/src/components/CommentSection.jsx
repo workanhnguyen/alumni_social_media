@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import SendIcon from "@mui/icons-material/Send";
 import { Avatar, Divider, Pagination } from "@mui/material";
@@ -6,7 +6,7 @@ import { CircularProgress } from "@mui/material";
 
 import { blankAvatar } from "../assets";
 import { CommentItem } from "../components";
-import { addNewComment } from "../apis/CommentApi";
+import { addNewComment, getCommentsByPostId } from "../apis/CommentApi";
 import {
   POST_DETAIL,
   COMMENT_PER_PAGE,
@@ -14,17 +14,54 @@ import {
 } from "../constants/common";
 import { Link } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
+import { getCommentQuantityByPostId } from "../apis/PostApi";
 
 const CommentSection = ({ listComments, isPostOwner, postId, type }) => {
-  const { postDispatch, commentCount, commentIndex, setCommentIndex } =
-    useStateContext();
+  const {
+    posts,
+    postDispatch,
+    commentCount,
+    setCommentCount,
+    commentIndex,
+    setCommentIndex,
+  } = useStateContext();
 
   const [commentContent, setCommentContent] = useState("");
+  const [commentsForDetailPage, setCommentsForDetailPage] = useState(listComments);
   const [isSendingComment, setIsSendingComment] = useState(false);
 
+  console.log(commentCount, commentIndex);
   const handleCommentContentChange = (e) => {
     setCommentContent(e.target.value);
   };
+
+  useEffect(() => {
+    if (type === POST_DETAIL) {
+      const process = async () => {
+        try {
+          let res = await getCommentsByPostId(postId, commentIndex);
+
+          if (res.status === 200) {
+            setCommentsForDetailPage(res.data);
+          }
+        } catch (e) {
+        }
+      };
+
+      process();
+    }
+  }, [posts, commentIndex]);
+
+  useEffect(() => {
+    if (type === POST_DETAIL) {
+      const process = async () => {
+        let res = await getCommentQuantityByPostId(postId);
+
+        if (res.status === 200) setCommentCount(res.data);
+      };
+      process();
+    }
+  }, []);
 
   const handleSendComment = () => {
     const process = async () => {
@@ -38,6 +75,7 @@ const CommentSection = ({ listComments, isPostOwner, postId, type }) => {
         let res = await addNewComment(postId, commentData);
 
         if (res.status === 201) {
+          setCommentCount(prev => prev + 1);
           postDispatch({
             type: ADD_COMMENT,
             payload: { postId: postId, newComment: res.data },
@@ -81,8 +119,8 @@ const CommentSection = ({ listComments, isPostOwner, postId, type }) => {
       </div>
       {type === POST_DETAIL ? (
         <div className="mt-6">
-          {listComments.length > 0 &&
-            listComments.map((comment, index) => (
+          {commentsForDetailPage.length > 0 &&
+            commentsForDetailPage.map((comment, index) => (
               <div key={index}>
                 <CommentItem
                   isPostOwner={isPostOwner}
@@ -105,7 +143,7 @@ const CommentSection = ({ listComments, isPostOwner, postId, type }) => {
                 )}
               </div>
             ))}
-          {listComments.length > 0 && (
+          {commentsForDetailPage.length > 0 && (
             <div className="w-full flex justify-center mb-3">
               <Pagination
                 color="primary"

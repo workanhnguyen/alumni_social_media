@@ -136,9 +136,9 @@ public class ApiCommentController {
 //        }
 //    }
     
-    @GetMapping("/posts/{id}/")
+    @GetMapping("/posts/{id}")
     @CrossOrigin
-    public ResponseEntity<List<CommentDto>> getCommentByPost(@PathVariable("id") Long postId, @RequestParam(defaultValue = "1") int page) {
+    public ResponseEntity<List<CommentDto>> getCommentByPost(@PathVariable("id") Long postId, @RequestParam(value = "page") int page) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();

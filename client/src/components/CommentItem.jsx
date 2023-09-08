@@ -39,7 +39,7 @@ const CommentItem = ({
   postId,
   showRes = true,
 }) => {
-  const { user, commentDispatch, postDispatch } = useStateContext();
+  const { user, setCommentCount, postDispatch } = useStateContext();
   const [commentContent, setCommentContent] = useState(comment?.content);
   const [responseCommentContent, setResponseCommentContent] = useState("");
 
@@ -114,6 +114,7 @@ const CommentItem = ({
         let res = await deleteComment(comment.id);
 
         if (res.status === 204) {
+          setCommentCount(prev => prev - 1);
           postDispatch({ type: DELETE_COMMENT, payload: { postId: postId, deletedCommentId: comment.id }});
         }
       } catch (e) {
