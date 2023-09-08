@@ -9,7 +9,13 @@ import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 
 import { actionHaha, actionHeart, actionLike } from "../assets";
 import { Link } from "react-router-dom";
-import { ACTION_HAHA, ACTION_HEART, ACTION_LIKE, ADD_REACTION, REMOVE_REACTION } from "../constants/common";
+import {
+  ACTION_HAHA,
+  ACTION_HEART,
+  ACTION_LIKE,
+  ADD_REACTION,
+  REMOVE_REACTION,
+} from "../constants/common";
 import {
   addReactionToPost,
   deleteReactionFromPost,
@@ -17,27 +23,18 @@ import {
 } from "../apis/ReactionApi";
 import { useStateContext } from "../contexts/ContextProvider";
 
-const PostActionSection = ({ postId, reactions, onReactionsChange }) => {
+const PostActionSection = ({ postId, reactions }) => {
   const { user, postDispatch } = useStateContext();
 
-  const [reactionOnPost, setReactionOnPost] = useState(reactions.find(reaction => reaction.userId === user.id) || {});
-  const [currentReaction, setCurrentReaction] = useState("");
-console.log(reactionOnPost)
-  // Get current reaction of post
-  // useEffect(() => {
-  //   const process = async () => {
-  //     try {
-  //       let res = await getReactionOnPost(postId);
+  const [reactionOnPost, setReactionOnPost] = useState({});
 
-  //       if (res.status === 200) setReactionOnPost(res.data);
-  //     } catch (e) {}
-  //   };
-
-  //   process();
-  // }, [postId]);
+  useEffect(() => {
+    setReactionOnPost(
+      reactions.find((reaction) => reaction.userId === user.id) || {}
+    );
+  }, [postId]);
 
   const handleReactionChange = (reactionType, popupState) => {
-    setCurrentReaction(reactionType);
     popupState.close();
 
     if (reactionType !== "") {
@@ -47,12 +44,11 @@ console.log(reactionOnPost)
           let addReactionRes = await addReactionToPost(postId, reactionData);
           console.log(addReactionRes);
           if (addReactionRes.status === 201) {
-            postDispatch({ type: ADD_REACTION, payload: { postId: postId, newReaction: addReactionRes.data } });
-            // onReactionsChange(prev => [addReactionRes.data, ...prev]);
-            // let getReactionRes = await getReactionOnPost(postId);
-            
-            // if (getReactionRes.status === 200)
-              setReactionOnPost(addReactionRes.data);
+            postDispatch({
+              type: ADD_REACTION,
+              payload: { postId: postId, newReaction: addReactionRes.data },
+            });
+            setReactionOnPost(addReactionRes.data);
           }
         } catch (e) {}
       };
@@ -61,19 +57,15 @@ console.log(reactionOnPost)
     } else {
       const deleteReaction = async () => {
         try {
-          // let findReactionRes = await getReactionOnPost(postId);
-          
-          // if (findReactionRes.status === 200) {
-            let res = await deleteReactionFromPost(reactionOnPost?.id);
-            // console.log(res);
-            if (res.status === 204) {
-              // console.log(reactionOnPost);
-              postDispatch({ type: REMOVE_REACTION, payload: { postId: postId, removedReactionId: reactionOnPost.id }})
-              setReactionOnPost({});
-              // console.log(res);
-              // setCurrentReaction("");
-              // onReactionsChange(prev => prev.filter(reaction => reaction.id !== findReactionRes.data.id));
-            }
+          let res = await deleteReactionFromPost(reactionOnPost?.id);
+
+          if (res.status === 204) {
+            postDispatch({
+              type: REMOVE_REACTION,
+              payload: { postId: postId, removedReactionId: reactionOnPost.id },
+            });
+            setReactionOnPost({});
+          }
           // }
         } catch (e) {
           return;
@@ -138,8 +130,8 @@ console.log(reactionOnPost)
               {...bindTrigger(popupState)}
               className="w-fit flex items-center px-10 py-2 hover:bg-gray active:bg-gray-2 rounded-md cursor-pointer"
             >
-              {reactionOnPost.reactionType || currentReaction !== '' ? (
-                populateReaction(reactionOnPost.reactionType || currentReaction)
+              {reactionOnPost.reactionType ? (
+                populateReaction(reactionOnPost.reactionType)
               ) : (
                 <>
                   <ThumbUpOutlinedIcon
@@ -158,12 +150,12 @@ console.log(reactionOnPost)
               elevation={2}
               {...bindMenu(popupState)}
             >
-              {reactionOnPost.reactionType || currentReaction !== "" ? (
+              {reactionOnPost.reactionType ? (
                 <MenuItem onClick={() => handleReactionChange("", popupState)}>
                   {/* <Avatar src={actionHaha} sx={{ width: 18, height: 18 }} /> */}
                   <BlockOutlinedIcon fontSize="small" />
                   <span className="ml-1.5">{`Bỏ ${populateReactionString(
-                    reactionOnPost.reactionType || currentReaction
+                    reactionOnPost.reactionType
                   )}`}</span>
                 </MenuItem>
               ) : (
@@ -210,12 +202,6 @@ console.log(reactionOnPost)
           Bình luận
         </span>
       </Link>
-      {/* <div className="w-fit flex items-center px-8 py-2 hover:bg-gray active:bg-gray-2 rounded-md cursor-pointer">
-        <ReplyOutlinedIcon fontSize="small" className="text-dark-gray" />
-        <span className="text-sm text-dark-gray ml-1 font-semibold">
-          Chia sẻ
-        </span>
-      </div> */}
     </div>
   );
 };

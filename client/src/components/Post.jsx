@@ -26,7 +26,7 @@ import {
   PostReactionQuantity,
 } from "../components";
 import PostImageSlider from "./PostImageSlider";
-import { DELETE, LOCK_COMMENT, UNLOCK_COMMENT } from "../constants/common";
+import { DELETE, LOCK_COMMENT, POST_DETAIL, UNLOCK_COMMENT } from "../constants/common";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { useStateContext } from "../contexts/ContextProvider";
 import {
@@ -36,10 +36,16 @@ import {
   unlockPost,
 } from "../apis/PostApi";
 import { useNavigate } from "react-router-dom";
-import { addReactionToPost, deleteReactionFromPost, getReactionOnPost, getReactionsByPostId } from "../apis/ReactionApi";
+import {
+  addReactionToPost,
+  deleteReactionFromPost,
+  getReactionOnPost,
+  getReactionsByPostId,
+} from "../apis/ReactionApi";
 
 const Post = ({ data, className, type }) => {
-
+  if (type === POST_DETAIL)
+    console.log(data);
   const { user, postDispatch, setPostCount, comments } = useStateContext();
 
   const [commentQuantity, setCommentQuantity] = useState(0);
@@ -50,37 +56,6 @@ const Post = ({ data, className, type }) => {
   const [showDeleteProgress, setShowDeleteProgress] = useState(false);
 
   const navigate = useNavigate();
-
-  // Get comment quantities of post
-  // useEffect(() => {
-  //   const process = async () => {
-  //     try {
-  //       let res = await getCommentQuantityByPostId(data?.id);
-
-  //       if (res.status === 200) {
-  //         setCommentQuantity(res.data);
-  //       }
-  //     } catch (e) {
-  //       return;
-  //     }
-  //   };
-  //   process();
-  // }, [comments]);
-
-  // Get reactions of post
-  // useEffect(() => {
-  //   const listReactions = async () => {
-  //     try {
-  //       let res = await getReactionsByPostId(data?.id);
-        
-  //       if (res.status === 200) {
-  //         setReactions(res.data);
-  //       }
-  //     } catch (e) {}
-  //   };
-
-  //   listReactions();
-  // }, []);
 
   const handleShowEditPostForm = () => {
     setShowEditPostForm(true);
@@ -128,11 +103,12 @@ const Post = ({ data, className, type }) => {
           postDispatch({ type: DELETE, payload: data?.id });
           setPostCount((prev) => prev - 1);
         }
-      } catch (e) {} 
-      finally {
+      } catch (e) {
+      } finally {
         setShowDeleteProgress(false);
         setOpenDeletePostDialog(false);
-        navigate(-1, { replace: true });
+        if (type === POST_DETAIL)
+          navigate(-1, { replace: true });
       }
     };
     process();
@@ -142,10 +118,6 @@ const Post = ({ data, className, type }) => {
     setCommentQuantity(newCommentQuantity);
   };
 
-  const handleReactionsChange = (reactions) => {
-    setReactions(reactions);
-  };
-  
   return (
     <>
       <div
@@ -222,14 +194,14 @@ const Post = ({ data, className, type }) => {
           </div>
         )}
         {/* Post reaction quantity */}
-        <PostReactionQuantity
-        reactions={data?.reactions}
-          postId={data?.id}
-        />
+        <PostReactionQuantity reactions={data?.reactions} postId={data?.id} />
         <Divider variant="middle" />
         {/* Post action section: like, comment, share */}
         <div className="my-1">
-          <PostActionSection postId={data?.id} reactions={data?.reactions} onReactionsChange={handleReactionsChange} />
+          <PostActionSection
+            postId={data?.id}
+            reactions={data?.reactions}
+          />
         </div>
         <Divider variant="middle" />
         {/* Comment section */}
@@ -240,11 +212,10 @@ const Post = ({ data, className, type }) => {
             </div>
           ) : (
             <CommentSection
-            listComments={data?.comments}
+              listComments={data?.comments}
               isPostOwner={data?.user?.id === user.id}
               postId={data?.id}
               type={type}
-              onCommentQuantityChange={handleCommentQuantityChange}
             />
           )}
         </div>

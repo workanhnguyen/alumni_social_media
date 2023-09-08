@@ -50,15 +50,15 @@ const PostReactionQuantity = ({ reactions, postId }) => {
   };
 
   const checkLoggingUserReactionExisting = (reactions) => {
-    return reactions.some(reaction => reaction.userId.id === user.id);
+    return reactions.some(reaction => reaction.userId === user.id);
   };
 
   const populateStringReaction = (reactions) => {
     const isLoggingUser = checkLoggingUserReactionExisting(reactions);
     if (isLoggingUser && reactions.length === 1)
-      return "Bạn";
+      return "Bạn đã thích bài viết này";
     else if (isLoggingUser &&  reactions.length > 1)
-      return `Bạn và ${reactions.length - 1} người khác`
+      return `Bạn và ${reactions.length - 1} người khác thích bài viết này`
     else if (!isLoggingUser && reactions.length === 1)
       return `1 người thích bài viết này`;
     else if (!isLoggingUser && reactions.length > 1)

@@ -37,9 +37,6 @@ const CommentItem = ({
   isPostOwner,
   comment,
   postId,
-  onCommentDelete,
-  onCommentUpdate,
-  onCommentQuantityChange,
   showRes = true,
 }) => {
   const { user, commentDispatch, postDispatch } = useStateContext();

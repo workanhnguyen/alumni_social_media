@@ -21,7 +21,7 @@ export const ContextProvider = ({ children }) => {
 
   const [pageContent, setPageContent] = useState(HOME);
   const [postType, setPostType] = useState(null);
-  const [postDetail, setPostDetail] = useState(null);
+  const [postDetail, setPostDetail] = useState({});
   const [postCount, setPostCount] = useState(0);
   const [pageIndex, setPageIndex] = useState(1);
   const [commentCount, setCommentCount] = useState(0);
