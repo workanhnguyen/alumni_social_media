@@ -36,16 +36,18 @@ const DashBoard = () => {
       }
     };
 
-    const handleGetCountAllPosts = async () => {
-      try {
-        let res = await countAllPosts();
-        setPostCount(res.data);
-      } catch (e) {
-      }
-    };
+    // const handleGetCountAllPosts = async () => {
+    //   try {
+    //     let res = await countAllPosts();
+    //     setPostCount(res.data);
+    //   } catch (e) {
+    //   }
+    // };
 
     handleFetchAllPosts();
-    handleGetCountAllPosts();
+
+    return () => handleFetchAllPosts();
+    // handleGetCountAllPosts();
   }, []);
 
   return (

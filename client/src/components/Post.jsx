@@ -39,8 +39,7 @@ import { useNavigate } from "react-router-dom";
 import { addReactionToPost, deleteReactionFromPost, getReactionOnPost, getReactionsByPostId } from "../apis/ReactionApi";
 
 const Post = ({ data, className, type }) => {
-  if (data.id === 24)
-    console.log(data);
+
   const { user, postDispatch, setPostCount, comments } = useStateContext();
 
   const [commentQuantity, setCommentQuantity] = useState(0);
@@ -53,35 +52,35 @@ const Post = ({ data, className, type }) => {
   const navigate = useNavigate();
 
   // Get comment quantities of post
-  useEffect(() => {
-    const process = async () => {
-      try {
-        let res = await getCommentQuantityByPostId(data?.id);
+  // useEffect(() => {
+  //   const process = async () => {
+  //     try {
+  //       let res = await getCommentQuantityByPostId(data?.id);
 
-        if (res.status === 200) {
-          setCommentQuantity(res.data);
-        }
-      } catch (e) {
-        return;
-      }
-    };
-    process();
-  }, [comments]);
+  //       if (res.status === 200) {
+  //         setCommentQuantity(res.data);
+  //       }
+  //     } catch (e) {
+  //       return;
+  //     }
+  //   };
+  //   process();
+  // }, [comments]);
 
   // Get reactions of post
-  useEffect(() => {
-    const listReactions = async () => {
-      try {
-        let res = await getReactionsByPostId(data?.id);
+  // useEffect(() => {
+  //   const listReactions = async () => {
+  //     try {
+  //       let res = await getReactionsByPostId(data?.id);
         
-        if (res.status === 200) {
-          setReactions(res.data);
-        }
-      } catch (e) {}
-    };
+  //       if (res.status === 200) {
+  //         setReactions(res.data);
+  //       }
+  //     } catch (e) {}
+  //   };
 
-    listReactions();
-  }, []);
+  //   listReactions();
+  // }, []);
 
   const handleShowEditPostForm = () => {
     setShowEditPostForm(true);

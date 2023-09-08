@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 
 import { Avatar } from "@mui/material";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
@@ -7,9 +7,29 @@ import { actionHaha, actionHeart, actionLike } from "../assets";
 import { ACTION_HAHA, ACTION_HEART, ACTION_LIKE } from "../constants/common";
 import { useStateContext } from "../contexts/ContextProvider";
 
-const PostReactionQuantity = ({ reactions, commentQuantity }) => {
+const PostReactionQuantity = ({ reactions, postId }) => {
   
-  const { user } = useStateContext();
+  const { user, posts } = useStateContext();
+  const [commentQuantity, setCommentQuantity] = useState(0);
+
+  useEffect(() => {
+    const quantityCommentOfPost = posts.reduce((sum, currentPost) => {
+      if (currentPost.id === postId) {
+        sum += currentPost.comments.length;
+    
+        // If you want to count responses within comments as well
+        currentPost.comments.forEach((comment) => {
+          sum += comment.listComments.length;
+        });
+      }
+      return sum;
+    }, 0);
+    setCommentQuantity(quantityCommentOfPost)
+  }, [posts]);
+
+  if (postId === 24)
+    console.log(commentQuantity);
+
   const handleUniqueReactions = (reactions) => {
     const uniqueIconArray = reactions.reduce((accumulator, reaction) => {
       if (!accumulator[reaction.reactionType]) {
