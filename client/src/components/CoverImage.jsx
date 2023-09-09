@@ -67,7 +67,6 @@ const CoverImage = ({ bgImage }) => {
     setCoverImage(newCoverImage);
   };
 
-  console.log(coverImage);
   return (
     <>
       <div

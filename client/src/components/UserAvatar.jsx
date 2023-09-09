@@ -69,7 +69,8 @@ const UserAvatar = ({ avatar }) => {
         )}
       </div>
       {/* Change avatar dialog */}
-      <Container maxWidth="sm">
+      {openChangeAvatarDialog && (
+        <Container maxWidth="sm">
         <Dialog
           fullWidth
           open={openChangeAvatarDialog}
@@ -93,7 +94,7 @@ const UserAvatar = ({ avatar }) => {
               <Button
                 variant="contained"
                 disableElevation
-                disabled={!avatar[0]}
+                disabled={!toUpdateAvatar[0]}
                 onClick={handleChangeAvatar}
               >
                 Cập nhật
@@ -102,6 +103,7 @@ const UserAvatar = ({ avatar }) => {
           </DialogActions>
         </Dialog>
       </Container>
+      )}
     </>
   );
 };

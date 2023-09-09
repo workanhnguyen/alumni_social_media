@@ -4,6 +4,7 @@ import {
   CoverImage,
   DataLoading,
   Post,
+  SkeletonLoading,
   UserAvatar,
   UserCommonInfo,
   UserDetailInfo,
@@ -15,6 +16,7 @@ import { getPostsByUserId } from "../apis/PostApi";
 import { FETCH_BY_USER } from "../constants/common";
 import { useParams } from "react-router-dom";
 import { getUserByUsername } from "../apis/UserApi";
+import { Skeleton } from "@mui/material";
 
 const PersonalPage = () => {
   const { username } = useParams();
@@ -22,25 +24,44 @@ const PersonalPage = () => {
 
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPostLoading, setIsPostLoading] = useState(false);
 
   const isCurrentUser = () => {
-    return username === user.username;
-  }
+    if (username) return username === user?.username;
+  };
 
   useEffect(() => {
-    if (isCurrentUser()) setCurrentUser(user);
-    else {
+    if (isCurrentUser()) {
+      setCurrentUser(user);
+      const process = async () => {
+        setIsPostLoading(true);
+        try {
+          let postRes = await getPostsByUserId(user.id);
+        if (postRes.status === 200)
+          postDispatch({ type: FETCH_BY_USER, payload: postRes.data });
+        } catch (e) {}
+        finally {
+          setIsPostLoading(false);
+        }
+      };
+
+      process();
+    } else {
       const process = async () => {
         setIsLoading(true);
+        setIsPostLoading(true);
         try {
           let userRes = await getUserByUsername(username);
 
           if (userRes.status === 200) {
+            console.log(userRes.data);
             setCurrentUser(userRes.data);
 
             let postRes = await getPostsByUserId(userRes.data.id);
-            if (postRes.status === 200)
+            if (postRes.status === 200) {
               postDispatch({ type: FETCH_BY_USER, payload: postRes.data });
+              setIsPostLoading(false);
+            }
           }
         } catch (e) {
         } finally {
@@ -62,9 +83,13 @@ const PersonalPage = () => {
         <>
           <div className="w-full h-full flex flex-col items-center bg-white drop-shadow-sm">
             <div className="max-lg:w-full lg:w-235 flex flex-col items-center my-6 mt-16">
-              <CoverImage bgImage={isCurrentUser() ? user.bgImage : currentUser?.bgImage} />
+              <CoverImage
+                bgImage={isCurrentUser() ? user.bgImage : currentUser?.bgImage}
+              />
               <div className="w-full flex max-lg:flex-col max-lg:items-center px-8">
-                <UserAvatar avatar={isCurrentUser() ? user.avatar : currentUser?.avatar} />
+                <UserAvatar
+                  avatar={isCurrentUser() ? user.avatar : currentUser?.avatar}
+                />
                 <UserCommonInfo userInfo={currentUser} />
               </div>
             </div>
@@ -77,23 +102,31 @@ const PersonalPage = () => {
               </div>
               {/* Posts */}
               <div className="w-full h-full flex flex-col max-lg:items-center mb-5">
-                {posts.length > 0 ? (
-                  posts.map((post, index) => (
-                    <Post
-                      key={index}
-                      data={post}
-                      className="max-sm:w-full max-md:w-4/5 max-lg:w-150 lg:w-128"
-                    />
-                  ))
-                ) : (
-                  <div className="w-full flex flex-col mt-10 justify-center items-center">
-                    <img
-                      className="max-sm:w-3/4 w-1/2"
-                      src={emptyPlaceholder1}
-                      alt="no-posts"
-                    />
-                    <p>Hiện tại không có bài viết nào!</p>
+                {isPostLoading ? (
+                  <div className="max-sm:w-full max-md:w-4/5 max-lg:w-150 lg:w-128">
+                    <SkeletonLoading />
                   </div>
+                ) : (
+                  <>
+                    {posts.length > 0 ? (
+                      posts.map((post, index) => (
+                        <Post
+                          key={index}
+                          data={post}
+                          className="max-sm:w-full max-md:w-4/5 max-lg:w-150 lg:w-128"
+                        />
+                      ))
+                    ) : (
+                      <div className="w-full flex flex-col mt-10 justify-center items-center">
+                        <img
+                          className="max-sm:w-3/4 w-1/2"
+                          src={emptyPlaceholder1}
+                          alt="no-posts"
+                        />
+                        <p>Hiện tại không có bài viết nào!</p>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>

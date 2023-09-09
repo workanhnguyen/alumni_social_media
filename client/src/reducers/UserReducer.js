@@ -11,6 +11,7 @@ const UserReducer = (currentState, action) => {
             cookie.remove(USER);
             return null;
         case UPDATE:
+            cookie.save(USER, { ...currentState, ...action.payload });
             return { ...currentState, ...action.payload };
         default:
             return currentState;

@@ -179,10 +179,9 @@ const ChatRoomPage = () => {
                 ref={lastMessageRef}
                 className="w-full h-128 mb-5 p-4 overflow-auto"
               >
-                {messages.map((message, index) => (
-                  <div className="flex flex-col mt-2 mb-5">
+                {messages.map((message) => (
+                  <div key={message.id} className="flex flex-col mt-2 mb-5">
                     <div
-                      key={index}
                       className={`my-1 flex ${
                         user.id === message.user.id
                           ? "justify-end"
@@ -220,7 +219,7 @@ const ChatRoomPage = () => {
                       </div>
 
                       <Avatar
-                        src={message.user.avatar}
+                        src={user.id === message.user.id ? user.avatar : message.user.avatar}
                         sx={{ width: 24, height: 24 }}
                       />
                     </div>
