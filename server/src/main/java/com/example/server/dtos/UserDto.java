@@ -5,6 +5,7 @@
 package com.example.server.dtos;
 
 import com.example.server.pojos.Groups;
+import com.example.server.pojos.Letters;
 import com.example.server.pojos.Majors;
 import com.example.server.pojos.Users;
 import java.util.Date;
@@ -39,4 +40,5 @@ public class UserDto {
     private String academicYear;
     private Majors majorId;
     private Set<Groups> groupsSet;
+    private Set<Letters> letterSet;
 }

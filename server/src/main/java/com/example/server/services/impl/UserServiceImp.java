@@ -183,6 +183,7 @@ public class UserServiceImp implements UserService {
             .academicYear(user.getAcademicYear())
             .majorId(user.getMajorId())
             .groupsSet(user.getGroupsSet())
+            .letterSet(user.getLettersSet())
             .build();
         return userDto;
     }

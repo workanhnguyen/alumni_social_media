@@ -4,13 +4,19 @@
  */
 package com.example.server.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
@@ -39,10 +45,11 @@ public class Letters implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
-    private Integer id;
+    private Long id;
+
     @Lob
     @Size(max = 65535)
     @Column(name = "content")
@@ -57,21 +64,25 @@ public class Letters implements Serializable {
     @Size(max = 65535)
     @Column(name = "description")
     private String description;
-    @ManyToMany(mappedBy = "lettersSet")
+    @JoinTable(name = "user_letter", joinColumns = {
+        @JoinColumn(name = "letter_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "user_id", referencedColumnName = "id")})
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore()
     private Set<Users> usersSet;
 
     public Letters() {
     }
 
-    public Letters(Integer id) {
+    public Letters(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
