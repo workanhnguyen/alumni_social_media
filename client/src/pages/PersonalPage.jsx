@@ -7,23 +7,14 @@ import {
   UserAvatar,
   UserCommonInfo,
   UserDetailInfo,
-  UserImageList,
 } from "../components";
 import { DefaultLayout } from "../layouts";
-import { blankAvatar, emptyPlaceholder1 } from "../assets";
+import { emptyPlaceholder1 } from "../assets";
 import { useStateContext } from "../contexts/ContextProvider";
 import { getPostsByUserId } from "../apis/PostApi";
 import { FETCH_BY_USER } from "../constants/common";
 import { useParams } from "react-router-dom";
 import { getUserByUsername } from "../apis/UserApi";
-
-const images = [
-  blankAvatar,
-  blankAvatar,
-  blankAvatar,
-  blankAvatar,
-  blankAvatar,
-];
 
 const PersonalPage = () => {
   const { posts, postDispatch } = useStateContext();
@@ -46,10 +37,7 @@ const PersonalPage = () => {
           if (postRes.status === 200)
             postDispatch({ type: FETCH_BY_USER, payload: postRes.data });
         }
-      } catch (e) {
-        console.log(e);
-        return;
-      } finally {
+      } catch (e) {} finally {
         setIsLoading(false);
       }
     };

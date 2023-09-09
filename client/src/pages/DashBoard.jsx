@@ -12,7 +12,6 @@ import { FETCH_ALL, POST_NORMAL, POST_PER_PAGE } from "../constants/common";
 const DashBoard = () => {
   const { posts, postDispatch, postCount, setPostCount, pageIndex, setPageIndex } = useStateContext();
   const [isPostsLoading, setIsPostsLoading] = useState(false);
-  console.log(postCount, pageIndex);
 
   useEffect(() => {
     const handleFetchAllPosts = async () => {

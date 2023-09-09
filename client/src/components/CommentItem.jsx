@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import "moment/locale/vi";
 
@@ -10,7 +10,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Divider,
   Menu,
   MenuItem,
 } from "@mui/material";
@@ -23,12 +22,11 @@ import { CircularProgress } from "@mui/material";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import { useStateContext } from "../contexts/ContextProvider";
 import {
-  addNewComment,
   addResponseComment,
   deleteComment,
   updateComment,
 } from "../apis/CommentApi";
-import { ADD_RESPONSE_COMMENT, CREATE, DELETE_COMMENT, UPDATE_COMMENT } from "../constants/common";
+import { ADD_RESPONSE_COMMENT, DELETE_COMMENT, UPDATE_COMMENT } from "../constants/common";
 import LoadingButton from "./LoadingButton";
 
 moment.locale("vi");
@@ -39,6 +37,7 @@ const CommentItem = ({
   postId,
   showRes = true,
 }) => {
+  console.log(comment);
   const { user, setCommentCount, postDispatch } = useStateContext();
   const [commentContent, setCommentContent] = useState(comment?.content);
   const [responseCommentContent, setResponseCommentContent] = useState("");
@@ -227,8 +226,8 @@ const CommentItem = ({
 
                 {/* Comment actions */}
                 {(!showEditInput &&
-                  (user.id === comment?.user?.id ||
-                    user.id === comment?.userId?.id) || isPostOwner) && (
+                  ((user.id === comment?.user?.id ||
+                    user.id === comment?.userId?.id) || isPostOwner)) && (
                     <PopupState variant="popover" popupId="demo-popup-menu">
                       {(popupState) => (
                         <>

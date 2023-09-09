@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
 import PublicIcon from "@mui/icons-material/Public";
@@ -10,15 +10,23 @@ import { useStateContext } from "../contexts/ContextProvider";
 import { UPDATE } from "../constants/common";
 
 const EditPostForm = ({ data, show, setShow }) => {
-  const [content, setContent] = useState(data?.content || "");
-  const [images, setImages] = useState(data?.images || []);
+  if (show) console.log(data);
+  const [content, setContent] = useState("");
+  const [images, setImages] = useState([]);
 
   const { postDispatch } = useStateContext();
 
   const [showProgress, setShowProgress] = useState(false);
   const postPanelRef = useRef();
 
+  useEffect(() => {
+    setContent(data?.content);
+    setImages(data?.images);
+  }, [data]);
+
   const handleClosePostPanel = () => {
+    setContent(data?.content);
+    setImages(data?.images);
     setShow(false);
   };
 

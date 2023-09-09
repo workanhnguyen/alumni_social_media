@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useState, memo } from "react";
 
 import {
   Button,
@@ -31,25 +31,13 @@ import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { useStateContext } from "../contexts/ContextProvider";
 import {
   deletePost,
-  getCommentQuantityByPostId,
   lockPost,
   unlockPost,
 } from "../apis/PostApi";
 import { useNavigate } from "react-router-dom";
-import {
-  addReactionToPost,
-  deleteReactionFromPost,
-  getReactionOnPost,
-  getReactionsByPostId,
-} from "../apis/ReactionApi";
 
 const Post = ({ data, className, type }) => {
-  if (type === POST_DETAIL)
-    console.log(data);
-  const { user, postDispatch, setPostCount, comments } = useStateContext();
-
-  const [commentQuantity, setCommentQuantity] = useState(0);
-  const [reactions, setReactions] = useState([]);
+  const { user, postDispatch, setPostCount } = useStateContext();
 
   const [showEditPostForm, setShowEditPostForm] = useState(false);
   const [openDeletePostDialog, setOpenDeletePostDialog] = useState(false);
@@ -62,31 +50,25 @@ const Post = ({ data, className, type }) => {
   };
 
   const handleLockComment = async (popupState) => {
+    popupState.close();
     try {
       let res = await lockPost(data.id);
 
       if (res.status === 200) {
         postDispatch({ type: LOCK_COMMENT, payload: res.data });
       }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      popupState.close();
-    }
+    } catch (e) {}
   };
 
   const handleUnlockComment = async (popupState) => {
+    popupState.close();
     try {
       let res = await unlockPost(data.id);
 
       if (res.status === 200) {
         postDispatch({ type: UNLOCK_COMMENT, payload: res.data });
       }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      popupState.close();
-    }
+    } catch (e) {}
   };
 
   const handleOpenDeletePostDialog = (popupState) => {
@@ -112,10 +94,6 @@ const Post = ({ data, className, type }) => {
       }
     };
     process();
-  };
-
-  const handleCommentQuantityChange = (newCommentQuantity) => {
-    setCommentQuantity(newCommentQuantity);
   };
 
   return (

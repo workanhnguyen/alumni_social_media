@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import cookie from "react-cookies";
 
 import {
-  AlumniAddInfo,
   AlumniAddInfoPage,
   AlumniLoginPage,
   AlumniRegisterPage,
@@ -11,7 +9,6 @@ import {
   ChooseRolePage,
   DashBoard,
   GroupPage,
-  InfoPage,
   LecturerLoginPage,
   LetterPage,
   PersonalPage,
@@ -22,48 +19,32 @@ import {
   ALUMNI_LOGIN,
   ALUMNI_REGISTER,
   CURRENT_USER,
-  DASHBOARD,
   GROUPS,
   LECTURER_LOGIN,
   LETTERS,
   POST_DETAIL,
   ROOT_PAGE,
-  INFO_PAGE,
   ROLE_PAGE,
   CHAT_ROOM_PAGE,
 } from "./routes";
 import { useStateContext } from "./contexts/ContextProvider";
-import { ALREADY_LOGIN, NO_ACTIVE } from "./constants/common";
 import { ROLE_ALUMNI } from "./constants/role";
 
 const App = () => {
   const { token, user } = useStateContext();
-  const booleanUser = JSON.parse(
-    user === false || user === "false" ? user : null
-  );
 
-  const isContainsEmptyFields = (data) => {
+  const isAlumniWithEmptyFields = () => {
     return (
-      data &&
-      data.role === ROLE_ALUMNI &&
-      (data.phone === null ||
-        data.phone === "" ||
-        data.academicYear === null ||
-        data.academicYear === "" ||
-        data.bgImage === null ||
-        data.majorId === null)
+      user?.role === ROLE_ALUMNI &&
+      (user?.phone === null ||
+        user?.phone === "" ||
+        user?.academicYear === null ||
+        user?.academicYear === "" ||
+        user?.bgImage === null ||
+        user?.majorId === null)
     );
   };
 
-  const isActivated = user !== null && booleanUser !== false;
-  const isFullUserInfo =
-    isActivated &&
-    user?.phone !== null &&
-    user?.phone !== "" &&
-    user?.academicYear !== null &&
-    user?.academicYear !== "" &&
-    user?.bgImage !== null &&
-    user?.majorId !== null;
   return (
     <BrowserRouter>
       <Routes>
@@ -87,7 +68,7 @@ const App = () => {
         )}
 
         {/* If user with alumni role is not full info */}
-        {isContainsEmptyFields(user) && (
+        {isAlumniWithEmptyFields() && (
           <Route path={ALUMNI_ADD_INFO} element={<AlumniAddInfoPage />} />
         )}
 
@@ -99,7 +80,7 @@ const App = () => {
               to={
                 !token
                   ? ROLE_PAGE
-                  : isContainsEmptyFields(user)
+                  : isAlumniWithEmptyFields()
                   ? ALUMNI_ADD_INFO
                   : ROOT_PAGE
               }

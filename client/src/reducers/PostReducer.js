@@ -12,7 +12,6 @@ import {
   UNLOCK_COMMENT,
   UPDATE,
   UPDATE_COMMENT,
-  UPDATE_RESPONSE_COMMENT,
 } from "../constants/common";
 
 const PostReducer = (currentState, action) => {

@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { CircularProgress } from "@mui/material";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -34,7 +33,7 @@ import { getMajorsByDepartmentId } from "../../apis/MajorApi";
 const defaultTheme = createTheme();
 
 const AlumniAddInfoPage = () => {
-  const { user, userDispatch } = useStateContext();
+  const { userDispatch } = useStateContext();
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [majorId, setMajorId] = useState("");
@@ -51,29 +50,36 @@ const AlumniAddInfoPage = () => {
   const [yAlert, setYAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [showProgress, setShowProgress] = useState(false);
-  const [isUpdateSuccessful, setIsUpdateSuccessful] = useState(false);
 
   const fileInputRef = useRef();
   const navigate = useNavigate();
 
+  // Get departments
   useEffect(() => {
     const process = async () => {
       try {
         let departmentRes = await getAllDepartments();
         if (departmentRes.status === 200) {
           setDepartments(departmentRes.data);
-
-          if (department !== "") {
-            let majorRes = await getMajorsByDepartmentId(department);
-            if (majorRes.status === 200) {
-              setMajors(majorRes.data);
-            }
-          }
         }
       } catch (e) {}
     };
 
     process();
+  }, []);
+
+  // Get majors of department
+  useEffect(() => {
+    const process = async () => {
+      try {
+        let majorRes = await getMajorsByDepartmentId(department);
+        if (majorRes.status === 200) {
+          setMajors(majorRes.data);
+        }
+      } catch (e) {}
+    };
+    if (department !== '')
+      process();
   }, [department]);
 
   const handleChooseCoverImage = (e) => {
@@ -87,14 +93,6 @@ const AlumniAddInfoPage = () => {
   const handleDepartmentChange = (e) => {
     setDepartment(e.target.value);
     setMajorId("");
-
-    const process = async () => {
-      try {
-        let res = await getMajorsByDepartmentId(e.target.value);
-      } catch (e) {}
-    };
-
-    process();
   };
 
   const handleMajorChange = (e) => {
@@ -119,6 +117,7 @@ const AlumniAddInfoPage = () => {
     };
 
     const processInfo = async () => {
+      setShowProgress(true);
       try {
         let infoRes = await updateInfoUser(infoData);
         if (infoRes.status === 200) {
@@ -145,6 +144,7 @@ const AlumniAddInfoPage = () => {
           }
         }
       } catch (e) {}
+      finally { setShowProgress(false) }
     };
 
     let message = validate();
@@ -215,7 +215,7 @@ const AlumniAddInfoPage = () => {
 
               {/* Choose department */}
               <Grid item xs={12}>
-                <FormControl fullWidth margin="dense" required error={mAlert}>
+                <FormControl fullWidth margin="dense" required>
                   <InputLabel id="department">Chọn khoa</InputLabel>
                   <Select
                     labelId="department"
@@ -235,7 +235,7 @@ const AlumniAddInfoPage = () => {
 
               {/* Choose majority */}
               <Grid item xs={12}>
-                <FormControl fullWidth margin="dense" required>
+                <FormControl fullWidth margin="dense" required error={mAlert}>
                   <InputLabel id="majority">Chọn ngành</InputLabel>
                   <Select
                     labelId="majority"
@@ -318,19 +318,7 @@ const AlumniAddInfoPage = () => {
 
               {/* Update button */}
               <Grid item xs={12}>
-                {isUpdateSuccessful ? (
-                  <Button
-                    color="success"
-                    size="large"
-                    variant="outlined"
-                    fullWidth
-                    startIcon={<CheckCircleIcon />}
-                    sx={{ mt: 0, mb: 2 }}
-                  >
-                    Cập nhật thành công
-                  </Button>
-                ) : (
-                  <Button
+              <Button
                     onClick={handleUpdateUserInfo}
                     fullWidth
                     type="submit"
@@ -341,7 +329,6 @@ const AlumniAddInfoPage = () => {
                   >
                     {showProgress ? <CircularProgress size={28} /> : "Cập nhật"}
                   </Button>
-                )}
               </Grid>
               <Grid item xs={12}>
                 <Button

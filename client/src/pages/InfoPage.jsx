@@ -17,7 +17,7 @@ const InfoPage = ({ type }) => {
       case NO_ACTIVE:
         return "Vui lòng chờ quản trị viên xác nhận tài khoản!";
       default:
-        return;
+        break;
     }
   };
 
