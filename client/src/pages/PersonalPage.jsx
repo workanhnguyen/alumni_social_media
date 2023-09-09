@@ -17,32 +17,39 @@ import { useParams } from "react-router-dom";
 import { getUserByUsername } from "../apis/UserApi";
 
 const PersonalPage = () => {
-  const { posts, postDispatch } = useStateContext();
+  const { username } = useParams();
+  const { user, posts, postDispatch } = useStateContext();
 
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { username } = useParams();
+  const isCurrentUser = () => {
+    return username === user.username;
+  }
 
   useEffect(() => {
-    const process = async () => {
-      setIsLoading(true);
-      try {
-        let userRes = await getUserByUsername(username);
+    if (isCurrentUser()) setCurrentUser(user);
+    else {
+      const process = async () => {
+        setIsLoading(true);
+        try {
+          let userRes = await getUserByUsername(username);
 
-        if (userRes.status === 200) {
-          setCurrentUser(userRes.data);
+          if (userRes.status === 200) {
+            setCurrentUser(userRes.data);
 
-          let postRes = await getPostsByUserId(userRes.data.id);
-          if (postRes.status === 200)
-            postDispatch({ type: FETCH_BY_USER, payload: postRes.data });
+            let postRes = await getPostsByUserId(userRes.data.id);
+            if (postRes.status === 200)
+              postDispatch({ type: FETCH_BY_USER, payload: postRes.data });
+          }
+        } catch (e) {
+        } finally {
+          setIsLoading(false);
         }
-      } catch (e) {} finally {
-        setIsLoading(false);
-      }
-    };
+      };
 
-    process();
+      process();
+    }
   }, [username]);
 
   return (
@@ -55,9 +62,9 @@ const PersonalPage = () => {
         <>
           <div className="w-full h-full flex flex-col items-center bg-white drop-shadow-sm">
             <div className="max-lg:w-full lg:w-235 flex flex-col items-center my-6 mt-16">
-              <CoverImage bgImage={currentUser?.bgImage} />
+              <CoverImage bgImage={isCurrentUser() ? user.bgImage : currentUser?.bgImage} />
               <div className="w-full flex max-lg:flex-col max-lg:items-center px-8">
-                <UserAvatar avatar={currentUser?.avatar} />
+                <UserAvatar avatar={isCurrentUser() ? user.avatar : currentUser?.avatar} />
                 <UserCommonInfo userInfo={currentUser} />
               </div>
             </div>
