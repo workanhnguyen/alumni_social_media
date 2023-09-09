@@ -55,7 +55,7 @@ public class ApiUserController {
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<?> updateAvatarUser(@RequestPart MultipartFile updateAvatar) {
+    public ResponseEntity<?> updateAvatarUser(@RequestPart(value = "avatar") MultipartFile updateAvatar) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
