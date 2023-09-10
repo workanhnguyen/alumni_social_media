@@ -54,37 +54,18 @@
     <div id="list-guest" style="display: none; margin-top: 12px">
         <div class="d-flex justify-content-between align-items-center">
             <h5>Thêm danh sách khách mời:</h5>
-            <%--            <a href="<c:url value="/letters" />" class="btn btn-success" style="width: 120px;">Hoàn thành</a>--%>
         </div>
         <select class="form-control" id="invite-selector-filter">
-            <%--            <option value="all" selected>Tất cả</option>--%>
-            <option value="toPerson" selected>Cá nhân</option>
+            <option value="all" selected>Tất cả</option>
+            <option value="toPerson">Cá nhân</option>
             <option value="toGroup">Nhóm</option>
         </select>
-        <%--        <div id="guest-all">--%>
-        <%--            &lt;%&ndash; Iterate over the users and convert them to a JSON array &ndash;%&gt;--%>
-        <%--            <c:set var="userArray">--%>
-        <%--                <c:forEach items="${users}" var="user" varStatus="loop">--%>
-        <%--                    <c:set var="userJson">--%>
-        <%--                        {--%>
-        <%--                            "id": "${user.id}",--%>
-        <%--                            "lastName": "${user.lastName}",--%>
-        <%--                            "firstName": "${user.firstName}",--%>
-        <%--                            "email": "${user.email}"--%>
-        <%--                        }--%>
-        <%--                    </c:set>--%>
-        <%--                    <c:if test="${!loop.last}">--%>
-        <%--                        ${userJson},--%>
-        <%--                    </c:if>--%>
-        <%--                    <c:if test="${loop.last}">--%>
-        <%--                        ${userJson}--%>
-        <%--                    </c:if>--%>
-        <%--                </c:forEach>--%>
-        <%--            </c:set>--%>
-        <%--            <button style="margin-top: 6px" id="btn-all" class="w-100 btn btn-success"--%>
-        <%--                    onclick="inviteAll('${authToken}')">Gửi thư mời đến tất cả--%>
-        <%--            </button>--%>
-        <%--        </div>--%>
+        <div id="guest-all" style="display: block">
+            <button style="margin-top: 6px" id="btn-all" class="w-100 btn btn-success"
+                    onclick="inviteAll('${authToken}')">Gửi thư mời đến tất cả
+            </button>
+            <a id="btn-back" href="<c:url value="/letters" />" class="w-100 btn btn-success" style="display: none; margin-top: 6px">Hoàn tất</a>
+        </div>
         <div id="guest-group" style="display: none; margin-top: 24px">
             <div style="max-height: 400px; overflow-y: scroll">
                 <table class="table">
@@ -102,7 +83,8 @@
 
                             <td>${g.groupName}</td>
                             <td>
-                                <button id="btn-group-row-${g.id}" class="btn btn-primary" onclick="inviteGroup(${g.id}, '${authToken}')">Mời
+                                <button id="btn-group-row-${g.id}" class="btn btn-primary"
+                                        onclick="inviteGroup(${g.id}, '${authToken}')">Mời
                                 </button>
                             </td>
                         </tr>
@@ -110,8 +92,11 @@
                     </tbody>
                 </table>
             </div>
+            <div class="w-100" style="margin-top: 12px">
+                <a href="<c:url value="/letters" />" class="w-100 btn btn-success">Hoàn tất</a>
+            </div>
         </div>
-        <div id="guest-person" style="margin-top: 24px">
+        <div id="guest-person" style="display: none; margin-top: 24px">
             <div style="max-height: 400px; overflow-y: scroll">
                 <table class="table">
                     <thead>
@@ -161,7 +146,9 @@
                                 </c:choose>
                             </td>
                             <td>
-                                <button id="btn-user-row-${u.id}" class="btn btn-primary" onclick="invitePerson('${u.id}', '${u.email}', '${u.lastName}', '${u.firstName}', '${authToken}')">Mời
+                                <button id="btn-user-row-${u.id}" class="btn btn-primary"
+                                        onclick="invitePerson('${u.id}', '${u.email}', '${u.lastName}', '${u.firstName}', '${authToken}')">
+                                    Mời
                                 </button>
                             </td>
                         </tr>
@@ -169,9 +156,9 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div class="w-100">
-            <a href="<c:url value="/letters" />" class="w-100 btn btn-success">Hoàn tất</a>
+            <div class="w-100" style="margin-top: 12px">
+                <a href="<c:url value="/letters" />" class="w-100 btn btn-success">Hoàn tất</a>
+            </div>
         </div>
     </div>
 </div>

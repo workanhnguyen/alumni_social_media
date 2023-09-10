@@ -9,41 +9,27 @@ function onLoad() {
     });
 }
 
-function hideUserRow(userId) {
-    const userRow = document.getElementById(`user-row-${userId}`);
-    if (userRow) {
-        userRow.style.display = 'none';
-    }
-}
-
-function hideGroupRow(groupId) {
-    const groupRow = document.getElementById(`group-row-${groupId}`);
-    if (groupRow) {
-        groupRow.style.display = 'none';
-    }
-}
-
 function changeInviteFiler() {
     const inviteSelectorDOM = document.getElementById("invite-selector-filter");
 
-    // const guestAllDOM = document.getElementById("guest-all");
+    const guestAllDOM = document.getElementById("guest-all");
     const guestGroupDOM = document.getElementById("guest-group");
     const guestPersonDOM = document.getElementById("guest-person");
 
     inviteSelectorDOM.addEventListener("change", function () {
         switch (inviteSelectorDOM.value) {
-            // case 'all':
-            //     guestAllDOM.style.display = 'block';
-            //     guestGroupDOM.style.display = 'none';
-            //     guestPersonDOM.style.display = 'none';
-            //     break;
+            case 'all':
+                guestAllDOM.style.display = 'block';
+                guestGroupDOM.style.display = 'none';
+                guestPersonDOM.style.display = 'none';
+                break;
             case 'toGroup':
-                // guestAllDOM.style.display = 'none';
+                guestAllDOM.style.display = 'none';
                 guestGroupDOM.style.display = 'block';
                 guestPersonDOM.style.display = 'none';
                 break;
             case 'toPerson':
-                // guestAllDOM.style.display = 'none';
+                guestAllDOM.style.display = 'none';
                 guestGroupDOM.style.display = 'none';
                 guestPersonDOM.style.display = 'block';
                 break;
@@ -125,7 +111,6 @@ function invitePerson(id, email, lastName, firstName, authToken) {
         }
     })
 }
-
 function inviteGroup(groupId, authToken) {
 
     document.getElementById(`btn-group-row-${groupId}`).disabled = true;
@@ -168,6 +153,45 @@ function inviteGroup(groupId, authToken) {
             alert("Gửi lời mời thành công!");
         })
         .catch(e => console.log(e));
+}
+function inviteAll(authToken) {
+    fetch(`/server/api/users/`, {
+        method: "get",
+        headers: {
+            "Authorization": authToken,
+            "Content-Type": "application/json"
+        }
+    }).then(res => res.json())
+        .then(data => {
+            for (let i = 0; i < data.length; i++) {
+                fetch(`/server/api/letters/${letterId}/add_user/${data[i].id}`, {
+                    method: "post",
+                    headers: {
+                        "Authorization": authToken,
+                        "Content-Type": "application/json"
+                    }
+                }).then(res => {
+                    if (res.status === 200) {
+
+                        const params = {
+                            to_mail: data[i].email,
+                            to_name: `${data[i].lastName} ${data[i].firstName}`,
+                            from_name: "OU Media After Graduated",
+                            reply_to: "OU Media After Graduated",
+                            event_title: document.getElementById("letter-title-input").value,
+                            event_content: document.getElementById("letter-content-input").value
+                        };
+
+                        emailjs.send("service_x1pwrtx", "template_5ebi1t7", params).then(function (res) {
+                        });
+                    }
+                })
+            }
+            document.getElementById("btn-all").style.display = 'none';
+            document.getElementById("btn-back").style.display = 'block';
+
+            alert("Gửi lời mời thành công!");
+        }).catch(e => console.log(e));
 }
 
 onLoad();

@@ -34,6 +34,15 @@ public class ApiUserController {
     @Autowired
     private MajorService majorService;
 
+    @GetMapping("/")
+    public ResponseEntity<?> getUsers(@RequestParam Map<String, String> params) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
+            return new ResponseEntity<>(userService.getUsers(params), HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     @PostMapping(path = "/register/",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
