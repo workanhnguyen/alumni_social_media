@@ -12,16 +12,20 @@
 <%--<c:url value="/posts" var="searchPostByUsername"/>--%>
 <div class="container">
     <h1 class="text-center mt-3 mb-3">DANH SÁCH THƯ MỜI</h1>
-<%--    <c:if test="${counter > 1}">--%>
-<%--        <ul class="pagination">--%>
-<%--            <c:forEach begin="1" end="${counter}" var="i">--%>
-<%--                <c:url value="/letters" var="pageUrl">--%>
-<%--                    <c:param name="page" value="${i}"></c:param>--%>
-<%--                </c:url>--%>
-<%--                <li class="page-item"><a class="page-link ${pageIndex == i ? 'bg-primary text-white' : ''}" href="${pageUrl}">${i}</a></li>--%>
-<%--            </c:forEach>--%>
-<%--        </ul>--%>
-<%--    </c:if>--%>
+    <nav class="navbar navbar-expand-md navbar-light">
+        <a href="<c:url value="/letters/new" />" class="btn btn-success">+ Thêm thư mời</a>
+    </nav>
+    <c:if test="${counter > 1}">
+        <ul class="pagination">
+            <c:forEach begin="1" end="${counter}" var="i">
+                <c:url value="/letters" var="pageUrl">
+                    <c:param name="page" value="${i}"></c:param>
+                </c:url>
+                <li class="page-item"><a class="page-link ${pageIndex == i ? 'bg-primary text-white' : ''}"
+                                         href="${pageUrl}">${i}</a></li>
+            </c:forEach>
+        </ul>
+    </c:if>
 
     <table class="table">
         <thead>
@@ -35,32 +39,32 @@
         </tr>
         </thead>
         <tbody>
-<%--        <c:forEach items="${letters}" var="l">--%>
-<%--            <tr class="align-middle">--%>
-<%--                <th scope="row" id="letterId">${l.id}</th>--%>
-<%--                <td>${l.createdAt}</td>--%>
-<%--                <td>${l.user.lastName} ${p.user.firstName}</td>--%>
-<%--                <c:choose>--%>
-<%--                    <c:when test="${p.user.role == 'ROLE_ALUMNI'}">--%>
-<%--                        <td>Cựu sinh viên</td>--%>
-<%--                    </c:when>--%>
-<%--                    <c:when test="${p.user.role == 'ROLE_LECTURER'}">--%>
-<%--                        <td>Giảng viên</td>--%>
-<%--                    </c:when>--%>
-<%--                    <c:otherwise>--%>
-<%--                        <td>Quản trị viên</td>--%>
-<%--                    </c:otherwise>--%>
-<%--                </c:choose>--%>
-<%--                <td>--%>
-<%--                        ${p.isLocked == true ? 'Bị khóa' : 'Đang mở'}--%>
-<%--                </td>--%>
-<%--                <td>--%>
-<%--                    <c:url value="/api/posts/${p.id}/" var="apiDelete"/>--%>
-<%--                    <a href="<c:url value="/posts/${p.id}" /> " class="btn btn-success">Xem chi tiết</a>--%>
-<%--                    <button class="btn btn-danger" onclick="deletePost('${apiDelete}', '${authToken}')">Xóa</button>--%>
-<%--                </td>--%>
-<%--            </tr>--%>
-<%--        </c:forEach>--%>
+        <%--        <c:forEach items="${letters}" var="l">--%>
+        <%--            <tr class="align-middle">--%>
+        <%--                <th scope="row" id="letterId">${l.id}</th>--%>
+        <%--                <td>${l.createdAt}</td>--%>
+        <%--                <td>${l.user.lastName} ${p.user.firstName}</td>--%>
+        <%--                <c:choose>--%>
+        <%--                    <c:when test="${p.user.role == 'ROLE_ALUMNI'}">--%>
+        <%--                        <td>Cựu sinh viên</td>--%>
+        <%--                    </c:when>--%>
+        <%--                    <c:when test="${p.user.role == 'ROLE_LECTURER'}">--%>
+        <%--                        <td>Giảng viên</td>--%>
+        <%--                    </c:when>--%>
+        <%--                    <c:otherwise>--%>
+        <%--                        <td>Quản trị viên</td>--%>
+        <%--                    </c:otherwise>--%>
+        <%--                </c:choose>--%>
+        <%--                <td>--%>
+        <%--                        ${p.isLocked == true ? 'Bị khóa' : 'Đang mở'}--%>
+        <%--                </td>--%>
+        <%--                <td>--%>
+        <%--                    <c:url value="/api/posts/${p.id}/" var="apiDelete"/>--%>
+        <%--                    <a href="<c:url value="/posts/${p.id}" /> " class="btn btn-success">Xem chi tiết</a>--%>
+        <%--                    <button class="btn btn-danger" onclick="deletePost('${apiDelete}', '${authToken}')">Xóa</button>--%>
+        <%--                </td>--%>
+        <%--            </tr>--%>
+        <%--        </c:forEach>--%>
         </tbody>
     </table>
 </div>

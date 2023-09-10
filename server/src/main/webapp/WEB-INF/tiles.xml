@@ -62,4 +62,8 @@
         <put-attribute name="title" value="Chi tiết thư mời" />
         <put-attribute name="content" value="/WEB-INF/pages/letter-detail.jsp" />
     </definition>
+    <definition name="addLetter" extends="baseLayout">
+        <put-attribute name="title" value="Thêm thư mời" />
+        <put-attribute name="content" value="/WEB-INF/pages/add-letter.jsp" />
+    </definition>
 </tiles-definitions>

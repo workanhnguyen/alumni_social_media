@@ -115,6 +115,4 @@ public class ApiLetterController {
             return ResponseEntity.badRequest().body("User is not in the group.");
         }
     }
-
-    
 }
