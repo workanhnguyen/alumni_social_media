@@ -4,6 +4,7 @@
  */
 package com.example.server.repositories.impl;
 
+import com.example.server.dtos.LetterDto;
 import com.example.server.pojos.Posts;
 import com.example.server.repositories.*;
 import com.example.server.pojos.Groups;
@@ -98,5 +99,46 @@ public class LetterRepositoryImp implements LetterRepository{
 
         List<Object[]> result = query.list();
         return result;
+    }
+
+    @Override
+    public List<Letters> getLetters(Map<String, String> params) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Letters> q = b.createQuery(Letters.class);
+        Root<Letters> root = q.from(Letters.class);
+        q.select(root);
+
+        if (params != null) {
+            List<Predicate> predicates = new ArrayList<>();
+
+            String title = params.get("title");
+            if (title != null && !title.isEmpty()) {
+                predicates.add(b.like(root.get("content"), String.format("%%%s%", title)));
+            }
+
+            q.where(predicates.toArray(Predicate[]::new));
+            q.orderBy(b.desc(root.get("createdAt")));
+        }
+
+        Query query = s.createQuery(q);
+
+        String page = params.get("page");
+        if (page != null && !page.isEmpty()) {
+
+            int p = Integer.parseInt(page);
+            int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+
+            query.setFirstResult((p - 1) * pageSize);
+            query.setMaxResults(pageSize);
+        }
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Long countLetters() {
+        return entityManager.createQuery("SELECT COUNT(l) FROM Letters l", Long.class)
+                .getSingleResult();
     }
 }

@@ -6,6 +6,7 @@ package com.example.server.services;
 
 
 import com.example.server.dtos.GroupDto;
+import com.example.server.dtos.LetterDto;
 import com.example.server.pojos.Groups;
 import com.example.server.pojos.Letters;
 import com.example.server.pojos.Users;
@@ -27,6 +28,6 @@ public interface LetterService {
     Boolean addUserToLetter(Users user, Letters l);
     
     Boolean removeUserFromLetter(Letters l, Users user);
-    
-
+    List<LetterDto> getLetters(Map<String, String> params);
+    Long countLetters();
 }

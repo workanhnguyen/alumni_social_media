@@ -4,6 +4,7 @@
  */
 package com.example.server.repositories;
 
+import com.example.server.dtos.LetterDto;
 import com.example.server.pojos.Groups;
 import com.example.server.pojos.Letters;
 import com.example.server.pojos.Users;
@@ -24,4 +25,6 @@ public interface LetterRepository {
     Boolean removeUserFromLetter(Letters l, Users user);
     Letters findLetterById(Long id);
     List<Object[]> getLetterByUser(Users u);
+    List<Letters> getLetters(Map<String, String> params);
+    Long countLetters();
 }

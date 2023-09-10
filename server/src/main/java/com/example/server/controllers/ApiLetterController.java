@@ -15,6 +15,8 @@ import com.example.server.services.GroupService;
 import com.example.server.services.LetterService;
 
 import com.example.server.services.UserService;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +95,7 @@ public class ApiLetterController {
         }
 
         if (letterService.addUserToLetter(user, l)) {
-            return ResponseEntity.ok("User added to letter successfully.");
+            return ResponseEntity.status(HttpStatus.OK).build();
         } else
             return ResponseEntity.badRequest().body("FALSE");
     }
@@ -114,5 +116,15 @@ public class ApiLetterController {
         } else {
             return ResponseEntity.badRequest().body("User is not in the group.");
         }
+    }
+
+    @GetMapping("")
+    @CrossOrigin
+    public ResponseEntity<?> getLetters() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            return new ResponseEntity<>(letterService.getLetters(new HashMap<>()), HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

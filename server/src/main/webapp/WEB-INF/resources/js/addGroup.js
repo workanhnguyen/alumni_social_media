@@ -6,14 +6,7 @@ function onLoad() {
         (e || window.event).returnValue = confirmationMessage;
         return confirmationMessage;
     });
-
-    function hideUserRow(userId) {
-        const userRow = document.getElementById(`user-row-${userId}`);
-        if (userRow) {
-            userRow.style.display = 'none';
-        }
-    }
-};
+}
 function hideUserRow(userId) {
     const userRow = document.getElementById(`user-row-${userId}`);
     if (userRow) {

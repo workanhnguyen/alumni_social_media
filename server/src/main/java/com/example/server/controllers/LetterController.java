@@ -49,6 +49,12 @@ public class LetterController {
 
         int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
 
+        Long count = this.letterService.countLetters();
+
+        model.addAttribute("counter", Math.ceil(count * 1.0/pageSize));
+        model.addAttribute("letters", letterService.getLetters(params));
+        model.addAttribute("pageIndex", params.get("page"));
+
         return "listLetter";
     }
 

@@ -2,6 +2,7 @@ package com.example.server.services.impl;
 
 import com.example.server.dtos.CommentDto;
 import com.example.server.dtos.GroupDto;
+import com.example.server.dtos.LetterDto;
 import com.example.server.dtos.UserDto;
 import com.example.server.pojos.Comments;
 import com.example.server.pojos.Groups;
@@ -28,9 +29,6 @@ import org.springframework.stereotype.Service;
 public class LetterServiceImp implements LetterService {
     @Autowired
     private LetterRepository letterRepo;
-    
-   
-
 
     @Override
     public Letters addLetter(Map<String, String> params, Users u) {
@@ -61,9 +59,31 @@ public class LetterServiceImp implements LetterService {
     }
 
     @Override
+    public List<LetterDto> getLetters(Map<String, String> params) {
+        List<Letters> letters = letterRepo.getLetters(params);
+        List<LetterDto> letterDtos = new ArrayList<>();
+
+        letters.forEach(letter -> {
+            LetterDto letterDto = new LetterDto();
+            letterDto.setId(letter.getId());
+            letterDto.setContent(letter.getContent());
+            letterDto.setDescription(letter.getDescription());
+            letterDto.setCreatedAt(letter.getCreatedAt());
+            letterDto.setUpdatedAt(letter.getUpdatedAt());
+
+            letterDtos.add(letterDto);
+        });
+
+        return letterDtos;
+    }
+
+    @Override
+    public Long countLetters() {
+        return letterRepo.countLetters();
+    }
+
+    @Override
     public Letters findLetterById(Long letterId) {
         return this.letterRepo.findLetterById(letterId);
     }
-    
-   
 }

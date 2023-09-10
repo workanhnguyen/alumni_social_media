@@ -32,39 +32,23 @@
         <tr>
             <th scope="col">ID</th>
             <th scope="col">Ngày tạo</th>
-            <th scope="col">Người tạo</th>
-            <th scope="col">Vai trò</th>
             <th scope="col">Tiêu đề</th>
             <th scope="col">Hành động</th>
         </tr>
         </thead>
         <tbody>
-        <%--        <c:forEach items="${letters}" var="l">--%>
-        <%--            <tr class="align-middle">--%>
-        <%--                <th scope="row" id="letterId">${l.id}</th>--%>
-        <%--                <td>${l.createdAt}</td>--%>
-        <%--                <td>${l.user.lastName} ${p.user.firstName}</td>--%>
-        <%--                <c:choose>--%>
-        <%--                    <c:when test="${p.user.role == 'ROLE_ALUMNI'}">--%>
-        <%--                        <td>Cựu sinh viên</td>--%>
-        <%--                    </c:when>--%>
-        <%--                    <c:when test="${p.user.role == 'ROLE_LECTURER'}">--%>
-        <%--                        <td>Giảng viên</td>--%>
-        <%--                    </c:when>--%>
-        <%--                    <c:otherwise>--%>
-        <%--                        <td>Quản trị viên</td>--%>
-        <%--                    </c:otherwise>--%>
-        <%--                </c:choose>--%>
-        <%--                <td>--%>
-        <%--                        ${p.isLocked == true ? 'Bị khóa' : 'Đang mở'}--%>
-        <%--                </td>--%>
-        <%--                <td>--%>
-        <%--                    <c:url value="/api/posts/${p.id}/" var="apiDelete"/>--%>
-        <%--                    <a href="<c:url value="/posts/${p.id}" /> " class="btn btn-success">Xem chi tiết</a>--%>
-        <%--                    <button class="btn btn-danger" onclick="deletePost('${apiDelete}', '${authToken}')">Xóa</button>--%>
-        <%--                </td>--%>
-        <%--            </tr>--%>
-        <%--        </c:forEach>--%>
+        <c:forEach items="${letters}" var="l">
+            <tr class="align-middle">
+                <th scope="row" id="letterId">${l.id}</th>
+                <td>${l.createdAt}</td>
+                <td>${l.content}</td>
+                <td>
+                    <c:url value="/api/posts/${l.id}/" var="apiDelete"/>
+                    <a href="<c:url value="/letters/${l.id}" /> " class="btn btn-success">Xem chi tiết</a>
+                    <button class="btn btn-danger" onclick="deletePost('${apiDelete}', '${authToken}')">Xóa</button>
+                </td>
+            </tr>
+        </c:forEach>
         </tbody>
     </table>
 </div>
