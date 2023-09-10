@@ -4,7 +4,7 @@ import cookie from "react-cookies";
 
 import { HOME } from "../constants/page";
 import UserReducer from "../reducers/UserReducer";
-import { TOKEN, USER } from "../constants/common";
+import { GROUP, LETTER, TOKEN, USER } from "../constants/common";
 import PostReducer from "../reducers/PostReducer";
 import CommentReducer from "../reducers/CommentReducer";
 
@@ -18,6 +18,8 @@ export const ContextProvider = ({ children }) => {
   const [posts, postDispatch] = useReducer(PostReducer, []);
   const [comments, commentDispatch] = useReducer(CommentReducer, []);
   const token = cookie.load(TOKEN) || null;
+  const [letterSet, setLetterSet] = useState(cookie.load(LETTER) || []);
+  const [groupsSet, setGroupsSet] = useState(cookie.load(GROUP) || []);
 
   const [pageContent, setPageContent] = useState(HOME);
   const [postType, setPostType] = useState(null);
@@ -51,6 +53,10 @@ export const ContextProvider = ({ children }) => {
         commentIndex,
         setCommentIndex,
         token,
+        letterSet,
+        setLetterSet,
+        groupsSet,
+        setGroupsSet,
       }}
     >
       {children}

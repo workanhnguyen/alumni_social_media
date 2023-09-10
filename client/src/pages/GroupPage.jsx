@@ -6,7 +6,7 @@ import { Avatar, Button, Container } from "@mui/material";
 
 import { DefaultLayout } from "../layouts";
 import { useStateContext } from "../contexts/ContextProvider";
-import { messengerIcon } from "../assets";
+import { emptyPlaceholder1, messengerIcon } from "../assets";
 import { Link } from "react-router-dom";
 
 function stringToColor(string) {
@@ -39,14 +39,14 @@ function stringAvatar(name) {
 }
 
 const Group = () => {
-  const { user } = useStateContext();
+  const { groupsSet } = useStateContext();
   return (
     <DefaultLayout>
       <div className="w-full min-h-screen flex bg-gray">
         <div className="flex-1 my-6 mt-20">
           <Container maxWidth="sm">
-            {user.groupsSet.length > 0 &&
-              user.groupsSet.map((group, index) => (
+            {groupsSet.length > 0 ? (
+              groupsSet.map((group, index) => (
                 <div
                   key={index}
                   className="w-full flex p-4 mb-2 items-center bg-white rounded-md drop-shadow-sm"
@@ -72,7 +72,17 @@ const Group = () => {
                     </Link>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <div className="w-full flex flex-col mt-10 justify-center items-center">
+                <img
+                  className="max-sm:w-3/4 w-1/2"
+                  src={emptyPlaceholder1}
+                  alt="no-posts"
+                />
+                <p>Hiện tại bạn không tham gia nhóm nào!</p>
+              </div>
+            )}
           </Container>
         </div>
       </div>

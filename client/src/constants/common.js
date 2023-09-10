@@ -36,6 +36,9 @@ export const TRUE = "TRUE";
 export const FALSE = "FALSE";
 export const COMMENT_PER_PAGE = 10;
 
+export const LETTER = "letters";
+export const GROUP = "groups";
+
 export const ACTION_HAHA = "ACTION_HAHA";
 export const ACTION_LIKE = "ACTION_LIKE";
 export const ACTION_HEART = "ACTION_HEART";

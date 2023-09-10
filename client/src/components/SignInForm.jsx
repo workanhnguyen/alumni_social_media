@@ -22,7 +22,7 @@ import { Copyright, LoadingButton } from "../components";
 import { getCurrentUser, loginUser } from "../apis/UserApi";
 import { ALUMNI_ADD_INFO, DASHBOARD, INFO_PAGE, ROOT_PAGE } from "../routes";
 import { useStateContext } from "../contexts/ContextProvider";
-import { LOGIN, TOKEN, USER } from "../constants/common";
+import { GROUP, LETTER, LOGIN, TOKEN, USER } from "../constants/common";
 import { auth } from "../configs/FirebaseConfig";
 import {
   FIREBASE_EMAIL_SUFFIX,
@@ -65,12 +65,12 @@ export default function SignInForm({ role }) {
         cookie.save(TOKEN, response.data);
 
         let userRes = await getCurrentUser();
-     
+        
         if (userRes.status === 200) {
-      
-          cookie.save(USER, userRes.data);
+          cookie.save(LETTER, userRes.data.letterSet);
+          cookie.save(GROUP, userRes.data.groupsSet);
+          cookie.save(USER, {...userRes.data, groupsSet: [], letterSet: []});
 
-          console.log(cookie.load(USER));
           userDispatch({
             type: LOGIN,
             payload: userRes.data,
