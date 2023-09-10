@@ -102,6 +102,7 @@ public class UserController {
     // Update user
     @PostMapping("/users/{id}")
     public String update(Model model, @ModelAttribute(value = "user") @Valid Users u, BindingResult rs) {
+        u.setMajorId(majorService.getMajorById(1L));
         model.addAttribute("departments", departmentService.getAllDepartments());
         if (!rs.hasErrors()) if (userService.addOrUpdateUser(u)) return "redirect:/";
         return "userDetail";

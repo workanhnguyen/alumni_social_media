@@ -1,6 +1,6 @@
 import cookie from "react-cookies";
 
-import { LOGIN, LOGOUT, TOKEN, UPDATE, USER } from "../constants/common";
+import { GROUP, LETTER, LOGIN, LOGOUT, TOKEN, UPDATE, USER } from "../constants/common";
 
 const UserReducer = (currentState, action) => {
     switch (action.type) {
@@ -9,6 +9,8 @@ const UserReducer = (currentState, action) => {
         case LOGOUT:
             cookie.remove(TOKEN);
             cookie.remove(USER);
+            cookie.remove(LETTER);
+            cookie.remove(GROUP);
             return null;
         case UPDATE:
             cookie.save(USER, { ...currentState, ...action.payload });

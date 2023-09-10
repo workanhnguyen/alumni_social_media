@@ -1,3 +1,7 @@
+function onLoad() {
+
+}
+
 function getMajorsByDepartment() {
     const departmentDropdown = document.getElementById("department");
     const majorDropdown = document.getElementById("major");
@@ -41,4 +45,5 @@ function getMajorsByDepartment() {
     }
 }
 
+onLoad();
 getMajorsByDepartment();

@@ -57,14 +57,14 @@ function stringAvatar(name) {
 }
 
 const ChatRoomPage = () => {
-  const { user } = useStateContext();
+  const { user, groupsSet } = useStateContext();
   const { chatRoomId: room } = useParams();
   const lastMessageRef = useRef(null);
 
   const [messageContent, setMessageContent] = useState("");
   const [messages, setMessages] = useState([]);
   const [currentGroup, setCurrentGroup] = useState(
-    user?.groupsSet.find((group) => group.id === parseInt(room))
+    groupsSet?.find((group) => group.id === parseInt(room))
   );
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
@@ -86,7 +86,7 @@ const ChatRoomPage = () => {
     });
 
     setCurrentGroup(
-      user?.groupsSet.find((group) => group.id === parseInt(room))
+      groupsSet?.find((group) => group.id === parseInt(room))
     );
 
     return () => unsubcribe();
@@ -139,8 +139,8 @@ const ChatRoomPage = () => {
                 Danh sách nhóm
               </p>
               <div className="max-md:mt-4 h-5/6 overflow-auto">
-                {user.groupsSet.length > 0 &&
-                  user.groupsSet.map((group, index) => (
+                {groupsSet?.length > 0 &&
+                  groupsSet?.map((group, index) => (
                     <Link
                       to={`/chattings/${group.id}`}
                       key={index}
@@ -164,9 +164,9 @@ const ChatRoomPage = () => {
               {/* Group chat info */}
               <div className="border-b-0.5 border-gray w-full">
                 <div className="w-full flex items-center px-4 py-2 mb-3">
-                  <Avatar {...stringAvatar(currentGroup.groupName)} />
+                  <Avatar {...stringAvatar(currentGroup?.groupName)} />
                   <div className="flex flex-col justify-center ml-2">
-                    <p className="font-semibold">{currentGroup.groupName}</p>
+                    <p className="font-semibold">{currentGroup?.groupName}</p>
                     <div className="text-sm flex items-center">
                       <div className="w-3 h-3 rounded-full mr-2 bg-green-400"></div>
                       <p>Đang hoạt động</p>

@@ -27,7 +27,7 @@ const PostForm = ({ show, setShow }) => {
   };
 
   const handleClosePostPanel = () => {
-    console.log(1);
+    
     handleClearInput();
     setShowAlert(false);
     setShow(false);

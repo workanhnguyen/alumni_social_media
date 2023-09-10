@@ -42,7 +42,7 @@ const PostActionSection = ({ postId, reactions }) => {
         const reactionData = { reaction_type: reactionType };
         try {
           let addReactionRes = await addReactionToPost(postId, reactionData);
-          console.log(addReactionRes);
+          
           if (addReactionRes.status === 201) {
             postDispatch({
               type: ADD_REACTION,
