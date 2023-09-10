@@ -86,7 +86,7 @@ public class ApiLetterController {
     
     @PostMapping("/{letterId}/add_user/{userId}")
     @CrossOrigin
-    public ResponseEntity<String> addUserToGroup(@PathVariable Long letterId, @PathVariable Long userId) {
+    public ResponseEntity<String> addUserToGroup(@PathVariable(value = "letterId") Long letterId, @PathVariable(value = "userId") Long userId) {
         Letters l = letterService.findLetterById(letterId);
         Users user = userService.getUserById(userId);
 

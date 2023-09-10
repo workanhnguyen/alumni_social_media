@@ -1,3 +1,5 @@
+let letterId = '';
+
 function onLoad() {
     window.addEventListener("beforeunload", function (e) {
         // Prompt a confirmation dialog
@@ -84,7 +86,8 @@ function createLetter(path, authToken) {
                 letterTitleDOM.readOnly = true;
                 letterContentDOM.readOnly = true;
             }
-        }).catch(e => {
+            return res.json();
+        }).then(data => letterId = data.id).catch(e => {
             alert("Thêm thư mời thất bại!");
         })
     }
@@ -93,21 +96,63 @@ function invitePerson(id, email, lastName, firstName, authToken) {
     document.getElementById(`btn-user-row-${id}`).disabled = true;
     document.getElementById(`btn-user-row-${id}`).innerHTML = "Đang gửi...";
 
-    var params = {
-        to_mail: email,
-        to_name: `${lastName} ${firstName}`,
-        from_name: "OU Media After Graduated",
-        reply_to: "OU Media After Graduated",
-        event_title: document.getElementById("letter-title-input").value,
-        event_content: document.getElementById("letter-content-input").value
-    }
+    fetch(`/server/api/letters/${letterId}/add_user/${id}`, {
+        method: "post",
+        headers: {
+            "Authorization": authToken,
+            "Content-Type": "application/json"
+        }
+    }).then(res => {
+        if (res.status === 200) {
 
-    emailjs.send("service_x1pwrtx","template_5ebi1t7", params).then(function (res) {
-        document.getElementById(`user-row-${id}`).style.display = 'none';
-        alert("Gửi lời mời thành công!");
-    }).catch(function (e) {
-        alert("Có lỗi xảy ra!");
+            var params = {
+                to_mail: email,
+                to_name: `${lastName} ${firstName}`,
+                from_name: "OU Media After Graduated",
+                reply_to: "OU Media After Graduated",
+                event_title: document.getElementById("letter-title-input").value,
+                event_content: document.getElementById("letter-content-input").value
+            }
+
+            emailjs.send("service_x1pwrtx","template_5ebi1t7", params).then(function (res) {
+                document.getElementById(`user-row-${id}`).style.display = 'none';
+                alert("Gửi lời mời thành công!");
+            }).catch(function (e) {
+                alert("Có lỗi xảy ra!");
+            })
+        }
     })
+}
+function inviteGroup(groupId, authToken) {
+
+    document.getElementById(`btn-group-row-${groupId}`).disabled = true;
+    document.getElementById(`btn-group-row-${groupId}`).innerHTML = "Đang gửi...";
+
+    fetch(`/server/api/groups/${groupId}/members`, {
+        method: "get",
+        headers: {
+            "Authorization": authToken,
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => res.json())
+        .then(data => {
+            for (let i = 0; i < data.usersSet.length; i++) {
+                const params = {
+                    to_mail: data.usersSet[i].email,
+                    to_name: `${data.usersSet[i].lastName} ${data.usersSet[i].firstName}`,
+                    from_name: "OU Media After Graduated",
+                    reply_to: "OU Media After Graduated",
+                    event_title: document.getElementById("letter-title-input").value,
+                    event_content: document.getElementById("letter-content-input").value
+                };
+
+                emailjs.send("service_x1pwrtx","template_5ebi1t7", params).then(function (res) {});
+            }
+            document.getElementById(`group-row-${groupId}`).style.display = 'none';
+            alert("Gửi lời mời thành công!");
+        })
+        .catch(e => console.log(e));
 }
 
 onLoad();

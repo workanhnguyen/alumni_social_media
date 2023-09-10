@@ -31,8 +31,6 @@ function sendEmail() {
         && usernameExisting === null
         && emailValid) {
 
-        console.log(true);
-
         var params = {
             to_mail: toMail.trim(),
             to_name: toName.trim(),

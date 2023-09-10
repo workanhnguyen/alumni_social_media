@@ -102,7 +102,7 @@
 
                             <td>${g.groupName}</td>
                             <td>
-                                <button class="btn btn-primary" onclick="inviteGroup(${g.id}, '${authToken}')">Thêm
+                                <button id="btn-group-row-${g.id}" class="btn btn-primary" onclick="inviteGroup(${g.id}, '${authToken}')">Mời
                                 </button>
                             </td>
                         </tr>
@@ -161,7 +161,7 @@
                                 </c:choose>
                             </td>
                             <td>
-                                <button id="btn-user-row-${u.id}" class="btn btn-primary" onclick="invitePerson('${u.id}', '${u.email}', '${u.lastName}', '${u.firstName}', '${authToken}')">Thêm
+                                <button id="btn-user-row-${u.id}" class="btn btn-primary" onclick="invitePerson('${u.id}', '${u.email}', '${u.lastName}', '${u.firstName}', '${authToken}')">Mời
                                 </button>
                             </td>
                         </tr>
