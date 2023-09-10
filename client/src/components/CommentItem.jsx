@@ -37,7 +37,7 @@ const CommentItem = ({
   postId,
   showRes = true,
 }) => {
-  console.log(comment);
+
   const { user, setCommentCount, postDispatch } = useStateContext();
   const [commentContent, setCommentContent] = useState(comment?.content);
   const [responseCommentContent, setResponseCommentContent] = useState("");

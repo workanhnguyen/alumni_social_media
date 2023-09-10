@@ -65,9 +65,16 @@ export default function SignInForm({ role }) {
         cookie.save(TOKEN, response.data);
 
         let userRes = await getCurrentUser();
-
+     
         if (userRes.status === 200) {
+      
           cookie.save(USER, userRes.data);
+
+          console.log(cookie.load(USER));
+          userDispatch({
+            type: LOGIN,
+            payload: userRes.data,
+          });
 
           const methods = await fetchSignInMethodsForEmail(
             auth,
@@ -81,11 +88,6 @@ export default function SignInForm({ role }) {
             ).then((res) => console.log(res));
           }
         }
-
-        userDispatch({
-          type: LOGIN,
-          payload: userRes.data,
-        });
 
         if (isContainsEmptyFields(userRes.data)) navigate(ALUMNI_ADD_INFO);
         else navigate(ROOT_PAGE, { replace: true });

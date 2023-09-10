@@ -37,14 +37,13 @@ function stringAvatar(name) {
 
 const Letter = () => {
   const { user } = useStateContext();
-  console.log(user);
   return (
     <DefaultLayout>
       <div className="w-full min-h-screen flex bg-gray">
         <div className="flex-1 my-6 mt-20">
           <Container maxWidth="sm">
-            {user.letterSet.length > 0 &&
-              user.letterSet.map((letter, index) => (
+            {user?.letterSet?.length > 0 &&
+              user?.letterSet?.map((letter, index) => (
                 <div
                   key={index}
                   className="w-full flex flex-col p-4 mb-3 bg-white rounded-md drop-shadow-sm"

@@ -31,7 +31,6 @@ const CommentSection = ({ listComments, isPostOwner, postId, type }) => {
   const [commentsForDetailPage, setCommentsForDetailPage] = useState(listComments);
   const [isSendingComment, setIsSendingComment] = useState(false);
 
-  console.log(commentCount, commentIndex);
   const handleCommentContentChange = (e) => {
     setCommentContent(e.target.value);
   };
