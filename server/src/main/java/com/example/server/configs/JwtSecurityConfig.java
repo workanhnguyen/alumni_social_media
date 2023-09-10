@@ -80,6 +80,10 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/api/**").authenticated()
                 .antMatchers(HttpMethod.PATCH, "/api/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/api/**").access("isAuthenticated() and hasAnyRole('ROLE_ADMIN', 'ROLE_ALUMNI', 'ROLE_LECTURER')")
+                .antMatchers( "/api/groups/**").access("hasAnyRole('ROLE_ADMIN')")
+                .antMatchers( "/api/letters/**").access("hasAnyRole('ROLE_ADMIN')")
+                .antMatchers( "/api/stats/**").access("hasAnyRole('ROLE_ADMIN')")
+
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());

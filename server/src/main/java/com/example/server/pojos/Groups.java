@@ -62,7 +62,7 @@ public class Groups implements Serializable {
         @JoinColumn(name = "group_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "id")})
     @ManyToMany(fetch = FetchType.EAGER)
-    @JsonIgnore
+    @JsonIgnore 
     private Set<Users> usersSet;
     @JoinColumn(name = "creator_id", referencedColumnName = "id")
     @ManyToOne

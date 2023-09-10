@@ -135,7 +135,11 @@ public class UserRepositoryImp implements UserRepository {
         Session s = this.factory.getObject().getCurrentSession();
         Query q = s.createQuery("FROM Users WHERE id=:userId");
         q.setParameter("userId", userId);
-        return (Users) q.getSingleResult();
+        try {
+            return (Users) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }   
     }
 
     @Override
