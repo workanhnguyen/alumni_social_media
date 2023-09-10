@@ -33,6 +33,7 @@
             <th scope="col">ID</th>
             <th scope="col">Ngày tạo</th>
             <th scope="col">Tiêu đề</th>
+            <th scope="col">Nội dung</th>
             <th scope="col">Hành động</th>
         </tr>
         </thead>
@@ -42,14 +43,14 @@
                 <th scope="row" id="letterId">${l.id}</th>
                 <td>${l.createdAt}</td>
                 <td>${l.content}</td>
+                <td>${l.description}</td>
                 <td>
-                    <c:url value="/api/posts/${l.id}/" var="apiDelete"/>
-                    <a href="<c:url value="/letters/${l.id}" /> " class="btn btn-success">Xem chi tiết</a>
-                    <button class="btn btn-danger" onclick="deletePost('${apiDelete}', '${authToken}')">Xóa</button>
+                    <c:url value="/api/letters/${l.id}/" var="apiDelete"/>
+                    <button class="btn btn-danger" onclick="deleteLetter('${apiDelete}', '${authToken}')">Xóa</button>
                 </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
 </div>
-<%--<script src="<c:url value="/js/listPost.js" />"></script>--%>
+<script src="<c:url value="/js/listLetter.js" />"></script>

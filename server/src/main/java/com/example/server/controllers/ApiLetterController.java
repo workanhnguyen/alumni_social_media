@@ -112,7 +112,7 @@ public class ApiLetterController {
         }
 
         if (letterService.removeUserFromLetter(l, user)) {
-            return ResponseEntity.ok("User removed from group successfully.");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             return ResponseEntity.badRequest().body("User is not in the group.");
         }

@@ -8,7 +8,6 @@ function onLoad() {
         return confirmationMessage;
     });
 }
-
 function changeInviteFiler() {
     const inviteSelectorDOM = document.getElementById("invite-selector-filter");
 
@@ -38,7 +37,6 @@ function changeInviteFiler() {
         }
     })
 }
-
 function createLetter(path, authToken) {
     const btnCreateLetterDOM = document.getElementById("btn-create-letter");
     const letterTitleDOM = document.getElementById("letter-title-input");
@@ -79,7 +77,6 @@ function createLetter(path, authToken) {
         })
     }
 }
-
 function invitePerson(id, email, lastName, firstName, authToken) {
     document.getElementById(`btn-user-row-${id}`).disabled = true;
     document.getElementById(`btn-user-row-${id}`).innerHTML = "Đang gửi...";

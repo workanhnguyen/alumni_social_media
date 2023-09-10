@@ -93,7 +93,7 @@
                 </table>
             </div>
             <div class="w-100" style="margin-top: 12px">
-                <a href="<c:url value="/letters" />" class="w-100 btn btn-success">Hoàn tất</a>
+                <a href="<c:url value="/letters?page=1" />" class="w-100 btn btn-success">Hoàn tất</a>
             </div>
         </div>
         <div id="guest-person" style="display: none; margin-top: 24px">
