@@ -2,6 +2,7 @@ package com.example.server.services.impl;
 
 import com.example.server.dtos.CommentDto;
 import com.example.server.dtos.GroupDto;
+import com.example.server.dtos.LetterDto;
 import com.example.server.dtos.UserDto;
 import com.example.server.pojos.Comments;
 import com.example.server.pojos.Groups;
@@ -29,7 +30,8 @@ public class LetterServiceImp implements LetterService {
     @Autowired
     private LetterRepository letterRepo;
     
-   
+   @Autowired
+    private UserService userService;
 
 
     @Override
@@ -63,6 +65,35 @@ public class LetterServiceImp implements LetterService {
     @Override
     public Letters findLetterById(Long letterId) {
         return this.letterRepo.findLetterById(letterId);
+    }
+
+    @Override
+    public LetterDto getLetterMembers(Long letterId) {
+        Letters letter = letterRepo.findLetterById(letterId);
+        if (letter != null) {
+   
+            LetterDto letterDto = LetterDto.builder()
+                    .id(letter.getId())
+                    .content(letter.getContent())
+                    .description(letter.getDescription())
+                    .createdAt(letter.getCreatedAt())
+                    .usersSet(letter.getUsersSet()
+                            .stream()
+                            .map(userService::userToUserDto) 
+                            .collect(Collectors.toSet()))
+                    .build();  
+                
+            return letterDto;
+        } else {
+            return null; 
+        }
+    }
+
+    @Override
+    public List<Letters> getLetterByUser(Users u) {
+        List<Letters> letters = new ArrayList<> ();
+        letters = letterRepo.getLetterByUser(u);
+        return letters;  
     }
     
    

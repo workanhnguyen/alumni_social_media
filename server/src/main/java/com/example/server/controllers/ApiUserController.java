@@ -1,12 +1,20 @@
 package com.example.server.controllers;
 
 import com.example.server.components.JwtService;
+import com.example.server.dtos.GroupDto1;
+import com.example.server.dtos.LetterDto;
 import com.example.server.dtos.UserDto;
+import com.example.server.pojos.Groups;
+import com.example.server.pojos.Letters;
 
 import com.example.server.pojos.Users;
+import com.example.server.services.GroupService;
+import com.example.server.services.LetterService;
 import com.example.server.services.MajorService;
 import com.example.server.services.PostService;
 import com.example.server.services.UserService;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +41,12 @@ public class ApiUserController {
     private PostService postService;
     @Autowired
     private MajorService majorService;
+    
+    @Autowired
+    private LetterService letterService;
+    
+    @Autowired
+    private GroupService groupService;
 
     @PostMapping(path = "/register/",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
@@ -212,6 +226,36 @@ public class ApiUserController {
         currentUser.setBgImageFile(bgImage);
         // Return the updated currentUser object
         return currentUser;
+    }
+    
+    @GetMapping("/current_user/letters")
+    @CrossOrigin
+    public ResponseEntity<List<Letters>> getLetterByUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+            List<Letters> letters = new ArrayList<> ();
+            letters = letterService.getLetterByUser(currentUser);
+            return new ResponseEntity<>( letters,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+      
+    }
+    
+    @GetMapping("/current_user/groups")
+    @CrossOrigin
+    public ResponseEntity<List<GroupDto1>> getGroupByUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Users currentUser = userService.getUserByUsername(userDetails.getUsername());
+            List<GroupDto1> groupDto1 = new ArrayList<> ();
+            groupDto1 = groupService.getGroupByUser(currentUser);
+            return new ResponseEntity<>( groupDto1,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+      
     }
 
 }

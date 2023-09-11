@@ -6,6 +6,7 @@ package com.example.server.dtos;
 
 import com.example.server.pojos.Users;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,4 +26,5 @@ public class LetterDto {
     private String content;
     private Date createdAt;
     private String description;
+    private Set<UserDto> usersSet;
 }

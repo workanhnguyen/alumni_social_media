@@ -6,6 +6,7 @@ package com.example.server.services;
 
 
 import com.example.server.dtos.GroupDto;
+import com.example.server.dtos.GroupDto1;
 import com.example.server.pojos.Groups;
 import com.example.server.pojos.Users;
 
@@ -34,4 +35,5 @@ public interface GroupService {
     GroupDto getGroupMembers(Long groupId);
     List<GroupDto> getGroups(Map<String, String> params);
     Long countGroup();
+    List<GroupDto1> getGroupByUser(Users u);
 }

@@ -23,5 +23,6 @@ public interface LetterRepository {
     Boolean addUsertoLetter(Letters l, Users user);
     Boolean removeUserFromLetter(Letters l, Users user);
     Letters findLetterById(Long id);
-    List<Object[]> getLetterByUser(Users u);
+    List<Letters> getLetterByUser(Users u);
+    
 }

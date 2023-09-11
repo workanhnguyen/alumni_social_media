@@ -85,18 +85,20 @@ public class LetterRepositoryImp implements LetterRepository{
     }
 
     @Override
-    public List<Object[]> getLetterByUser(Users u) {
+    public List<Letters> getLetterByUser(Users u) {
         SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
         Session session = sessionFactory.openSession();
 
-        String sql = "SELECT l.* FROM letters l " +
-                "INNER JOIN user_letter ul ON l.letter_id = ul.letter_id " +
-                "WHERE ul.user_id = :userId";
 
-        NativeQuery<Object[]> query = session.createSQLQuery(sql);
-        query.setParameter("userId", u);
+        String sql = "SELECT l.id, l.content, l.created_at, l.updated_at, l.description FROM letters l " +
+             "INNER JOIN user_letter ul ON l.id = ul.letter_id " +
+             "WHERE ul.user_id = :userId";
 
-        List<Object[]> result = query.list();
-        return result;
+        NativeQuery<Letters> q = session.createNativeQuery(sql, Letters.class);
+        q.setParameter("userId", u.getId());
+        List<Letters> letters = q.list();
+
+
+        return letters;
     }
 }

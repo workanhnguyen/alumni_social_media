@@ -7,14 +7,19 @@ package com.example.server.repositories.impl;
 import com.example.server.pojos.Posts;
 import com.example.server.repositories.*;
 import com.example.server.pojos.Groups;
+import com.example.server.pojos.Letters;
 import com.example.server.pojos.Users;
 
 import java.util.*;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -34,6 +39,8 @@ public class GroupRepositoryImp implements GroupRepository{
     private EntityManager entityManager;
     @Autowired
     private Environment env;
+    @PersistenceUnit
+    private EntityManagerFactory entityManagerFactory;
 
     @Override
     public Groups addGroup(Groups gr) {
@@ -127,5 +134,23 @@ public class GroupRepositoryImp implements GroupRepository{
     public Long countGroup() {
         return entityManager.createQuery("SELECT COUNT(g) FROM Groups g ", Long.class)
                 .getSingleResult();
+    }
+
+    @Override
+    public List<Groups> getGroupByUser(Users u) {
+        SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+        Session session = sessionFactory.openSession();
+
+
+        String sql = "SELECT g.id, g.group_name, g.created_at, g.updated_at, g.creator_id FROM groupsjv g " +
+             "INNER JOIN group_member gm ON g.id = gm.group_id " +
+             "WHERE gm.user_id = :userId";
+
+        NativeQuery<Groups> q = session.createNativeQuery(sql, Groups.class);
+        q.setParameter("userId", u.getId());
+        List<Groups> groups = q.list();
+
+
+        return groups;
     }
 }
