@@ -122,7 +122,7 @@ CREATE TABLE `comments` (
   CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`belongs_to_comment_id`) REFERENCES `comments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `comments_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=149 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +131,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (9,'0395457434',NULL,2,14,'2023-08-27 19:13:27','2023-09-02 08:13:39'),(10,'test cmt 4',NULL,2,1,'2023-08-27 19:16:35',NULL),(11,'test cmt 4',NULL,2,1,'2023-08-27 19:18:16',NULL),(13,'test cmt 4',NULL,2,1,'2023-08-27 19:20:25',NULL),(14,'test cmt 4',NULL,2,1,'2023-08-27 19:22:29',NULL),(15,'test cmt 4',NULL,2,1,'2023-08-27 19:54:00',NULL),(16,'da update',NULL,21,1,'2023-08-30 19:01:25','2023-08-30 19:07:23'),(17,'test new cmt',16,21,1,'2023-09-01 19:08:53',NULL),(18,'test new cmt',16,21,1,'2023-09-01 19:39:48',NULL),(19,'test new cmt',17,21,1,'2023-09-01 19:40:00',NULL),(137,'Comment 2',NULL,24,14,'2023-09-09 00:47:18',NULL),(139,'Comment 1',137,24,14,'2023-09-09 01:17:52',NULL);
+INSERT INTO `comments` VALUES (70,'Chúc mừng Mãi nhee',NULL,39,18,'2023-09-12 04:09:44',NULL),(71,'Cảm ơn nè haha ?',70,39,19,'2023-09-12 04:10:25',NULL),(72,'Năm sau đi nữa hông? :)))',NULL,41,18,'2023-09-12 04:44:14',NULL),(73,'Khoa học máy tính 24 điểm :>',NULL,42,18,'2023-09-12 04:48:21',NULL),(74,'Điểm khối IT năm nay nhìn cũng ổn',73,42,19,'2023-09-12 04:48:52',NULL);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,7 +148,7 @@ CREATE TABLE `departments` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,7 +157,7 @@ CREATE TABLE `departments` (
 
 LOCK TABLES `departments` WRITE;
 /*!40000 ALTER TABLE `departments` DISABLE KEYS */;
-INSERT INTO `departments` VALUES (1,'Công nghệ thông tin','2023-09-01 18:40:52','2023-09-02 01:00:08'),(2,'Kế toán kiểm toán','2023-09-01 18:40:52','2023-09-02 01:00:08'),(3,'Xây dựng','2023-09-01 18:40:52','2023-09-02 01:00:08'),(4,'Đào tạo đặc biệt','2023-09-01 18:40:52','2023-09-02 01:00:08'),(5,'Ngôn ngữ','2023-09-01 18:40:52','2023-09-02 01:00:08'),(6,'Luật','2023-09-01 18:40:52','2023-09-02 01:00:08'),(7,'Công nghệ sinh học','2023-09-01 18:40:52','2023-09-02 01:00:08');
+INSERT INTO `departments` VALUES (1,'Công nghệ thông tin','2023-09-01 18:40:52','2023-09-02 01:00:08'),(2,'Kế toán Kiểm toán','2023-09-01 18:40:52','2023-09-12 03:12:52'),(3,'Xây dựng','2023-09-01 18:40:52','2023-09-02 01:00:08'),(4,'Đào tạo đặc biệt','2023-09-01 18:40:52','2023-09-02 01:00:08'),(6,'Luật','2023-09-01 18:40:52','2023-09-02 01:00:08'),(7,'Công nghệ sinh học','2023-09-01 18:40:52','2023-09-02 01:00:08'),(8,'Xã hội học - CTXH - Đông Nam Á','2023-09-12 03:12:52','2023-09-12 03:12:52'),(9,'Kinh tế và Quản lý công','2023-09-12 03:12:52','2023-09-12 03:12:52'),(10,'Ngoại ngữ','2023-09-12 03:12:52','2023-09-12 03:12:52'),(11,'Quản trị kinh doanh','2023-09-12 03:12:52','2023-09-12 03:12:52'),(12,'Tài chính Ngân hàng','2023-09-12 03:12:52','2023-09-12 03:12:52');
 /*!40000 ALTER TABLE `departments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,13 +169,15 @@ DROP TABLE IF EXISTS `group_member`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `group_member` (
-  `group_id` int NOT NULL,
-  `user_id` int NOT NULL,
-  PRIMARY KEY (`group_id`,`user_id`),
-  KEY `group_member_ibfk_2` (`user_id`),
-  CONSTRAINT `group_member_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groupsjv` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `group_member_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `group_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `group_id` (`group_id`),
+  CONSTRAINT `group_member_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `group_member_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `groupsjv` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +186,7 @@ CREATE TABLE `group_member` (
 
 LOCK TABLES `group_member` WRITE;
 /*!40000 ALTER TABLE `group_member` DISABLE KEYS */;
-INSERT INTO `group_member` VALUES (21,14),(23,14),(25,14);
+INSERT INTO `group_member` VALUES (13,19,7),(14,18,7);
 /*!40000 ALTER TABLE `group_member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +235,7 @@ CREATE TABLE `groupsjv` (
   PRIMARY KEY (`id`),
   KEY `creator_id` (`creator_id`),
   CONSTRAINT `groupsjv_ibfk_1` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +244,7 @@ CREATE TABLE `groupsjv` (
 
 LOCK TABLES `groupsjv` WRITE;
 /*!40000 ALTER TABLE `groupsjv` DISABLE KEYS */;
-INSERT INTO `groupsjv` VALUES (21,'Sinh viên Trường Đại học Mở TP.HCM',1,'2023-09-07 08:10:30',NULL),(23,'Sinh viên cơ sở Nguyễn Kiệm',1,'2023-09-07 08:40:38','2023-09-08 14:11:06'),(25,'Test 2',1,'2023-09-10 07:13:56','2023-09-10 07:15:09');
+INSERT INTO `groupsjv` VALUES (7,'Sinh viên Khoa CNTT',1,'2023-09-12 04:17:14',NULL);
 /*!40000 ALTER TABLE `groupsjv` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,7 +263,7 @@ CREATE TABLE `images` (
   PRIMARY KEY (`id`),
   KEY `images_ibfk_1` (`post_id`),
   CONSTRAINT `images_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,7 +272,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
-INSERT INTO `images` VALUES (1,17,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',1),(2,17,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',1),(3,18,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',1),(4,18,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',1),(5,19,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',1),(6,19,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',1),(9,21,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',1),(10,21,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',1),(11,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',1),(12,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',1),(13,23,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',1);
+INSERT INTO `images` VALUES (17,39,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1694491745/ezefwen5sq4qx1ycgyh5.jpg',1),(18,40,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1694492144/atewkelsyoeh90pqgaex.jpg',1),(19,41,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1694493812/tgjbtirzdg133llkpyrl.jpg',1),(20,42,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1694494009/n1x7n2wkoxrhusenqbya.jpg',1),(21,43,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1694494291/p042nbmcmjxpvgfd6gle.jpg',1),(22,44,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1694494567/jttg3qypchsm7l5atpq0.jpg',1);
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -288,7 +290,7 @@ CREATE TABLE `letters` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -297,7 +299,7 @@ CREATE TABLE `letters` (
 
 LOCK TABLES `letters` WRITE;
 /*!40000 ALTER TABLE `letters` DISABLE KEYS */;
-INSERT INTO `letters` VALUES (41,'Sự kiện khoa CNTT','2023-09-10 09:03:13',NULL,'Mời các bạn tham gia hội thảo chia sẻ tri thức khoa CNTT');
+INSERT INTO `letters` VALUES (8,'WORKSHOP WEB3 & BLOCKCHAIN - ETHVN - REVEAL TOPIC','2023-09-12 04:21:00',NULL,'Bạn có thắc mắc Chủ đề thảo luận trong các buổi Workshop là gì không?\nNhững vị khách mời đặc biệt nào sẽ đến với chúng ta?\nAd sẽ bật mí một chút về Chủ đề của các buổi Workshop nhé!\n? Buổi 1: Introduction to Blockchain & Web3\n? Buổi 2: Account – Crypto Wallets & Smart contract – Cryptocurrencies\n? Buổi 3: Defi, NFTs, and Gaming in Web3\nCác diễn giả là các chuyên gia đến từ ETHVN, SUCI Blockchain HUB và KyberNetwork ???\nNếu bạn chưa kịp đăng ký tham gia cũng đừng lo! Nhằm tạo thêm điều kiện cho các bạn, Khoa CNTT quyết định mở thêm 50 vé tham dự nữa cho các bạn nhé! Nhanh tay đăng ký thôi nào!!!');
 /*!40000 ALTER TABLE `letters` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,7 +319,7 @@ CREATE TABLE `majors` (
   PRIMARY KEY (`id`),
   KEY `department_id` (`department_id`),
   CONSTRAINT `majors_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -326,7 +328,7 @@ CREATE TABLE `majors` (
 
 LOCK TABLES `majors` WRITE;
 /*!40000 ALTER TABLE `majors` DISABLE KEYS */;
-INSERT INTO `majors` VALUES (1,'Công nghệ thông tin',1,'2023-09-01 18:41:39','2023-09-01 18:41:39'),(2,'Khoa học máy tính',1,'2023-09-01 18:41:39','2023-09-01 18:41:39'),(3,'Hệ thống quản lý',1,'2023-09-01 18:41:39','2023-09-01 18:41:39'),(4,'Kế toán',2,'2023-09-02 01:00:54','2023-09-02 01:00:54'),(5,'Kiểm toán',2,'2023-09-02 01:00:54','2023-09-02 01:00:54'),(6,'QLKT công trình xây dựng',3,'2023-09-02 01:00:54','2023-09-02 01:00:54'),(7,'Khoa học máy tính CLC',4,'2023-09-02 01:00:54','2023-09-02 01:10:26');
+INSERT INTO `majors` VALUES (1,'Công nghệ thông tin',1,'2023-09-01 18:41:39','2023-09-01 18:41:39'),(2,'Khoa học máy tính',1,'2023-09-01 18:41:39','2023-09-01 18:41:39'),(3,'Hệ thống quản lý',1,'2023-09-01 18:41:39','2023-09-01 18:41:39'),(4,'Kế toán',2,'2023-09-02 01:00:54','2023-09-02 01:00:54'),(5,'Kiểm toán',2,'2023-09-02 01:00:54','2023-09-02 01:00:54'),(6,'CNKT Công trình xây dựng',3,'2023-09-02 01:00:54','2023-09-12 03:16:49'),(7,'Khoa học máy tính CLC',4,'2023-09-02 01:00:54','2023-09-02 01:10:26'),(8,'Ngôn ngữ Anh CLC',4,'2023-09-12 03:16:49','2023-09-12 03:16:49'),(9,'Ngôn ngữ Trung Quốc CLC',4,'2023-09-12 03:16:49','2023-09-12 03:16:49'),(10,'Ngôn ngữ Nhật CLC',4,'2023-09-12 03:16:49','2023-09-12 03:16:49'),(11,'Kinh tế CLC',4,'2023-09-12 03:16:49','2023-09-12 03:16:49'),(12,'Quản trị kinh doanh CLC',4,'2023-09-12 03:16:49','2023-09-12 03:16:49'),(13,'Quản lý xây dựng',3,'2023-09-12 03:16:49','2023-09-12 03:16:49'),(14,'Ngôn ngữ Anh',10,'2023-09-12 03:17:23','2023-09-12 03:20:11'),(15,'Ngôn ngữ Hàn',10,'2023-09-12 03:17:23','2023-09-12 03:20:11'),(16,'Ngôn ngữ Trung Quốc',10,'2023-09-12 03:17:23','2023-09-12 03:20:11'),(17,'Ngôn ngữ Nhật',10,'2023-09-12 03:17:23','2023-09-12 03:20:11'),(18,'Luật',6,'2023-09-12 03:17:42','2023-09-12 03:17:42'),(19,'Luật kinh tế',6,'2023-09-12 03:17:42','2023-09-12 03:17:42'),(20,'Công nghệ sinh học',7,'2023-09-12 03:20:11','2023-09-12 03:20:11'),(21,'Xã hội học',8,'2023-09-12 03:20:11','2023-09-12 03:20:11'),(22,'Đông Nam Á học',8,'2023-09-12 03:20:11','2023-09-12 03:20:11'),(23,'Kinh tế học',9,'2023-09-12 03:20:11','2023-09-12 03:20:11'),(24,'Quản lý công',9,'2023-09-12 03:20:11','2023-09-12 03:20:11'),(25,'Quàn trị kinh doanh',11,'2023-09-12 03:20:11','2023-09-12 03:20:11'),(26,'Kinh doanh quốc tế',11,'2023-09-12 03:20:11','2023-09-12 03:20:11'),(27,'Marketing',11,'2023-09-12 03:20:11','2023-09-12 03:20:11'),(28,'Tài chính - Ngân hàng',12,'2023-09-12 03:20:39','2023-09-12 03:20:39');
 /*!40000 ALTER TABLE `majors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -375,7 +377,7 @@ CREATE TABLE `posts` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -384,7 +386,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'post 1',1,1,'2023-08-25 10:06:34','2023-08-25 10:06:34'),(2,'update2',1,1,'2023-08-26 06:57:48','2023-08-27 08:49:34'),(8,'test new 2',0,1,'2023-08-26 19:48:09',NULL),(9,'test new 2',0,1,'2023-08-26 20:39:17',NULL),(10,'test post image',0,1,'2023-08-28 00:27:48',NULL),(11,'test post image',0,1,'2023-08-28 00:28:27',NULL),(12,'test post image',0,1,'2023-08-28 00:37:16',NULL),(13,'test post image',0,1,'2023-08-28 07:38:50',NULL),(14,'test post image',0,1,'2023-08-28 07:40:15',NULL),(15,'test post image',0,1,'2023-08-28 07:41:15',NULL),(16,'test post image',0,1,'2023-08-28 07:42:55',NULL),(17,'test post image',0,1,'2023-08-28 07:46:00',NULL),(18,'test post image 2',0,1,'2023-08-28 08:25:31',NULL),(19,'test post image 2',0,1,'2023-08-28 08:30:45',NULL),(21,'test post image 22',0,1,'2023-08-28 08:50:04',NULL),(22,'test post image 22',0,1,'2023-08-28 09:10:17',NULL),(23,'test post image 22',0,1,'2023-08-28 10:31:17',NULL),(24,'test user 2 ',0,2,'2023-08-30 15:36:23','2023-08-30 15:36:23');
+INSERT INTO `posts` VALUES (39,'<p>Một chút thành tựu!</p>',0,19,'2023-02-12 04:09:04','2023-09-12 05:03:24'),(40,'<p><em style=\"color: rgb(5, 5, 5);\">Pháo đỏ rộn ràng&nbsp;- Xuân sang vạn phúc&nbsp;</em></p><p><span style=\"color: rgb(5, 5, 5);\">CHIẾN DỊCH XUÂN TÌNH NGUYỆN 2023 - ẤM&nbsp;</span></p><p><span style=\"color: rgb(5, 5, 5);\">------------------------------------------</span></p><p><strong style=\"color: rgb(5, 5, 5);\">[THÔNG TIN CHIẾN DỊCH]</strong></p><p><span style=\"color: rgb(5, 5, 5);\">Thời gian đóng quân: 10/01/2023 - 14/01/2023</span></p><p><span style=\"color: rgb(5, 5, 5);\">Mặt trận đóng quân: xã Thạnh Đức, huyện Bến Lức, tỉnh Long An</span></p>',0,18,'2023-06-12 04:15:44','2023-09-12 05:02:22'),(41,'<p>Hoàn thành nhiệm vụ!</p>',0,19,'2023-06-12 04:43:31','2023-09-12 05:03:47'),(42,'<p>Điểm chuẩn năm nay của trường mình nè!</p>',0,19,'2023-08-12 04:46:49','2023-09-12 05:02:22'),(43,'<p>Mọi người rảnh thì tham gia cuộc thi này bổ ích lắm nè.</p>',0,18,'2023-09-12 04:51:30',NULL),(44,'<p><span style=\"color: rgb(5, 5, 5);\">TRUNG THU CÙNG \"THẮP 2022\"</span></p><p><br></p><p><span style=\"color: rgb(5, 5, 5);\">Chương trình đã diễn ra thành công trọn vẹn ở cả hai mặt trận. Các em nhỏ đã có một mùa trung thu hân hoan, vui vẻ. Mình cũng có thêm một trải nghiệm mới!</span></p>',0,18,'2023-09-12 04:56:06','2023-09-12 04:58:59');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -435,7 +437,7 @@ CREATE TABLE `reactions` (
   KEY `post_id` (`post_id`),
   CONSTRAINT `reactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `reactions_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=156 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -444,7 +446,7 @@ CREATE TABLE `reactions` (
 
 LOCK TABLES `reactions` WRITE;
 /*!40000 ALTER TABLE `reactions` DISABLE KEYS */;
-INSERT INTO `reactions` VALUES (141,'ACTION_HAHA',14,24,'2023-09-09 00:47:28',NULL);
+INSERT INTO `reactions` VALUES (7,'ACTION_HEART',18,39,'2023-09-12 04:09:33',NULL),(8,'ACTION_HAHA',19,39,'2023-09-12 04:09:55',NULL),(9,'ACTION_HEART',18,40,'2023-09-12 04:15:54',NULL),(10,'ACTION_LIKE',19,40,'2023-09-12 04:16:16',NULL),(11,'ACTION_HAHA',18,41,'2023-09-12 04:43:55',NULL),(12,'ACTION_LIKE',19,42,'2023-09-12 04:47:26',NULL),(13,'ACTION_HEART',18,42,'2023-09-12 04:47:37',NULL),(14,'ACTION_HEART',19,41,'2023-09-12 04:49:10',NULL),(15,'ACTION_LIKE',19,43,'2023-09-12 04:51:53',NULL),(16,'ACTION_HEART',18,44,'2023-09-12 04:59:19',NULL),(17,'ACTION_HEART',19,44,'2023-09-12 04:59:37',NULL);
 /*!40000 ALTER TABLE `reactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -542,13 +544,15 @@ DROP TABLE IF EXISTS `user_letter`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_letter` (
-  `user_id` int NOT NULL,
-  `letter_id` int NOT NULL,
-  PRIMARY KEY (`user_id`,`letter_id`),
-  KEY `fk_letter_user_idx` (`letter_id`),
-  CONSTRAINT `fk_letter_user` FOREIGN KEY (`letter_id`) REFERENCES `letters` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_user_letter` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `letter_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `letter_id` (`letter_id`),
+  CONSTRAINT `user_letter_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_letter_ibfk_2` FOREIGN KEY (`letter_id`) REFERENCES `letters` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -557,7 +561,7 @@ CREATE TABLE `user_letter` (
 
 LOCK TABLES `user_letter` WRITE;
 /*!40000 ALTER TABLE `user_letter` DISABLE KEYS */;
-INSERT INTO `user_letter` VALUES (14,41);
+INSERT INTO `user_letter` VALUES (10,18,8),(11,19,8);
 /*!40000 ALTER TABLE `user_letter` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -591,7 +595,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `major_id` (`major_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`major_id`) REFERENCES `majors` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -600,7 +604,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','$2a$10$I0/FI1Q0gRDrkKS1gGdSF.gZ1ozf0ztbcEzYtAG/UKmEVGiEfqtFO','maidv@gmail.com','Mai','Van',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693727766/huh1izrhm3bcqkhng0h9.png',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-09-04 09:15:42',NULL,NULL,NULL),(2,'vananh','$2a$10$QCet25BP1PzJGzMKyb868.J5I8lQbdHxXLBGNu.YB90yAJs1arAXy','maidv1@gmail.com','Anh','Nguyen',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693622180/dvowsxlsyfzc3nquja8j.jpg',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-09-04 09:17:12',NULL,NULL,NULL),(3,'vananh1','$2a$10$kIh0d2CH/lek./.p958SseIH4naurqqqXs./Zh1a18ZIQZSn3qCl6','vananh1@gmail.com','Anh','Nguyen',NULL,'https://res.cloudinary.com/dz5z2md5y/image/upload/v1693622180/dvowsxlsyfzc3nquja8j.jpg',NULL,NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-09-04 09:17:12',NULL,NULL,NULL),(14,'2051012004','$2a$10$PqaQVxzYH2S0M/wYeqoVGO1gQu/G.C9owhVuc08ZNqGqxscxCFXOO','2051012004anh@ou.edu.vn','Anh','Nguyễn Vân','0395457434','https://res.cloudinary.com/dz5z2md5y/image/upload/v1693622180/dvowsxlsyfzc3nquja8j.jpg','https://res.cloudinary.com/dz5z2md5y/image/upload/v1694223742/g6xeniqeuadr0m3x9j0d.png',NULL,'2023-09-09 01:38:59',1,'ROLE_ALUMNI',NULL,2,'2051012004','2020'),(28,'2051050265','$2a$10$KwtMXVPmI8kP7X2Aut6FcO17vWo/UMZiHrOj14T09G5QXy.EcYLyS','2051050265mai@ou.edu.vn','Mãi','Đặng Văn','0348907654','https://res.cloudinary.com/dz5z2md5y/image/upload/v1694346675/pgu6arolipnp1xv2zbch.jpg','https://res.cloudinary.com/dz5z2md5y/image/upload/v1694346722/o94f2cfugst2xyu3eahx.png',NULL,'2023-09-10 12:12:10',1,'ROLE_ALUMNI',NULL,1,'2051050265','2021');
+INSERT INTO `users` VALUES (1,'admin','$2a$10$I0/FI1Q0gRDrkKS1gGdSF.gZ1ozf0ztbcEzYtAG/UKmEVGiEfqtFO','maidv@gmail.com','TP. HCM','Trường Đại học Mở','0331234567','https://res.cloudinary.com/dz5z2md5y/image/upload/v1694489374/logo-ou_yp5kdd.png','https://res.cloudinary.com/dz5z2md5y/image/upload/v1694489480/logo1_ffzpua.png',NULL,'2023-08-22 11:16:48',1,'ROLE_ADMIN','2023-09-12 04:17:40',NULL,NULL,NULL),(18,'2051012004','$2a$10$/yaaBvR2cqrtdHBT0xefTOcnCa2KFceuL.468ByvIHkS3LWR5iqCO','2051012004anh@ou.edu.vn','Anh','Nguyễn Vân','0395457321','https://res.cloudinary.com/dz5z2md5y/image/upload/v1694489631/grniakalwfvht0s9ssoe.jpg','https://res.cloudinary.com/dz5z2md5y/image/upload/v1694489676/agd7jj4wfaujfesheg8l.jpg',NULL,'2023-09-12 03:34:11',1,'ROLE_ALUMNI',NULL,2,'2051012004','2020'),(19,'2051050265','$2a$10$m9M5cOAETPZNZJibTHWaWeisJh3/foBCyXnXw8jpnV24zfZsrnIVe','2051050265mai@ou.edu.vn','Mãi','Đặng Văn','0395457321','https://res.cloudinary.com/dz5z2md5y/image/upload/v1694491593/kia1huokkjjyfi3bchts.jpg','https://res.cloudinary.com/dz5z2md5y/image/upload/v1694491651/jeazomhjoq7b1gfzzrmh.jpg',NULL,'2023-09-12 04:07:03',1,'ROLE_ALUMNI',NULL,1,'2051050265','2020');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -613,4 +617,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-10 19:20:48
+-- Dump completed on 2023-09-12 12:05:06
