@@ -67,8 +67,6 @@ export default function SignInForm({ role }) {
         let userRes = await getCurrentUser();
         
         if (userRes.status === 200) {
-          cookie.save(LETTER, userRes.data.letterSet);
-          cookie.save(GROUP, userRes.data.groupsSet);
           cookie.save(USER, {...userRes.data, groupsSet: [], letterSet: []});
 
           userDispatch({

@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import moment from "moment";
 import "moment/locale/vi";
 
@@ -9,6 +9,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import { emptyPlaceholder1, messengerIcon } from "../assets";
 import { Link } from "react-router-dom";
 import { getGroups } from "../apis/UserApi";
+import { FETCH_ALL } from "../constants/common";
 
 function stringToColor(string) {
   let hash = 0;
@@ -42,7 +43,7 @@ function stringAvatar(name) {
 const Group = () => {
   const [groups, setGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  
   useEffect(() => {
     const process = async () => {
       setIsLoading(true);
@@ -77,8 +78,8 @@ const Group = () => {
             </Container>
           ) : (
             <Container maxWidth="sm">
-              {groups.length > 0 ? (
-                groups.map((group, index) => (
+              {groups?.length > 0 ? (
+                groups?.map((group, index) => (
                   <div
                     key={index}
                     className="w-full flex p-4 mb-2 items-center bg-white rounded-md drop-shadow-sm"
