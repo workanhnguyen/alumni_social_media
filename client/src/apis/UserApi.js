@@ -9,6 +9,8 @@ const endpoints = {
     "update-bg-user": `${SERVER_CONTEXT}/api/users/current_user/cover_image/`,
     "get-user-by-username": `${SERVER_CONTEXT}/api/users`,
     "change-password": `${SERVER_CONTEXT}/api/users/change_password/`,
+    "get-groups": `${SERVER_CONTEXT}/api/users/current_user/groups`,
+    "get-letters": `${SERVER_CONTEXT}/api/users/current_user/letters`,
 };
 
 export const registerUser = (body) => ApiConfig.post(endpoints['register'], body);
@@ -19,3 +21,5 @@ export const updateInfoUser = (body) => authApi().patch(`${endpoints['update-inf
 export const updateAvatarUser = (body) => authApi().post(`${endpoints['update-avatar-user']}`, body);
 export const updateCoverImageUser = (body) => authApi().post(`${endpoints['update-bg-user']}`, body);
 export const changePassword = (body) => authApi().patch(`${endpoints['change-password']}`, body);
+export const getGroups = () => authApi().get(`${endpoints['get-groups']}`);
+export const getLetters = () => authApi().get(`${endpoints['get-letters']}`);
