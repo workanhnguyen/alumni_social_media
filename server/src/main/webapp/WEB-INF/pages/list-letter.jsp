@@ -33,7 +33,6 @@
             <th scope="col">ID</th>
             <th scope="col">Ngày tạo</th>
             <th scope="col">Tiêu đề</th>
-            <th scope="col">Nội dung</th>
             <th scope="col">Hành động</th>
         </tr>
         </thead>
@@ -43,7 +42,6 @@
                 <th scope="row" id="letterId">${l.id}</th>
                 <td>${l.createdAt}</td>
                 <td>${l.content}</td>
-                <td>${l.description}</td>
                 <td>
                     <a class="btn btn-success" href="<c:url value="/letters/${l.id}/"/>">Xem chi tiết</a>
                     <c:url value="/api/letters/${l.id}/" var="apiDelete"/>

@@ -24,7 +24,7 @@
         <label for="letter-title">Tiêu đề</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <input type="text" class="form-control" id="letter-content" value="${letter.description}" readonly/>
+        <textarea type="text" class="form-control" style="height: 260px" id="letter-content" readonly>${letter.description}</textarea>
         <label for="letter-content">Nội dung</label>
     </div>
     <div>
