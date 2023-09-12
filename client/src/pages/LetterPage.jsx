@@ -91,8 +91,8 @@ const Letter = () => {
                           </p>
                         </div>
                       </div>
-                      <div className="mt-3">
-                        <p>{letter.description}</p>
+                      <div className="mt-3 h-fit">
+                        <textarea className="text-sm leading-7 w-full h-64">{letter.description}</textarea>
                       </div>
                     </div>
                   ))}
