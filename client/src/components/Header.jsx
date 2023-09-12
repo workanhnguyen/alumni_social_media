@@ -92,13 +92,12 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
-    userDispatch({ type: LOGOUT });
 
     const res = await signOut(auth);
     console.log(res);
 
     navigate(ROLE_PAGE, { replace: true });
-    window.location.reload();
+    userDispatch({ type: LOGOUT });
   };
 
   const handleChangePassword = (e) => {
