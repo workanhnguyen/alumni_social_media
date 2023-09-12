@@ -2,6 +2,7 @@ package com.example.server.services.impl;
 
 import com.example.server.dtos.CommentDto;
 import com.example.server.dtos.GroupDto;
+import com.example.server.dtos.GroupDto1;
 import com.example.server.dtos.UserDto;
 import com.example.server.pojos.Comments;
 import com.example.server.pojos.Groups;
@@ -12,6 +13,7 @@ import com.example.server.repositories.GroupRepository;
 
 import com.example.server.services.GroupService;
 import com.example.server.services.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -127,5 +129,28 @@ public class GroupServiceImp implements GroupService {
     @Override
     public Long countGroup() {
         return grRepo.countGroup();
+    }
+
+    @Override
+    public List<GroupDto1> getGroupByUser(Users u) {
+        List<Groups> groups = new ArrayList<> ();
+        groups = grRepo.getGroupByUser(u);
+        if (!groups.isEmpty()) {
+            List<GroupDto1> groupDto1 = new ArrayList<>();
+
+            groups.forEach(g -> {
+                GroupDto1 grDto1 = GroupDto1.builder()
+                        .id(g.getId())
+                        .groupName(g.getGroupName())
+                        .createdAt(g.getCreatedAt())
+                        .updatedAt(g.getUpdatedAt())
+                        .creatorId(userService.userToUserDto(g.getCreatorId()))
+                        .build();
+                groupDto1.add(grDto1);
+            });
+
+            return groupDto1;
+        }
+        return new ArrayList<>();
     }
 }

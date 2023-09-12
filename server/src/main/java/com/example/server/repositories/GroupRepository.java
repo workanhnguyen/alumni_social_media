@@ -25,4 +25,5 @@ public interface GroupRepository {
     Set<Users> getGroupMembers(Long groupId);
     List<Groups> getGroups(Map<String, String> params);
     Long countGroup();
+    List<Groups> getGroupByUser(Users u);
 }

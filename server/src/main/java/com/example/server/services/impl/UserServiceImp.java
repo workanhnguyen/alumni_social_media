@@ -3,7 +3,6 @@ package com.example.server.services.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.server.dtos.UserDto;
-import static com.example.server.pojos.Reactions_.updatedAt;
 import com.example.server.pojos.Users;
 import com.example.server.repositories.MajorRepository;
 import com.example.server.repositories.UserRepository;
@@ -182,8 +181,8 @@ public class UserServiceImp implements UserService {
             .studentId(user.getStudentId())
             .academicYear(user.getAcademicYear())
             .majorId(user.getMajorId())
-            .groupsSet(user.getGroupsSet())
-            .letterSet(user.getLettersSet())
+//            .groupsSet(user.getGroupsSet())
+//            .letterSet(user.getLettersSet())
             .build();
         return userDto;
     }

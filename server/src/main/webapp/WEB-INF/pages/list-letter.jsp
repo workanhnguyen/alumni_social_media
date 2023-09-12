@@ -45,6 +45,7 @@
                 <td>${l.content}</td>
                 <td>${l.description}</td>
                 <td>
+                    <a class="btn btn-success" href="<c:url value="/letters/${l.id}/"/>">Xem chi tiết</a>
                     <c:url value="/api/letters/${l.id}/" var="apiDelete"/>
                     <button class="btn btn-danger" onclick="deleteLetter('${apiDelete}', '${authToken}')">Xóa</button>
                 </td>

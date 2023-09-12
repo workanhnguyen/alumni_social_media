@@ -6,6 +6,7 @@ package com.example.server.controllers;
 
 import com.example.server.dtos.CommentDto;
 import com.example.server.dtos.GroupDto;
+import com.example.server.dtos.LetterDto;
 import com.example.server.dtos.PostDto;
 import com.example.server.pojos.Groups;
 import com.example.server.pojos.Letters;
@@ -127,4 +128,13 @@ public class ApiLetterController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+    @GetMapping("/{letterId}/members")
+    @CrossOrigin
+    public ResponseEntity<LetterDto> getGroupMembers(@PathVariable Long letterId) {
+        LetterDto letterDto = letterService.getLetterMembers(letterId);
+        return ResponseEntity.ok(letterDto);
+    }
+
+
+
 }

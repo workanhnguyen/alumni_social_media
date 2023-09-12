@@ -27,4 +27,5 @@ public class LetterDto {
     private Date createdAt;
     private Date updatedAt;
     private String description;
+    private Set<UserDto> usersSet;
 }

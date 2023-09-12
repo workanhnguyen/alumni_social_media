@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -65,5 +66,11 @@ public class LetterController {
         model.addAttribute("users", userService.getUsers(new HashMap<>()));
         model.addAttribute("groups", groupService.getGroups(new HashMap<>()));
         return "addLetter";
+    }
+
+    @GetMapping("/letters/{id}")
+    public String detail(Model model, @PathVariable(value = "id") long letterId) {
+        model.addAttribute("letter", letterService.getLetterMembers(letterId));
+        return "letterDetail";
     }
 }

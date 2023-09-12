@@ -24,10 +24,15 @@ public interface LetterService {
     
     Boolean deleteLetter(Long id);
     
-    Letters findLetterById(Long grId);
+    Letters findLetterById(Long letterId);
+
     Boolean addUserToLetter(Users user, Letters l);
     
     Boolean removeUserFromLetter(Letters l, Users user);
     List<LetterDto> getLetters(Map<String, String> params);
     Long countLetters();
+
+    LetterDto getLetterMembers(Long letterId);
+
+    List<Letters> getLetterByUser(Users u);
 }

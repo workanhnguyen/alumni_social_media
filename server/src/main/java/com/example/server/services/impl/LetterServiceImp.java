@@ -29,6 +29,9 @@ import org.springframework.stereotype.Service;
 public class LetterServiceImp implements LetterService {
     @Autowired
     private LetterRepository letterRepo;
+    
+   @Autowired
+    private UserService userService;
 
     @Override
     public Letters addLetter(Map<String, String> params, Users u) {
@@ -86,4 +89,35 @@ public class LetterServiceImp implements LetterService {
     public Letters findLetterById(Long letterId) {
         return this.letterRepo.findLetterById(letterId);
     }
+
+    @Override
+    public LetterDto getLetterMembers(Long letterId) {
+        Letters letter = letterRepo.findLetterById(letterId);
+        if (letter != null) {
+
+            LetterDto letterDto = LetterDto.builder()
+                    .id(letter.getId())
+                    .content(letter.getContent())
+                    .description(letter.getDescription())
+                    .createdAt(letter.getCreatedAt())
+                    .usersSet(letter.getUsersSet()
+                            .stream()
+                            .map(userService::userToUserDto)
+                            .collect(Collectors.toSet()))
+                    .build();
+
+            return letterDto;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Letters> getLetterByUser(Users u) {
+        List<Letters> letters = new ArrayList<> ();
+        letters = letterRepo.getLetterByUser(u);
+        return letters;
+    }
+
+   
 }
