@@ -19,7 +19,7 @@ Với mục tiêu tạo ra một môi trường chia sẻ, trao đổi thông ti
 * Thống kê số lượng người dùng, số lượt làm khảo sát.
 
 ## Công nghệ sử dụng
-* Phía frontend: `TypeScript` `ReactJs` `Redux` `Tailwind CSS` `Material UI`
+* Phía frontend: `ReactJs` `Redux` `Tailwind CSS` `Material UI`
 * Phía backend: `Java Spring MVC`
 * Phía cơ sở dữ liệu: `MySQL`
 * Khác: `Firebase`
